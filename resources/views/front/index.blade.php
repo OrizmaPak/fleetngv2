@@ -1,142 +1,1458 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
+    <base href="{{ asset('fleetng-view') }}/">
+    <title>FleetNG  - Reliable Trucking & Haulage Solutions for Every Sector</title>
+    <meta name="description" content="FleetNG  - Specialized trucking and haulage for large quantity goods across all sectors: wholesale, construction, manufacturing, agriculture, and more.">
+    <meta name="author" content="FleetNG">
+    <meta name="keywords" content="logistics, trucking, haulage, transportation, FleetNG, wholesale delivery, construction delivery, bulk goods, supply chain, Nigeria">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FleetNG - Your trusted logistic partner</title>
-    <link rel="icon" href="{{ asset('front/images/favicon.png') }}" type="image/png">
-    <link rel="stylesheet" href="{{ asset('front/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('front/css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('front/css/responsive.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/bootstrap.css" />
+    <!-- bootstrap grid -->
+    <link rel="stylesheet" href="masterslider/style/masterslider.css" />
+    <!-- Master slider css -->
+    <link rel="stylesheet" href="masterslider/skins/default/style.css" />
+    <!-- Master slider default skin -->
+    <link rel="stylesheet" href="css/animate.css" />
+    <!-- animations -->
+    <link rel='stylesheet' href='owl-carousel/owl.carousel.css' />
+    <!-- Client carousel -->
+    <link rel="stylesheet" href="css/style.css" />
+    <!-- template styles -->
+    <link rel="stylesheet" href="css/color-default.css" />
+    <!-- template main color -->
+    <link rel="stylesheet" href="css/retina.css" />
+    <!-- retina ready styles -->
+    <link rel="stylesheet" href="css/responsive.css" />
+    <!-- responsive styles -->
+
+    <!-- Google Web fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:400,500,600,700,800" rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,700italic,400,800,700,600" rel='stylesheet' type='text/css'>
+
+    <!-- Font icons -->
+    <link rel="stylesheet" href="icon-fonts/font-awesome-4.3.0/css/font-awesome.min.css" />
+    <!-- Fontawesome icons css -->
+
+    <style>
+        .page-content{
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+    </style>
+    <!-- styleswitcher -->
 </head>
 
-<body>
-    <!-- Navbar Area Start -->
-    <nav class="nav-main bg-white position-sticky top-0">
-        <div class="container common-container">
-            <div class="navbar-inner-div">
-                <div class="left-div"> <a href="javascript:void(0)"><img
-                            src="{{ asset('front/images/logo/fleetng-logo.svg') }}" alt="Logo" width="60"
-                            class="img-fluid"></a></div>
-                <div class="nav-btns">
-                    <a href="{{ auth()->check() ? url('analytics') : url('user') }}" class="nav-btn btn me-2">User
-                        Login</a>
-                    <a href="{{ config('app.front_url') }}" class="nav-btn btn customer">Customer Login</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <!-- Navbar Area End -->
+<body><div class="header-wrapper header-transparent">
+        <!-- .header.header-style01 start -->
+        <header id="header" class="header-style01">
+            <!-- .container start -->
+            <div class="container">
+                <!-- .main-nav start -->
+                <div class="main-nav">
+                    <!-- .row start -->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nav class="navbar navbar-default nav-left" role="navigation">
 
-    <!-- Hero Area Start -->
-    <section class="hero-area-main-section">
-        <div class="hero-row-div">
-            <img src="{{ asset('front/images/icons/hero-design.svg') }}" alt="Half Circle" class="hero-design"
-                height="228">
-            <div class="left-part h-100">
-                <div class="text-div">
-                    <h1>Your trusted logistic partner</h1>
-                    <p>We serve you with full Accountability and Convenience.</p>
-                    <a href="https://client.fleetng.com">Request a Trip
-                        <svg width="41" height="29" viewBox="0 0 41 29" fill="none"
-                            xmlns="http://www.w3.org/2000/svg') }}">
-                            <path
-                                d="M31.5 26.1803C33.0217 26.1803 34.25 24.9799 34.25 23.4928C34.25 22.0058 33.0217 20.8053 31.5 20.8053C29.9784 20.8053 28.75 22.0058 28.75 23.4928C28.75 24.9799 29.9784 26.1803 31.5 26.1803ZM34.25 10.0553H29.6667V14.5345H37.8434L34.25 10.0553ZM9.50004 26.1803C11.0217 26.1803 12.25 24.9799 12.25 23.4928C12.25 22.0058 11.0217 20.8053 9.50004 20.8053C7.97837 20.8053 6.75004 22.0058 6.75004 23.4928C6.75004 24.9799 7.97837 26.1803 9.50004 26.1803ZM35.1667 7.36784L40.6667 14.5345V23.4928H37C37 26.467 34.5434 28.8678 31.5 28.8678C28.4567 28.8678 26 26.467 26 23.4928H15C15 26.467 12.5434 28.8678 9.50004 28.8678C6.45671 28.8678 4.00004 26.467 4.00004 23.4928H0.333374V3.78451C0.333374 1.79576 1.96504 0.201172 4.00004 0.201172H29.6667V7.36784H35.1667ZM4.00004 3.78451V19.9095H5.39337C6.40171 18.8166 7.86837 18.1178 9.50004 18.1178C11.1317 18.1178 12.5984 18.8166 13.6067 19.9095H26V3.78451H4.00004ZM16.8334 5.57617L23.25 11.847L16.8334 18.1178V13.6387H7.66671V10.0553H16.8334V5.57617Z"
-                                fill="white" />
-                        </svg>
-                    </a>
-                </div>
-            </div>
-            <div class="right-part">
-                <img src="{{ asset('front/images/hero-img.png') }}" alt="Hero Area" class="img-fluid">
-            </div>
-        </div>
-    </section>
-    <!-- Hero Area End -->
+                                <!-- .navbar-header start -->
+                                <div class="navbar-header">
+                                    <div class="logo">
+                                        <a href="{{ url('/') }}">
+                                            <img src="img/logo.png" alt="FleetNG - Logistics & Haulage"/>
+                                        </a>
+                                    </div>
+                                    <!-- .logo end -->
+                                </div>
+                                <!-- .navbar-header start -->
 
-    <!-- Below Hero working steps Area Start -->
-    <section class="working-steps-main-section">
+                                <!-- MAIN NAVIGATION -->
+                                <div class="collapse navbar-collapse">
+                                    <ul class="nav navbar-nav">
+                                        <li class="dropdown current-menu-item">
+                                            <a href="{{ url('/') }}#masterslider" class="dropdown-toggle scroll">Home</a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a href="{{ url('/') }}#services" class="dropdown-toggle scroll">Services</a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a href="{{ url('/') }}#about-us" class="dropdown-toggle scroll">About Us</a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a href="{{ url('/') }}#contact-us" class="dropdown-toggle scroll">Contact Us</a>
+                                        </li>
+                                        <!-- Login and Sign Up Buttons inside main menu -->
+                                        <li class="dropdown">
+                                            <a href="{{ auth()->check() ? url('analytics') : url('user') }}" class="" style="color: rgb(55, 55, 160)">
+                                                User Login
+                                            </a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a href="{{ config('app.front_url') }}" class="" style="color: red">
+                                                Customer Login
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <!-- .nav.navbar-nav end -->
+
+                                    <!-- RESPONSIVE MENU -->
+                                    <div id="dl-menu" class="dl-menuwrapper">
+                                        <button class="dl-trigger">Open Menu</button>
+                                        <ul class="dl-menu">
+                                            <li>
+                                                <a href="{{ url('/') }}#masterslider" class="scroll">Home</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}#services" class="scroll">Services</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}#about-us" class="scroll">About Us</a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ url('/') }}#contact-us" class="scroll">Contact Us</a>
+                                            </li>
+                                            <!-- Login and Sign Up in mobile menu -->
+                                            <li class="dropdown">
+                                                <a href="{{ auth()->check() ? url('analytics') : url('user') }}" class="scroll" style="color: rgb(119, 119, 252)">
+                                                    User Login
+                                                </a>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="{{ config('app.front_url') }}" class="scroll" style="color: red">
+                                                    Customer Login
+                                                </a>
+                                            </li>
+                                        </ul>
+                                        <!-- .dl-menu end -->
+                                    </div>
+                                    <div id="search">
+                                        <form action="{{ url('/') }}" method="get">
+                                            <input class="search-submit" type="submit" />
+                                            <input id="m_search" name="s" type="text" placeholder="Type and hit enter..." />
+                                        </form>
+                                    </div>
+                                    <!-- #dl-menu end -->
+                                </div>
+                                <!-- MAIN NAVIGATION END -->
+                            </nav>
+                            <!-- .navbar.navbar-default end -->
+                        </div>
+                        <!-- .col-md-12 end -->
+                    </div>
+                    <!-- .row end -->
+                </div>
+                <!-- .main-nav end -->
+            </div>
+            <!-- .container end -->
+        </header>
+        <!-- .header.header-style01 -->
+    </div>
+    <!-- .header-wrapper end -->
+
+    <div id="masterslider" class="master-slider ms-skin-default mb-0">
+        <!-- first slide -->
+        <div class="ms-slide">
+            <!-- slide background -->
+            <img src="masterslider/blank.gif" data-src="img/slider/slide04.jpg" alt="Logistics Experts" />
+
+            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 310px; transform: translateX(-50%);" data-type="image" data-effect="left(short)" data-duration="300" data-hide-effect="fade" data-delay="0" />
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 340px; transform: translateX(-50%);" data-type="text" data-effect="left(short)" data-duration="300" data-hide-effect="fade" data-delay="300">
+                Logistics & Haulage
+            </h2>
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 400px; transform: translateX(-50%);" data-type="text" data-effect="left(short)" data-duration="300" data-hide-effect="fade" data-delay="600">
+                Reliable Trucking
+            </h2>
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 460px; transform: translateX(-50%);" data-type="text" data-effect="left(short)" data-duration="300" data-hide-effect="fade" data-delay="900">
+                For Every Sector
+            </h2>
+        </div>
+        <!-- .ms-slide end -->
+
+        <!-- slide 02 start -->
+        <div class="ms-slide">
+            <!-- slide background -->
+            <img src="masterslider/blank.gif" data-src="img/slider/banner-5.png" alt="Start Your Delivery" />
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
+                Start Your Haulage
+            </h2>
+
+            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 450px; transform: translateX(-50%);" data-type="image" data-effect="bottom(short)" data-duration="300" data-hide-effect="fade" data-delay="300" />
+
+            <p class="ms-layer pi-text" style="left: 50%; top: 470px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="600">
+                Hassle-free bulk goods logistics for wholesale, construction, agriculture, and more.
+            </p>
+        </div>
+        <!-- .ms-slide end -->
+
+        <!-- slide 03 start -->
+        <div class="ms-slide">
+            <!-- slide background -->
+            <img src="masterslider/blank.gif" data-src="img/slider/banner-11.png" alt="Easy Logistics Steps" />
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
+                Simple Steps
+            </h2>
+
+            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 450px; transform: translateX(-50%);" data-type="image" data-effect="bottom(short)" data-duration="300" data-hide-effect="fade" data-delay="300" />
+
+            <p class="ms-layer pi-text" style="left: 50%; top: 470px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="600">
+                Request, Track, and Receive Your Goods Nationwide
+            </p>
+        </div>
+        <!-- .ms-slide slide03 end -->
+
+        <!-- slide 04 start -->
+        <div class="ms-slide">
+            <!-- slide background -->
+            <img src="masterslider/blank.gif" data-src="img/slider/slide05.jpg" alt="Choose Your Driver" />
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="00">
+                Choose Your Driver
+            </h2>
+
+            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 450px; transform: translateX(-50%);" data-type="image" data-effect="bottom(short)" data-duration="300" data-hide-effect="fade" data-delay="300" />
+
+            <p class="ms-layer pi-text" style="left: 50%; top: 470px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="600">
+                For Your Bulk Haulage Needs
+            </p>
+        </div>
+        <!-- .ms-slide slide04 end -->
+
+        <!-- slide 05 start -->
+        <div class="ms-slide">
+            <!-- slide background -->
+            <img src="masterslider/blank.gif" data-src="img/slider/banner-4.png" alt="Efficient Delivery" />
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
+                Reliable &
+            </h2>
+
+            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 450px; transform: translateX(-50%);" data-type="image" data-effect="bottom(short)" data-duration="300" data-hide-effect="fade" data-delay="300" />
+
+            <p class="ms-layer pi-text" style="left: 50%; top: 470px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="600">
+                Efficient Logistics for All Sectors
+            </p>
+        </div>
+        <!-- .ms-slide slide05 end -->
+
+        <!-- slide 06 start -->
+        <div class="ms-slide">
+            <!-- slide background -->
+            <img src="masterslider/blank.gif" data-src="img/slider/banner-6.png" alt="Innovative Logistics Solutions" />
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
+                Innovative
+            </h2>
+
+            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 450px; transform: translateX(-50%);" data-type="image" data-effect="bottom(short)" data-duration="300" data-hide-effect="fade" data-delay="300" />
+
+            <p class="ms-layer pi-text" style="left: 50%; top: 470px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="600">
+                Logistics Solutions for Every Industry
+            </p>
+        </div>
+        <!-- .ms-slide slide06 end -->
+
+        <!-- slide 07 start -->
+        <div class="ms-slide">
+            <!-- slide background -->
+            <img src="masterslider/blank.gif" data-src="img/slider/slider06.png" alt="Client Satisfaction" />
+
+            <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
+                Client Satisfaction
+            </h2>
+
+            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 450px; transform: translateX(-50%);" data-type="image" data-effect="bottom(short)" data-duration="300" data-hide-effect="fade" data-delay="300" />
+
+            <p class="ms-layer pi-text" style="left: 50%; top: 470px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="600">
+                For All Your Haulage Needs
+            </p>
+        </div>
+        <!-- .ms-slide slide07 end -->
+    </div>
+    <!-- #masterslider end -->
+
+    <div class="page-content parallax parallax01 mb-70">
+        <div class="container">
+            <div class="row services-negative-top">
+                <div class="col-md-4 col-sm-4">
+                    <div class="service-feature-box">
+                        <div class="service-media">
+                            <img src="img/slider/banner-3.png" alt="">
+
+                            <!-- <a href="{{ config('app.front_url') }}" class="read-more02">
+                                    <span>
+                                        Read more
+                                        <i class="fa fa-chevron-right"></i>
+                                    </span>
+                                </a> -->
+                        </div>
+                        <!-- .service-media end -->
+
+                        <div class="service-body">
+                            <div class="custom-heading">
+                                <h4>CHOOSE YOUR DRIVER</h4>
+                            </div>
+                            <!-- .custom-heading end -->
+
+                            <p>
+                                Select from our pool of experienced logistics drivers to ensure your goods are delivered safely and on time, no matter the sector or cargo size.
+                            </p>
+                        </div>
+                        <!-- .service-body end -->
+                    </div>
+                    <!-- .service-feature-box-end -->
+                </div>
+                <!-- .col-md-4 end -->
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="service-feature-box">
+                        <div class="service-media">
+                            <img src="img/slider/truck.png" alt="Logistics Trucking" />
+
+                            <!-- <a href="{{ url('/') }}#services" class="read-more02">
+                                    <span>
+                                        Read more
+                                        <i class="fa fa-chevron-right"></i>
+                                    </span>
+                                </a> -->
+                        </div>
+                        <!-- .service-media end -->
+
+                        <div class="service-body">
+                            <div class="custom-heading">
+                                <h4>TRACK YOUR LOGISTICS</h4>
+                            </div>
+                            <!-- .custom-heading end -->
+
+                            <p>
+                                Monitor your deliveries in real-time. Our advanced tracking system keeps you updated on every stage of your haulage process, from pickup to drop-off.
+                            </p>
+                        </div>
+                        <!-- .service-body end -->
+                    </div>
+                    <!-- .service-feature-box-end -->
+                </div>
+                <!-- .col-md-4 end -->
+
+                <div class="col-md-4 col-sm-4">
+                    <div class="service-feature-box">
+                        <div class="service-media">
+                            <img src="img/slider/namer.png" alt="Logistics Solutions" />
+
+                            <!-- <a href="{{ url('/') }}#services" class="read-more02">
+                                    <span>  
+                                        Read more
+                                        <i class="fa fa-chevron-right"></i>
+                                    </span>
+                                </a> -->
+                        </div>
+                        <!-- .service-media end -->
+
+                        <div class="service-body">
+                            <div class="custom-heading">
+                                <h4>LOGISTICS SOLUTIONS</h4>
+                            </div>
+                            <!-- .custom-heading end -->
+
+                            <p>
+                                We provide end-to-end logistics and haulage solutions for wholesale, construction, agriculture, manufacturing, and any sector requiring large quantity delivery.
+                            </p>
+                        </div>
+                        <!-- .service-body end -->
+                    </div>
+                    <!-- .service-feature-box-end -->
+                </div>
+                <!-- .col-md-4 end -->
+            </div>
+            <!-- .row end -->
+
+            <div class="row">
+                <div class="col-md-12">
+                    <a href="{{ config('app.front_url') }}" class="btn btn-big btn-yellow btn-centered">
+                            <span>
+                                View Logistics & Haulage Details
+                            </span>
+                        </a>
+                </div>
+                <!-- .col-md-12 end -->
+            </div>
+            <!-- .row end -->
+        </div>
+        <!-- .container end -->
+    </div>
+    <!-- .page-content end -->
+
+    <div class="page-content">
         <div class="container">
             <div class="row">
-                <div class="col-md-6 col-lg-3">
-                    <div class="each-steps-div">
-                        <img src="{{ asset('front/images/icons/started-with-phone.svg') }}" class="img-fluid"
-                            alt="Get started just with phone number">
-                        <p>Get started just with phone number</p>
+                <div class="col-md-12">
+                    <div class="custom-heading02">
+                        <h2>Logistics & Haulage Experts</h2>
+                        <p>
+                            We deliver large quantity goods with accountability, reliability, and convenience for your business, no matter the industry.
+                        </p>
                     </div>
+                    <!-- .custom-heading02 end -->
                 </div>
-                <div class="col-md-6 col-lg-3 mt-4 mt-md-0">
-                    <div class="each-steps-div">
-                        <img src="{{ asset('front/images/icons/easy-for-trip.svg') }}" class="img-fluid"
-                            alt="Easy steps to request for the Trip ">
-                        <p>Easy steps to request for the Trip </p>
+                <!-- .col-md-12 end -->
+            </div>
+            <!-- .row end -->
+
+            <div class="row mb-30">
+                <div class="col-md-6 col-sm-6">
+                    <div class="service-icon-left-boxed">
+                        <div class="icon-container animated triggerAnimation" data-animate="zoomIn">
+                            <img src="img/svg/pi-checklist-2.svg" alt="checklist icon" />
+                        </div>
+                        <!-- .icon-container end -->
+
+                        <div class="service-details">
+                            <h3>Request Bulk Delivery</h3>
+
+                            <p>
+                                Start your logistics journey by requesting delivery of wholesale goods, construction materials, agricultural produce, or any bulk cargo. Our process is simple and efficient for all your needs.
+                            </p>
+                        </div>
+                        <!-- .service-details end -->
                     </div>
+                    <!-- .service-icon-left-boxed end -->
                 </div>
-                <div class="col-md-6 col-lg-3 mt-4 mt-lg-0">
-                    <div class="each-steps-div">
-                        <img src="{{ asset('front/images/icons/choose-merchant.svg') }}" class="img-fluid"
-                            alt="Choose the merchant of your choice">
-                        <p>Choose the merchant of your choice</p>
+                <!-- .col-md-6 end -->
+
+                <div class="col-md-6 col-sm-6">
+                    <div class="service-icon-left-boxed">
+                        <div class="icon-container animated triggerAnimation" data-animate="zoomIn">
+                            <img src="img/svg/pi-globe-5.svg" alt="globe icon" />
+                        </div>
+                        <!-- .icon-container end -->
+
+                        <div class="service-details">
+                            <h3>Contact FleetNG </h3>
+
+                            <p>
+                                FleetNG : Suite 6, Scapular Plaza KM 17 Lekki-Epe expressway Eti-Osa Lagos Nigeria. Phone: +234 906 493 7788. Email: support@fleetng.com.
+                            </p>
+                        </div>
+                        <!-- .service-details end -->
                     </div>
+                    <!-- .service-icon-left-boxed end -->
                 </div>
-                <div class="col-md-6 col-lg-3 mt-4 mt-lg-0">
-                    <div class="each-steps-div">
-                        <img src="{{ asset('front/images/icons/get-notify.svg') }}" class="img-fluid"
-                            alt="Get notified for the payment">
-                        <p>Get notified for the payment</p>
+                <!-- .col-md-6 end -->
+            </div>
+            <!-- .row.mb-30 end -->
+
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="service-icon-left-boxed">
+                        <div class="icon-container animated triggerAnimation" data-animate="zoomIn">
+                            <img src="img/svg/pi-forklift-truck-5.svg" alt="forktruck icon" />
+                        </div>
+                        <!-- .icon-container end -->
+
+                        <div class="service-details">
+                            <h3>Refund Policy</h3>
+
+                            <p>
+                                Our refund policy covers all logistics and haulage transactions. Please contact us for details regarding refunds for deliveries and logistics services.
+                            </p>
+                        </div>
+                        <!-- .service-details end -->
                     </div>
+                    <!-- .service-icon-left-boxed end -->
+                </div>
+                <!-- .col-md-6 end -->
+
+                <div class="col-md-6 col-sm-6">
+                    <div class="service-icon-left-boxed">
+                        <div class="icon-container animated triggerAnimation" data-animate="zoomIn">
+                            <img src="img/svg/pi-touch-desktop.svg" alt="touch icon" />
+                        </div>
+                        <!-- .icon-container end -->
+
+                        <div class="service-details">
+                            <h3>Privacy Policy</h3>
+
+                            <p>
+                                We value your privacy in all logistics engagements. For our full privacy policy and terms, please contact FleetNG .
+                            </p>
+                        </div>
+                        <!-- .service-details end -->
+                    </div>
+                    <!-- .service-icon-left-boxed end -->
+                </div>
+                <!-- .col-md-6 end -->
+            </div>
+            <!-- .row.mb-30 end -->
+        </div>
+        <!-- .container end -->
+    </div>
+    <!-- .page-content end -->
+
+    <div id="about-us" class="page-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="custom-heading">
+                        <h2>About FleetNG </h2>
+                    </div><!-- .custom-heading end -->
+
+                    <p>
+                        FleetNG  specializes in the trucking and haulage of large quantity goods for all sectors: wholesale, construction, agriculture, manufacturing, and more. We are committed to supporting your business with reliable, accountable, and convenient logistics services.
+                    </p>
+
+                    <p>
+                        Our team of professional drivers and modern fleet ensures your goods arrive safely and on schedule. We are dedicated to providing the highest standards in logistics, making us the trusted partner for your supply chain.
+                    </p>
+                </div><!-- .col-md-6 end -->
+
+                <div class="col-md-6 animated triggerAnimation" data-animate="zoomIn">
+                    <img src="img/slider/trucker.png" alt="FleetNG "/>
+                </div><!-- .col-md-6 end -->
+            </div><!-- .row end -->
+        </div><!-- .container end -->
+    </div><!-- .page-content end -->  
+
+    <div class="page-content custom-bkg bkg-light-blue mb-70">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="custom-heading">
+                        <h2>Our Mission</h2>
+                    </div><!-- .custom-heading end -->
+
+                    <p>
+                        Our mission is to provide seamless logistics and haulage services, ensuring timely and safe delivery of all goods to your business or project sites. We strive to be the backbone of your supply chain, regardless of sector.
+                    </p>
+                </div><!-- .col-md-6 end -->
+
+                <div class="col-md-6">
+                    <div class="custom-heading">
+                        <h2>Our Promise</h2>
+                    </div><!-- .custom-heading end -->
+
+                    <ul class="fa-ul">
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Professional drivers for all types of bulk delivery
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Investment in staff training for safe and efficient logistics
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Environmentally responsible logistics practices
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Safety-first approach for all deliveries
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Advanced technology for real-time tracking and communication
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Commitment to the highest standards in logistics and haulage
+                        </li>
+                    </ul><!-- .fa-ul end -->
+                </div><!-- .col-md-6 end -->
+            </div><!-- .row end -->
+        </div><!-- .container end -->
+    </div><!-- .page-content.custom-bkg end -->
+
+    <div class="page-content">
+        <div class="container">
+            <div class="row">
+                <div class="custom-heading02">
+                    <h2>Logistics & Haulage Services</h2>
+                    <p>We deliver large quantity goods with full accountability and convenience for your business, no matter the sector.</p>
+                </div>
+            </div><!-- .row end -->
+
+            <div class="row">
+                <div class="col-md-3 col-sm-6">
+                    <div class="service-icon-center">
+                        <div class="icon-container">
+                            <i class="fa fa-truck"></i>
+                        </div>
+
+                        <h4>Request Bulk Delivery</h4>
+
+                        <p>
+                            Request delivery of wholesale goods, construction materials, agricultural produce, or any bulk cargo. Our process is fast and reliable for all your project needs.
+                        </p>
+                    </div><!-- .service-icon-center end -->
+                </div><!-- .col-md-3 end -->
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="service-icon-center">
+                        <div class="icon-container">
+                            <i class="fa fa-map-marker"></i>
+                        </div>
+
+                        <h4>Our Location</h4>
+
+                        <p>
+                            FleetNG : Suite 6, Scapular Plaza KM 17 Lekki-Epe expressway Eti-Osa Lagos Nigeria.
+                        </p>
+                    </div><!-- .service-icon-center end -->
+                </div><!-- .col-md-3 end -->
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="service-icon-center">
+                        <div class="icon-container">
+                            <i class="fa fa-phone"></i>
+                        </div>
+
+                        <h4>Call Us</h4>
+
+                        <p>
+                            Phone: +234 906 493 7788
+                        </p>
+                    </div><!-- .service-icon-center end -->
+                </div><!-- .col-md-3 end -->
+
+                <div class="col-md-3 col-sm-6">
+                    <div class="service-icon-center">
+                        <div class="icon-container">
+                            <i class="fa fa-envelope"></i>
+                        </div>
+
+                        <h4>Email Us</h4>
+
+                        <p>
+                            Email: support@fleetng.com
+                        </p>
+                    </div><!-- .service-icon-center end -->
+                </div><!-- .col-md-3 end -->
+            </div><!-- .row end -->
+
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="custom-heading">
+                        <h2>Top Logistics Drivers</h2>
+                    </div><!-- .custom-heading end -->
+
+                    <div class="row">
+                        <div class="col-md-4 col-sm-4">
+                            <div class="team-member">
+                                <img src="https://static.everypixel.com/ep-pixabay/0329/8099/0858/84037/3298099085884037069-head.png" alt=""/>
+                                <div class="team-details">
+                                    <h5>John Emenike</h5>
+                                    <p class="position">
+                                        Logistics & Haulage Driver
+                                    </p>
+                                </div><!-- .team-details end -->
+                            </div><!-- .member end -->
+                        </div><!-- .col-md-4 end -->
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="team-member">
+                                <img src="https://static.everypixel.com/ep-pixabay/0329/8099/0858/84037/3298099085884037069-head.png" alt=""/>
+                                <div class="team-details">
+                                    <h5>Tolu Abel</h5>
+                                    <p class="position">
+                                        Logistics & Haulage Driver
+                                    </p>
+                                </div><!-- .team-details end -->
+                            </div><!-- .member end -->
+                        </div><!-- .col-md-4 end -->
+
+                        <div class="col-md-4 col-sm-4">
+                            <div class="team-member">
+                                <img src="https://static.everypixel.com/ep-pixabay/0329/8099/0858/84037/3298099085884037069-head.png" alt=""/>
+                                <div class="team-details">
+                                    <h5>Alex Tony</h5>
+                                    <p class="position">
+                                        Logistics & Haulage Driver
+                                    </p>
+                                </div><!-- .team-details end -->
+                            </div><!-- .member end -->
+                        </div><!-- .col-md-4 end -->
+                    </div><!-- .row end -->
+                </div><!-- .col-md-9 end -->
+
+                <div class="col-md-3">
+                    <div class="custom-heading">
+                        <h2>Join Our Logistics Team</h2>
+                    </div><!-- .custom-heading end -->
+
+                    <div class="promo-box promo-bkg01">
+                        <h4>Drivers Needed</h4>
+                        <p>
+                            We are hiring logistics and haulage drivers. Join our team and help deliver goods to businesses and projects across Nigeria!
+                        </p>
+
+                        <a href="{{ config('app.front_url') }}" class="btn btn-medium btn-yellow">
+                            <span>Apply Now</span>
+                        </a>
+                    </div><!-- .promo-box end -->
+                </div><!-- .col-md-3 end -->
+            </div><!-- .row end -->
+        </div><!-- .container end -->
+    </div><!-- .page-content end -->
+
+    <div id="services" class="page-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="custom-heading">
+                        <h2>Our Logistics & Haulage Services</h2>
+                    </div><!-- .custom-heading end -->
+                    <p>
+                        FleetNG specializes in logistics and haulage, providing reliable delivery of large quantity goods for wholesale, construction, agriculture, manufacturing, and more. Our services are designed to meet the unique needs of businesses, contractors, and project managers in every sector.
+                    </p>
+
+                    <ul class="fa-ul">
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            End-to-end logistics for all industries
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Real-time tracking of all deliveries
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Professional drivers and modern trucks for every sector
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            High-quality, timely transportation of bulk goods
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Technology-driven logistics for efficiency and transparency
+                        </li>
+                        <li>
+                            <i class="fa fa-li fa-long-arrow-right"></i>
+                            Adherence to safety and industry standards in logistics and haulage
+                        </li>
+                    </ul><!-- .fa-ul end -->
+
+                    <br>
+
+                    <p>
+                        Contact us for your logistics and haulage needs. Location: Suite 6, Scapular Plaza KM 17 Lekki-Epe expressway Eti-Osa Lagos Nigeria. Call +234 906 493 7788 or email support@fleetng.com.
+                    </p>
+
+                    <p>
+                        For information on our refund policy, privacy policy, and terms and conditions regarding logistics and haulage, please reach out to our team.
+                    </p>
+                </div><!-- .col-md-8 end -->
+
+                <div class="col-md-4">
+                    <img src="img/pics/img32.jpg" alt="Logistics Truck">
+                </div><!-- .col-md-4 end -->
+            </div><!-- .row end -->
+        </div><!-- .container end -->
+    </div>
+
+    <div class="page-content parallax parallax01 dark">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="call-to-action clearfix">
+                        <div class="text">
+                            <h2>Logistics & Haulage You Can Trust.</h2>
+                            <p>
+                                We deliver large quantity goods for your business with reliability and efficiency. Request your delivery, track your shipment, and receive your goods on time, every time.
+                            </p>                              
+                        </div><!-- .text end -->
+
+                        <a href="{{ config('app.front_url') }}" class="btn btn-big">
+                            <span>Request Bulk Delivery</span>
+                        </a>
+                    </div><!-- .call-to-action end -->
+                </div><!-- .col-md-12 end -->
+            </div><!-- .row end -->
+        </div><!-- .container end -->
+    </div><!-- .page-content.parallax end -->
+
+    <div class="page-content custom-bkg bkg-dark-blue column-img-bkg dark mb-70">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-4 col-md-offset-2 custom-col-padding-both">
+                    <div class="custom-heading">
+                        <h3>Logistics & Haulage Solutions</h3>
+                    </div>
+                    <!-- .custom-heading end -->
+
+                    <p>
+                        We make logistics and haulage easy. Request your goods, choose your driver, and track your delivery from dispatch to your destination, for any sector or industry.
+                    </p>
+
+                    <ul class="service-list clearfix">
+                        <li>
+                            <div class="icon-container">
+                                <img class="svg-white" src="img/svg/pi-truck-8.svg" alt="icon" />
+                            </div>
+                            <!-- .icon-container end -->
+
+                            <p>
+                                Bulk Goods Transport
+                            </p>
+                        </li>
+                        <li>
+                            <div class="icon-container">
+                                <img class="svg-white" src="img/svg/pi-cargo-box-2.svg" alt="icon" />
+                            </div>
+                            <!-- .icon-container end -->
+
+                            <p>
+                                Choose Your Logistics Driver
+                            </p>
+                        </li>
+                        <li>
+                            <div class="icon-container">
+                                <img class="svg-white" src="img/svg/pi-cargo-retail.svg" alt="icon" />
+                            </div>
+                            <!-- .icon-container end -->
+
+                            <p>
+                                Track Your Delivery
+                            </p>
+                        </li>
+                        <li>
+                            <div class="icon-container">
+                                <img class="svg-white" src="img/svg/pi-mark-energy.svg" alt="icon" />
+                            </div>
+                            <!-- .icon-container end -->
+
+                            <p>
+                                Haulage for All Sectors
+                            </p>
+                        </li>
+                    </ul>
+                    <!-- .service-list end -->
+                </div>
+                <!-- .col-md-6 end -->
+
+                <div class="col-md-6 img-bkg01">
+                    <div>&nbsp;</div>
                 </div>
             </div>
-
+            <!-- .row end -->
         </div>
-    </section>
+        <!-- .container end -->
+    </div>
+    <!-- .page-content.bkg-dark-blue end -->
 
-    <footer class="bg-light p-3">
-        <ul class="nav justify-content-center gap-4">
-            <li class="nav-item">
-                <a class="nav-link text-normal fs-14" href="{{url('contact-us')}}">Contact Us</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-normal fs-14" href="{{url('refund-policy')}}">Refund Policy</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-normal fs-14" href="{{ url('privacy-policy') }}">Privacy Policy</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-normal fs-14" href="{{ url('terms-conditions') }}">Terms and Conditions</a>
-            </li>
-        </ul>
-    </footer>
-    <!-- Below Hero working steps Area End -->
+    <div class="page-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 col-sm-6">
+                    <div class="custom-heading">
+                        <h3>Our Logistics Services</h3>
+                    </div>
+                    <!-- .custom-heading end -->
 
-    <button class="btn btn-primary back-to-top" id="backToTopBtn">
-        <svg width="22" height="18" viewBox="0 0 22 18" fill="none">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M11 12.9235C11.2084 12.9235 11.4082 12.8384 11.5556 12.6869C11.7029 12.5355 11.7857 12.33 11.7857 12.1158V2.75868L15.158 6.22663C15.2311 6.30172 15.3178 6.36129 15.4132 6.40192C15.5087 6.44256 15.611 6.46348 15.7143 6.46348C15.8176 6.46348 15.9199 6.44256 16.0153 6.40192C16.1108 6.36129 16.1975 6.30172 16.2706 6.22663C16.3436 6.15154 16.4016 6.0624 16.4411 5.96429C16.4806 5.86618 16.501 5.76102 16.501 5.65483C16.501 5.54864 16.4806 5.44349 16.4411 5.34538C16.4016 5.24727 16.3436 5.15812 16.2706 5.08303L11.5563 0.237271C11.4833 0.162059 11.3966 0.102387 11.3011 0.0616725C11.2057 0.0209577 11.1033 0 11 0C10.8967 0 10.7943 0.0209577 10.6989 0.0616725C10.6034 0.102387 10.5167 0.162059 10.4437 0.237271L5.72943 5.08303C5.58189 5.23468 5.49901 5.44037 5.49901 5.65483C5.49901 5.8693 5.58189 6.07498 5.72943 6.22663C5.87696 6.37828 6.07707 6.46348 6.28571 6.46348C6.49436 6.46348 6.69446 6.37828 6.842 6.22663L10.2143 2.75868V12.1158C10.2143 12.33 10.2971 12.5355 10.4444 12.6869C10.5918 12.8384 10.7916 12.9235 11 12.9235ZM0 16.9616C0 16.7474 0.0827803 16.542 0.23013 16.3905C0.37748 16.2391 0.57733 16.154 0.785714 16.154H21.2143C21.4227 16.154 21.6225 16.2391 21.7699 16.3905C21.9172 16.542 22 16.7474 22 16.9616C22 17.1758 21.9172 17.3812 21.7699 17.5327C21.6225 17.6841 21.4227 17.7692 21.2143 17.7692H0.785714C0.57733 17.7692 0.37748 17.6841 0.23013 17.5327C0.0827803 17.3812 0 17.1758 0 16.9616V16.9616Z" fill="#ffffff"></path>
-            </svg>
-    </button>
+                    <ul class="pi-latest-posts clearfix">
+                        <li>
+                            <div class="post-media">
+                                <img src="img/svg/pi-truck-8.svg" alt="icon" />
+                            </div>
+                            <!-- .post-media end -->
 
-    <script src="{{ asset('front/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('front/js/bootstrap.bundle.min.js') }}"></script>
-    <script type="text/javascript">
-      $(function(){
-        $(window).scroll(function(){
-            if($(window).scrollTop() > 125){
-                $('#backToTopBtn').addClass("d-flex").removeClass("d-none");
-            }
-            else{
-                $('#backToTopBtn').addClass("d-none").removeClass("d-flex");
-            }
+                            <div class="post-details">
+                                <div class="post-date">
+                                    <p>
+                                        <i class="fa fa-calendar"></i> LOGISTICS & HAULAGE
+                                    </p>
+                                </div>
+
+                                <a href="{{ config('app.front_url') }}">
+                                    <h4>
+                                        Bulk Goods Transport
+                                    </h4>
+                                </a>
+
+                                <a href="{{ config('app.front_url') }}" class="read-more">
+                                        <span>
+                                            Learn more
+                                            <i class="fa fa-chevron-right"></i>
+                                        </span>
+                                    </a>
+                            </div>
+                            <!-- .post-details end -->
+                        </li>
+
+                        <li>
+                            <div class="post-media">
+                                <img src="img/svg/pi-cargo-retail.svg" alt="icon" />
+                            </div>
+                            <!-- .post-media end -->
+
+                            <div class="post-details">
+                                <div class="post-date">
+                                    <p>
+                                        <i class="fa fa-calendar"></i> WHOLESALE DELIVERY
+                                    </p>
+                                </div>
+
+                                <a href="{{ config('app.front_url') }}">
+                                    <h4>
+                                        Wholesale & Retail Delivery
+                                    </h4>
+                                </a>
+
+                                <a href="{{ config('app.front_url') }}" class="read-more">
+                                        <span>
+                                            Learn more
+                                            <i class="fa fa-chevron-right"></i>
+                                        </span>
+                                    </a>
+                            </div>
+                            <!-- .post-details end -->
+                        </li>
+                    </ul>
+                    <!-- .pi-latest-posts end -->
+                </div>
+                <!-- .col-md-4 end -->
+
+                <div class="col-md-4 col-sm-6">
+                    <div class="custom-heading">
+                        <h3>What Our Clients Say</h3>
+                    </div>
+                    <!-- .custom-heading end -->
+
+                    <div class="carousel-container">
+                        <div id="testimonial-carousel" class="owl-carousel owl-carousel-navigation">
+                            <div class="owl-item">
+                                <div class="testimonial">
+                                    <p>
+                                        FleetNG made our wholesale delivery seamless. Their logistics team delivered all our goods on time and kept us updated throughout the process.
+                                    </p>
+                                    <div class="testimonial-author">
+                                        <p>
+                                            JAMES ANDERSON, <br /> Wholesale Manager
+                                        </p>
+                                    </div>
+                                    <!-- .testimonial-author end -->
+                                </div>
+                                <!-- .testimonial end -->
+                            </div>
+                            <!-- .owl-item end -->
+
+                            <div class="owl-item">
+                                <div class="testimonial">
+                                    <p>
+                                        The logistics service from FleetNG is top-notch. We always receive our bulk materials exactly when we need them, whether for construction or retail.
+                                    </p>
+                                    <div class="testimonial-author">
+                                        <p>
+                                            SARAH JOHNSON, <br /> Operations Supervisor
+                                        </p>
+                                    </div>
+                                    <!-- .testimonial-author end -->
+                                </div>
+                                <!-- .testimonial end -->
+                            </div>
+                            <!-- .owl-item end -->
+
+                            <div class="owl-item">
+                                <div class="testimonial">
+                                    <p>
+                                        FleetNG's real-time tracking and professional drivers make them our preferred partner for all large quantity deliveries.
+                                    </p>
+                                    <div class="testimonial-author">
+                                        <p>
+                                            MICHAEL BROWN, <br /> Logistics Coordinator
+                                        </p>
+                                    </div>
+                                    <!-- .testimonial-author end -->
+                                </div>
+                                <!-- .testimonial end -->
+                            </div>
+                            <!-- .owl-item end -->
+                        </div>
+                        <!-- #testimonial-carousel end -->
+                    </div>
+                    <!-- .carousel-container end -->
+                </div>
+                <!-- .col-md-4 end -->
+
+                <div class="col-md-4 col-sm-12 clearfix">
+                    <div class="custom-heading">
+                        <h3>Our Service Locations</h3>
+                    </div>
+                    <!-- .custom-heading end -->
+
+                    <img src="img/pics/locations.jpg" alt="locations illustration" />
+
+                    <br />
+
+                    <p>
+                        FleetNG  serves over 150 locations, delivering goods to businesses and project sites across Nigeria and beyond.
+                    </p>
+
+                    <a href="{{ config('app.front_url') }}" class="read-more">
+                            <span>
+                                View all locations
+                                <i class="fa fa-chevron-right"></i>
+                            </span>
+                        </a>
+                </div>
+                <!-- .col-md-4 end -->
+            </div>
+            <!-- .row end -->
+        </div>
+        <!-- .container end -->
+    </div>
+    <!-- .page-content end -->
+
+    <div class="page-content custom-bkg bkg-grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="carousel-container">
+                        <div id="client-carousel" class="owl-carousel owl-carousel-navigation">
+                            <div class="owl-item"><img src="img/pics/client01.png" alt="" /></div>
+                            <div class="owl-item"><img src="img/pics/client02.png" alt="" /></div>
+                            <div class="owl-item"><img src="img/pics/client03.png" alt="" /></div>
+                            <div class="owl-item"><img src="img/pics/client04.png" alt="" /></div>
+                            <div class="owl-item"><img src="img/pics/client05.png" alt="" /></div>
+                            <div class="owl-item"><img src="img/pics/client06.png" alt="" /></div>
+                        </div>
+                        <!-- .owl-carousel.owl-carousel-navigation end -->
+                    </div>
+                    <!-- .carousel-container end -->
+                </div>
+                <!-- .col-md-12 end -->
+            </div>
+            <!-- .row end -->
+        </div>
+        <!-- .container end -->
+    </div>
+    <!-- .page-content end -->
+
+    <div id="contact-us" class="page-content" style="padding-top:40px">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="custom-heading">
+                        <h3>Contact FleetNG </h3>
+                    </div><!-- .custom-heading.left end -->
+
+                    <p>
+                        For all your logistics and haulage needs, including wholesale, construction, agriculture, and more, contact FleetNG. We provide reliable delivery, real-time tracking, and professional support for your business.
+                    </p>
+
+                    <br>
+
+                    <!-- .contact form start -->
+                    <form class="wpcf7 clearfix" id="fleetng-home-contact" action="{{ route('submit-contact-us') }}" method="POST">
+                        @csrf
+                        <div class="alert alert-success" id="fleetng-home-contact-success" style="display:none;"></div>
+                        <div class="alert alert-danger" id="fleetng-home-contact-error" style="display:none;"></div>
+                        <fieldset>
+                            <label>
+                                <span class="required">*</span> Your request:
+                            </label>
+
+                            <select class="wpcf7-form-control-wrap wpcf7-select" id="contact-inquiry">
+                                <option value="Request a Delivery">Request a Delivery</option>
+                                <option value="Choose a Driver">Choose a Driver</option>
+                                <option value="Track Logistics">Track Logistics</option>
+                                <option value="Other Inquiries">Other Inquiries</option>
+                            </select>
+                        </fieldset>
+
+                        <fieldset>
+                            <label>
+                                <span class="required">*</span> First Name:
+                            </label>
+
+                            <input type="text" class="wpcf7-text" id="contact-name" name="first_name" required>
+                        </fieldset>
+
+                        <fieldset>
+                            <label>
+                                <span class="required">*</span> Last Name:
+                            </label>
+
+                            <input type="text" class="wpcf7-text" id="contact-last-name" name="last_name" required>
+                        </fieldset>
+
+                        <fieldset>
+                            <label>
+                                <span class="required">*</span> Email:
+                            </label>
+
+                            <input type="email" class="wpcf7-text" id="contact-email" name="email" required>
+                        </fieldset>
+
+                        <fieldset>
+                            <label>
+                                <span class="required">*</span> Phone:
+                            </label>
+
+                            <input type="tel" class="wpcf7-text" id="contact-phone" name="phone" placeholder="0801234567" required>
+                        </fieldset>
+
+                        <fieldset>
+                            <label>
+                                <span class="required">*</span> Message:
+                            </label>
+
+                            <textarea rows="8" class="wpcf7-textarea" id="contact-message" name="message" required></textarea>
+                        </fieldset>
+
+                        <input type="submit" class="wpcf7-submit" value="send">
+                    </form><!-- .wpcf7 end -->
+                </div><!-- .col-md-6 end -->
+
+                <div class="col-md-6">
+                    <div class="custom-heading">
+                        <h3>FleetNG  HQ</h3>
+                    </div><!-- .custom-heading end -->
+
+                    <div id="map" style="position: relative; overflow: hidden;">
+                        <iframe
+                            width="100%"
+                            height="450"
+                            frameborder="0" style="border:0"
+                            src="https://www.google.com/maps?q=Suite+6,+Scapular+Plaza+KM+17+Lekki-Epe+expressway,+Eti-Osa,+Lagos,+Nigeria&output=embed" allowfullscreen>
+                        </iframe>
+                    </div>
+
+                    <div class="custom-heading">
+                        <h4>FleetNG Address</h4>
+                    </div><!-- .custom-heading end -->
+
+                    <address>
+                        Suite 6, Scapular Plaza KM 17 Lekki-Epe expressway, <br>
+                        Eti-Osa, Lagos, Nigeria
+                    </address>
+
+                    <span class="text-big colored">
+                        +234 906 493 7788
+                    </span>
+                    <br>
+
+                    <a href="mailto:support@fleetng.com">support@fleetng.com</a>
+                </div><!-- .col-md-6 end -->
+            </div><!-- .row end -->
+        </div><!-- .container end -->
+    </div>
+
+
+<!-- ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// -->
+    <div id="footer-wrapper" class="footer-dark">
+        <footer id="footer">
+            <div class="container">
+                <div class="row" style="display: flex; justify-content: space-between; flex-wrap: wrap;">
+                    <ul class="col-md-3 col-sm-6 footer-widget-container clearfix">
+                        <!-- .widget.widget_text -->
+                        <li class="widget widget_newsletterwidget">
+                            <div class="title">
+                                <h3>Newsletter Subscribe</h3>
+                            </div>
+
+                            <p>
+                                Subscribe to our newsletter for updates on logistics, new services, and special offers for your business.
+                            </p>
+
+                            <br />
+
+                            <form class="newsletter" action="javascript:void(0)">
+                                <input class="email" type="email" placeholder="Your email...">
+                                <input type="submit" class="submit" value="">
+                            </form>
+                        </li>
+                        <!-- .widget.widget_newsletterwidget end -->
+                    </ul>
+                    <!-- .col-md-3.footer-widget-container end -->
+
+                    <ul class="col-md-3 col-sm-6 footer-widget-container">
+                        <!-- .widget-pages start -->
+                        <li class="widget widget_pages">
+                            <div class="title">
+                                <h3>Quick Links</h3>
+                            </div>
+
+                            <ul>
+                                <li><a href="{{ url('/') }}#masterslider" class="scroll">Home</a></li>
+                                <li><a href="{{ url('/') }}#services" class="scroll">Services</a></li>
+                                <li><a href="{{ url('/') }}#about-us" class="scroll">About us</a></li>
+                                <li><a href="{{ url('/') }}#contact-us" class="scroll">Contact us</a></li>
+                            </ul>
+                        </li>
+                        <!-- .widget-pages end -->
+                    </ul>
+                    <!-- .col-md-3.footer-widget-container end -->
+
+                    <ul style="display:none" class="col-md-3 col-sm-6 footer-widget-container d-none">
+                        <!-- .widget-pages start -->
+                        <li class="widget widget_pages">
+                            <div class="title">
+                                <h3>Industry solutions</h3>
+                            </div>
+
+                            <ul>
+                                <li><a href="{{ url('/') }}#services">Overland transportation</a></li>
+                                <li><a href="{{ url('/') }}#services">Air freight</a></li>
+                                <li><a href="{{ url('/') }}#services">Ocean freight</a></li>
+                                <li><a href="{{ url('/') }}#services">Large projects</a></li>
+                                <li><a href="{{ url('/') }}#services">Rail international shipping</a></li>
+                                <li><a href="{{ url('/') }}#services">Contract logistics</a></li>
+                                <li><a href="{{ url('/') }}#services">Packaging options</a></li>
+                            </ul>
+                        </li>
+                        <!-- .widget-pages end -->
+                    </ul>
+                    <!-- .col-md-3.footer-widget-container end -->
+
+                    <ul class="col-md-3 col-sm-6 footer-widget-container">
+                        <li class="widget widget-text">
+                            <div class="title">
+                                <h3>Contact Us</h3>
+                            </div>
+
+                            <address>
+                                Suite 6, Scapular Plaza KM 17 Lekki-Epe expressway, <br />
+                                Eti-Osa, Lagos, Nigeria
+                            </address>
+
+                            <span class="text-big">
+                                +234 906 493 7788
+                            </span>
+                            <br />
+
+                            <a href="mailto:support@fleetng.com">support@fleetng.com</a>
+                            <br />
+                            <ul class="footer-social-icons">
+                                <li><a href="{{ config('app.front_url') }}" class="fa fa-facebook"></a></li>
+                                <li><a href="{{ config('app.front_url') }}" class="fa fa-twitter"></a></li>
+                                <li><a href="{{ config('app.front_url') }}" class="fa fa-google-plus"></a></li>
+                            </ul>
+                            <!-- .footer-social-icons end -->
+                        </li>
+                        <!-- .widget.widget-text end -->
+                    </ul>
+                    <!-- .col-md-3.footer-widget-container end -->
+                </div>
+                <!-- .row end -->
+            </div>
+            <!-- .container end -->
+        </footer>
+        <!-- #footer end -->
+
+        <div class="copyright-container">
+            <div class="container">
+                <div class="row" style="display: flex; justify-content: space-between;">
+                    <div class="col-md-6">
+                        <p>FLEETNG 2025. All RIGHTS RESERVED.</p>
+                    </div>
+                    <!-- .col-md-6 end -->
+
+                    <div class="col-md-6">
+                        <p class="align-right">POWERED BY <a href="{{ url('/') }}">FLEETNG.</a> .</p>
+                    </div>
+                    <!-- .col-md-6 end -->
+                </div>
+                <!-- .row end -->
+            </div>
+            <!-- .container end -->
+        </div>
+        <!-- .copyright-container end -->
+
+        <a href="{{ config('app.front_url') }}" class="scroll-up">Scroll</a>
+    </div>
+    <!-- #footer-wrapper end -->
+
+    <script src="js/jquery-2.1.4.min.js"></script>
+    <!-- jQuery library -->
+    <script src="js/bootstrap.min.js"></script>
+    <!-- .bootstrap script -->
+    <script src="js/jquery.srcipts.min.js"></script>
+    <!-- modernizr, retina, stellar for parallax -->
+    <script src="owl-carousel/owl.carousel.min.js"></script>
+    <!-- Carousels script -->
+    <script src="masterslider/masterslider.min.js"></script>
+    <!-- Master slider main js -->
+    <script src="js/jquery.matchHeight-min.js"></script>
+    <!-- for columns with background image -->
+    <script src="js/jquery.dlmenu.min.js"></script>
+    <!-- for responsive menu -->
+    <!-- styleswitcher script -->
+    <script src="js/include.js"></script>
+    <!-- custom js functions -->
+
+    <script>
+        /* <![CDATA[ */
+        (function ($) {
+            $('#fleetng-home-contact').on('submit', function (event) {
+                event.preventDefault();
+                var $form = $(this);
+                var $success = $('#fleetng-home-contact-success').hide();
+                var $error = $('#fleetng-home-contact-error').hide();
+                var firstName = $.trim($('#contact-name').val());
+                var lastName = $.trim($('#contact-last-name').val());
+                var payload = $form.serializeArray().filter(function (field) {
+                    return field.name !== 'first_name' && field.name !== 'last_name';
+                });
+
+                payload.push({ name: 'name', value: $.trim(firstName + ' ' + lastName) });
+
+                $.ajax({
+                    url: $form.attr('action'),
+                    type: 'POST',
+                    data: $.param(payload),
+                    headers: { 'Accept': 'application/json' },
+                    success: function (response) {
+                        $success.text(response.message || 'Thank you for contacting us. We will get back to you shortly.').show();
+                        $form[0].reset();
+                    },
+                    error: function (xhr) {
+                        var response = xhr.responseJSON || {};
+                        $error.text(response.message || 'Something went wrong. Please check the form and try again.').show();
+                    }
+                });
+            });
+        })(jQuery);
+
+        jQuery(document).ready(function($) {
+            'use strict';
+
+            function equalHeight() {
+                $('.page-content.column-img-bkg *[class*="custom-col-padding"]').each(function() {
+                    var maxHeight = $(this).outerHeight();
+                    $('.page-content.column-img-bkg *[class*="img-bkg"]').height(maxHeight);
+                });
+            };
+
+            $(document).ready(equalHeight);
+            $(window).resize(equalHeight);
+
+            // Smooth scrolling for navigation links
+            $('a.scroll').on('click', function(event) {
+                if (this.hash !== "") {
+                    event.preventDefault();
+                    var hash = this.hash;
+                    $('html, body').animate({
+                        scrollTop: $(hash).offset().top
+                    }, 800, function(){
+                        window.location.hash = hash;
+                    });
+                }
+            });
+
+            // MASTER SLIDER START 
+            var slider = new MasterSlider();
+            slider.setup('masterslider', {
+                width: 1140, // slider standard width
+                height: 854, // slider standard height
+                space: 0,
+                speed: 50,
+                layout: "fullwidth",
+                centerControls: false,
+                loop: true,
+                autoplay: true
+                // more slider options goes here...
+                // check slider options section in documentation for more options.
+            });
+            // adds Arrows navigation control to the slider.
+            slider.control('arrows');
+
+            // CLIENTS CAROUSEL START 
+            $('#client-carousel').owlCarousel({
+                items: 6,
+                loop: true,
+                margin: 30,
+                responsiveClass: true,
+                mouseDrag: true,
+                dots: false,
+                responsive: {
+                    0: {
+                        items: 2,
+                        nav: true,
+                        loop: true,
+                        autoplay: true,
+                        autoplayTimeout: 3000,
+                        autoplayHoverPause: true,
+                        responsiveClass: true
+                    },
+                    600: {
+                        items: 3,
+                        nav: true,
+                        loop: true,
+                        autoplay: true,
+                        autoplayTimeout: 3000,
+                        autoplayHoverPause: true,
+                        responsiveClass: true
+                    },
+                    1000: {
+                        items: 6,
+                        nav: true,
+                        loop: true,
+                        autoplay: true,
+                        autoplayTimeout: 3000,
+                        autoplayHoverPause: true,
+                        responsiveClass: true,
+                        mouseDrag: true
+                    }
+                }
+            });
+
+            // TESTIMONIAL CAROUSELS START
+            $('#testimonial-carousel').owlCarousel({
+                items: 1,
+                loop: true,
+                margin: 30,
+                responsiveClass: true,
+                mouseDrag: true,
+                dots: false,
+                autoheight: true,
+                responsive: {
+                    0: {
+                        items: 1,
+                        nav: true,
+                        loop: true,
+                        autoplay: true,
+                        autoplayTimeout: 3000,
+                        autoplayHoverPause: true,
+                        responsiveClass: true,
+                        autoHeight: true
+                    },
+                    600: {
+                        items: 1,
+                        nav: true,
+                        loop: true,
+                        autoplay: true,
+                        autoplayTimeout: 3000,
+                        autoplayHoverPause: true,
+                        responsiveClass: true,
+                        autoHeight: true
+                    },
+                    1000: {
+                        items: 1,
+                        nav: true,
+                        loop: true,
+                        autoplay: true,
+                        autoplayTimeout: 3000,
+                        autoplayHoverPause: true,
+                        responsiveClass: true,
+                        mouseDrag: true,
+                        autoHeight: true
+                    }
+                }
+            });
         });
-
-        $("#backToTopBtn").on("click", function(){
-            $("html, body").animate({ scrollTop: 0 });
-            return false;
-        });
-    });
-  </script>
-</body>
+        /* ]]> */
+    </script>
+    </body>
 
 </html>
+
+
+

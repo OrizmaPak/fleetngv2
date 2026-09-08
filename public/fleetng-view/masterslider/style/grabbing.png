@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#38bdf8" />
+    <link rel="manifest" href="/fleetng/view/app/manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="/fleetng/view/app/pwa-192x192.png" />
+    <title>FleetNG - React</title>
+    <script type="module" crossorigin src="/fleetng/view/app/assets/index-CPih_R9V.js"></script>
+    <link rel="stylesheet" crossorigin href="/fleetng/view/app/assets/index-CAL86MIu.css">
+  </head>
+  <body class="bg-slate-50 dark:bg-slate-900">
+    <div id="root"></div>
+  </body>
+</html>
