@@ -1,0 +1,14 @@
+<svg width="56" height="57" viewBox="0 0 56 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="icon-park-outline:view-grid-detail" clip-path="url(#clip0_29_499)">
+<g id="Group">
+<path id="Vector" d="M49.166 2.66064H6.83402C4.4961 2.66064 2.60083 4.55591 2.60083 6.89384V49.2258C2.60083 51.5637 4.4961 53.459 6.83402 53.459H49.166C51.5039 53.459 53.3992 51.5637 53.3992 49.2258V6.89384C53.3992 4.55591 51.5039 2.66064 49.166 2.66064Z" stroke="#5B5B5B" stroke-width="4" stroke-linejoin="round"/>
+<path id="Vector_2" d="M12.4783 12.5381H23.7668V23.8266H12.4783V12.5381Z" stroke="#5B5B5B" stroke-width="4" stroke-linejoin="round"/>
+<path id="Vector_3" d="M32.2332 12.5381H43.5217M32.2332 22.4155H43.5217M12.4783 33.7041H43.5217M12.4783 43.5815H43.5217" stroke="#5B5B5B" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_29_499">
+<rect width="56" height="56" fill="white" transform="translate(0 0.0598145)"/>
+</clipPath>
+</defs>
+</svg>

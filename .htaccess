@@ -1,0 +1,15 @@
+RewriteEngine On
+RewriteRule ^$ "https://nglohitech.com.ng/FLEETNG V2/public/" [R=302,L]
+
+# Use the host's installed PHP 8.2 runtime only for this application tree.
+<IfModule mime_module>
+    AddHandler application/x-httpd-ea-php82 .php .php8 .phtml
+</IfModule>
+<FilesMatch "\.(php|php8|phtml)$">
+    SetHandler none
+</FilesMatch>
+
+
+#RewriteEngine On
+#RewriteCond %{HTTPS} off
+#RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
