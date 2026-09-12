@@ -183,13 +183,15 @@ class ClientController extends Controller
         return view('admin.client-management.client-edit', compact('client'));
     }
 
-    public function client_status_change($id)
+    public function client_status_change(Request $request, $id)
     {
         abort_unless((int) Auth::user()->user_type === 1, 403);
 
         $client = Customer::where('id', $id)->first();
         if ($client) {
-            $client->is_active = $client->is_active ? 0 : 1;
+            if (!$request->isMethod('post')) return view('admin.client-management.confirm-status', compact('client'));
+            $request->validate(['status'=>'required|boolean']);
+            $client->is_active = $request->boolean('status');
             $client->save();
             return redirect(route('client-list'))->with('success', "Client status updated successfully!");
         } else {

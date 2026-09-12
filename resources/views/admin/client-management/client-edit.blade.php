@@ -12,7 +12,7 @@
 @section('page-style')
     {{-- Page Css files --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/base/plugins/forms/pickers/form-flat-pickr.css') }}">
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <link href="{{ asset('editor/css/summernote-bs4.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/croppie.css') }}">
 @endsection
 

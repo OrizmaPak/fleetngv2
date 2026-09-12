@@ -23,7 +23,7 @@ class TripController extends Controller
   private $allowUserType;
   public function __construct()
   {
-    $this->api_url = config('app.url') . 'api/';
+    $this->api_url = rtrim(config('app.url'), '/') . '/api/';
     $this->allowUserType = config('custom.permission');
   }
 
@@ -54,115 +54,27 @@ class TripController extends Controller
   
   public function trip_confirm_pos($id)
   {
-    $user = Auth::user();
-    $trip = Trip::where('id', $id)->first();
-    $merchant = $trip->merchant();
-    $merchant_id =  $merchant ? $merchant->id : null;
-    if ($trip && !$trip->payment_id && $user->is_payment_user && $merchant_id == $user->merchant_assigned) {
-      $data = [
-        "trip_id" => $trip->id,
-        "customer_id" => $trip->client_id,
-        "status" => "successful",
-        "amount" => $trip->total_trip_cost(),
-        "payment_type" => 'confirmed_pos',
-        "payment_confirmed_by" => $user->id,
-      ];
-
-      $payment_id = TripPayment::create($data)->id;
-
-      $trip->payment_id = $payment_id;
-      $trip->payment_confirmed_by_pos = 1;
-      $trip->save();
-
-      return redirect(route('trip-list'))->with('success', 'Trip payment status updated successfully.');
-    }
-    return redirect(route('trip-list'))->with('fail', 'Trip not found.');
+    return $this->recordPayment([$id], 'confirmed_pos');
   }
+
   public function trip_bank_payment_received($id)
   {
-    $user = Auth::user();
-    $trip = Trip::where('id', $id)->first();
-    $merchant = $trip->merchant();
-    $merchant_id =  $merchant ? $merchant->id : null;
-    if ($trip && !$trip->payment_id && $user->is_payment_user && $merchant_id == $user->merchant_assigned) {
-      $data = [
-        "trip_id" => $trip->id,
-        "customer_id" => $trip->client_id,
-        "status" => "successful",
-        "amount" => $trip->total_trip_cost(),
-        "payment_type" => 'confirmed_bank_transfer',
-        "payment_confirmed_by" => $user->id,
-      ];
-
-      $payment_id = TripPayment::create($data)->id;
-
-      $trip->payment_id = $payment_id;
-      $trip->payment_confirm_by_bank_transfer = 1;
-      $trip->save();
-
-      return redirect(route('trip-list'))->with('success', 'Trip payment status updated successfully.');
-    }
-    return redirect(route('trip-list'))->with('fail', 'Trip not found.');
+    return $this->recordPayment([$id], 'confirmed_bank_transfer');
   }
 
   public function bulk_trip_bank_payment_received(Request $request)
   {
-    $user = Auth::user();
-    $trip_ids = $request->transfer_trip_ids;
-    $trip_ids = explode(',', $trip_ids);
-    $trips = Trip::whereIn('id', $trip_ids)->get();
-
-    foreach ($trips as $trip) {
-      $merchant = $trip->merchant();
-      $merchant_id =  $merchant ? $merchant->id : null;
-      if ($trip && !$trip->payment_id && $user->is_payment_user && $merchant_id == $user->merchant_assigned) {
-        $data = [
-          "trip_id" => $trip->id,
-          "customer_id" => $trip->client_id,
-          "status" => "successful",
-          "amount" => $trip->total_trip_cost(),
-          "payment_type" => 'confirmed_bank_transfer',
-          "payment_confirmed_by" => $user->id,
-        ];
-
-        $payment_id = TripPayment::create($data)->id;
-
-        $trip->payment_id = $payment_id;
-        $trip->payment_confirm_by_bank_transfer = 1;
-        $trip->save();
-      }
-    }
-
-    return redirect(route('trip-list'))->with('success', 'Trip payment status updated successfully.');
+    return $this->recordPayment(explode(',', (string) $request->transfer_trip_ids), 'confirmed_bank_transfer');
   }
 
   public function bulk_trip_pos_payment_received(Request $request)
   {
-    $user = Auth::user();
-    $trip_ids = $request->pos_trip_ids;
-    $trip_ids = explode(',', $trip_ids);
-    $trips = Trip::whereIn('id', $trip_ids)->get();
-    foreach ($trips as $trip) {
-      $merchant = $trip->merchant();
-      $merchant_id =  $merchant ? $merchant->id : null;
-      if ($trip && !$trip->payment_id && $user->is_payment_user && $merchant_id == $user->merchant_assigned) {
-        $data = [
-          "trip_id" => $trip->id,
-          "customer_id" => $trip->client_id,
-          "status" => "successful",
-          "amount" => $trip->total_trip_cost(),
-          "payment_type" => 'confirmed_pos',
-          "payment_confirmed_by" => $user->id,
-        ];
+    return $this->recordPayment(explode(',', (string) $request->pos_trip_ids), 'confirmed_pos');
+  }
 
-        $payment_id = TripPayment::create($data)->id;
-
-        $trip->payment_id = $payment_id;
-        $trip->payment_confirmed_by_pos = 1;
-        $trip->save();
-      }
-    }
-
+  private function recordPayment(array $ids, $method)
+  {
+    app(\App\Services\ManualTripPayment::class)->record(Auth::user(), $ids, $method);
     return redirect(route('trip-list'))->with('success', 'Trip payment status updated successfully.');
   }
 
@@ -346,6 +258,10 @@ class TripController extends Controller
   public function trip_add(Request $request)
   {
     if ($request->isMethod('post')) {
+      $request->validate(['client_type'=>'required|in:new,existing','client_id'=>'required_if:client_type,existing|nullable|integer|exists:customers,id','client_name'=>'required_if:client_type,new|nullable|string|max:255','client_phone'=>'required_if:client_type,new|nullable|regex:/^[0-9]{9,13}$/','client_email'=>'nullable|email','driver_id'=>'required|integer|exists:drivers,id','pickup_location'=>'required|integer|exists:pickup_locations,id','drop_location'=>'required|string|max:255','pickup_datetime'=>'required|date|after_or_equal:today','trip_cost'=>'required|integer|min:0','cost_of_sand'=>'nullable|integer|min:0','road_money'=>'nullable|integer|min:0']);
+      abort_unless(\App\Support\StaffAccess::drivers(Auth::user())->whereKey($request->driver_id)->exists(),404);
+      if ($request->client_type === 'existing' && !\App\Support\StaffAccess::global(Auth::user())) abort_unless(in_array((int)$request->client_id, Auth::user()->client_ids()->map(function($id){return (int)$id;})->all(),true),404);
+      $trip = \Illuminate\Support\Facades\DB::transaction(function () use ($request) {
       $client_phone = $request->client_phone;
       $client_email = $request->client_email;
       $client_name = $request->client_name;
@@ -388,8 +304,15 @@ class TripController extends Controller
       }
 
       $trip = Trip::create($data); // create trip in database
+      return $trip;
+      });
 
-      $trip->send_trip_request_notification();
+      try {
+        $trip->send_trip_request_notification();
+      } catch (\Throwable $error) {
+        report($error);
+        return redirect(route('trip-list'))->with('fail', 'Trip saved, but the driver notification failed. Do not create another trip.');
+      }
 
       // Add trip request for driver
       if ($trip) {
@@ -405,7 +328,7 @@ class TripController extends Controller
       ];
 
       $drivers = Auth::user()->merchant_drivers();
-      $clients = Customer::get();
+      $clients = \App\Support\StaffAccess::global(Auth::user()) ? Customer::get() : Customer::whereIn('id', Auth::user()->client_ids())->get();
 
       $locations = PickupLocation::where('is_active', 1)->get();
 
@@ -498,13 +421,13 @@ class TripController extends Controller
     }
     $live_tracking_url = "https://app.zypsa.com/tracking_api.php";
     $live_tracking_params          = [
-      'user_name' => "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name' => config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "track"
     ];
     $live_tracking_distance_params          = [
-      'user_name' => "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name' => config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "extra"
     ];
     $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));

@@ -66,6 +66,7 @@ class CustomerController extends Controller
                 'phone_number' => 'required|regex:/^\\d+$/|min:9|max:13',
                 'email' => 'required|email',
                 'first_name' => 'required',
+                'profile_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             ];
 
             $validator = Validator::make($request->all(), $validate, ['phone_number.*' => 'Invalid phone number.']);  // validate the request data
@@ -97,19 +98,21 @@ class CustomerController extends Controller
             }
 
             if ($request->file('profile_image')) { // if customer uploads the profile image
-                // delete old image if exists
-                if (!empty($customer->profile_image) && Storage::exists($customer->profile_image)) {
-                    Storage::delete($customer->profile_image);
-                }
-    
-                $file                  = $request->file('profile_image');
-                $data['profile_image'] = 'customers/profile/' . md5(time()) . '.' . $file->getClientOriginalExtension();
-                Storage::disk('s3')->put($data['profile_image'], file_get_contents($file)); //store new image in storage
-                $storage_url = Storage::disk('s3')->url($data['profile_image']); // get stored image url of s3
-                $data['profile_image'] = $storage_url;
+                $disk = Storage::disk(config('customers.profile_disk'));
+                $path = $request->file('profile_image')->store('customers/profile/' . $customer->id, config('customers.profile_disk'));
+                if (!$path) return response()->badRequest('Your photo could not be saved. Please try again.');
+                $data['profile_image'] = $path;
             }
 
-            $customer->update($data);
+            $previousImage = $customer->profile_image;
+            try { $customer->update($data); }
+            catch (\Throwable $error) {
+                if (isset($path)) $disk->delete($path);
+                throw $error;
+            }
+            if (isset($path) && is_string($previousImage) && strpos($previousImage, 'customers/profile/' . $customer->id . '/') === 0) {
+                $disk->delete($previousImage);
+            }
             return response()->success("Profile updated successfully.", $customer);
         } catch (\Throwable $th) {
             return response()->failedRequest($th);
@@ -124,6 +127,15 @@ class CustomerController extends Controller
         } catch (\Throwable $th) {
             return response()->failedRequest($th);
         }
+    }
+
+    public function profileImage(Request $request)
+    {
+        $path = $request->user()->profile_image;
+        abort_unless(is_string($path) && strpos($path, 'customers/profile/' . $request->user()->id . '/') === 0 && strpos($path, '..') === false, 404);
+        $disk = Storage::disk(config('customers.profile_disk'));
+        abort_unless($disk->exists($path), 404);
+        return $disk->response($path, null, ['Cache-Control' => 'private, no-cache', 'X-Content-Type-Options' => 'nosniff']);
     }
 
     public function merchants()

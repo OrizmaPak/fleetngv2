@@ -47,6 +47,8 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $hidden = [
+        'password',
+        'token',
         'remember_token',
     ];
 
@@ -56,6 +58,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $casts = [
+        'user_type' => 'integer',
+        'is_active' => 'boolean',
+        'merchant_assigned' => 'integer',
         'email_verified_at' => 'datetime',
     ];
 
@@ -66,7 +71,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function getPhotoAttribute($value)
     {
         if($value){
-            return Storage::disk('s3')->url($value);
+            return \App\Helpers\Helper::imageUrl($value);
         }
         return null;
     }
@@ -91,21 +96,14 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function drivers_ids()
     {
-        $ids = [];
-        if($this->user_type === 3){
-            $ids = Driver::where(['user_id' => $this->id])->pluck('id');
-        }
-
-        if($this->user_type === 4){
-            $ids = Driver::where(['merchant_id' => $this->id])->pluck('id');
-        }
-
-        if($this->is_payment_user){
-            $ids = Driver::where(['merchant_id' => $this->merchant_assigned])->pluck('id');
-        }
-        
-        return $ids;
+        return \App\Support\StaffAccess::drivers($this)->pluck('id');
     }
+
+    public function getIsPaymentUserAttribute($value)
+    {
+        return (bool) $value || (int) $this->user_type === 5;
+    }
+
 
     public function client_ids(){
         $ids = Trip::whereIn('driver_id', $this->drivers_ids())->pluck('client_id');
@@ -114,7 +112,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function merchant_drivers()
     {
-        $drivers = Driver::select('id', 'first_name', 'last_name')->where(['merchant_id' => $this->merchant_assigned])->get();
+        $drivers = \App\Support\StaffAccess::drivers($this)->select('id', 'first_name', 'last_name')->where('is_active', 1)->get();
         return $drivers->map(function($item){
             $lastTrip = Trip::where('driver_id', $item->id)->whereIn('status', [1, 2])->orderByDesc('id')->first(); // get previous new trip or live trip of driver
             $available = true;

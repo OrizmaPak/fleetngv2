@@ -18,6 +18,14 @@ use Illuminate\Support\Facades\Mail;
 
 class ApiController extends Controller
 {
+  public function __construct()
+  {
+    $this->middleware('auth:sanctum')->except(['forgot_password','admin_login','superadmin_login']);
+    $this->middleware(function ($request, $next) {
+      \App\Support\StaffAccess::api($request->route()->getActionMethod(), $request);
+      return $next($request);
+    });
+  }
   //function used for superadmin login
   public function superadmin_login(Request $request)
   {
@@ -96,7 +104,8 @@ class ApiController extends Controller
       $response['success'] = False;
       $response['message'] = "Error! Email is invalid! Please try valid email.";
     } else {
-      $code         = substr((mt_rand()), 0, 6);
+      $code = \Illuminate\Support\Str::random(64);
+      \Illuminate\Support\Facades\DB::table('password_resets')->updateOrInsert(['email'=>$email],['token'=>hash('sha256',$code),'created_at'=>now()]);
       $forgot_data  = array('token' => $code);
       ApiModel::editRecord('users', $where_data, $forgot_data);
 
@@ -324,7 +333,7 @@ class ApiController extends Controller
         $temp['last_name']   =   $driver->last_name;
         $temp['phone']       =   $driver->phone;
         $temp['email']       =   $driver->email;
-        $temp['photo']       =   'https://fleetng.s3.ap-southeast-1.amazonaws.com/' . $driver->photo;
+        $temp['photo']       =   Helper::imageUrl($driver->photo);
         $temp['vehicle_id']  =   $driver->vehicle_id;
         $temp['login_pin']   =   $driver->auth_pin;
         $temp['device_serial_number']   =   $driver->device_serial_number;
@@ -681,7 +690,7 @@ class ApiController extends Controller
         if ($merchant) {
           $temp['merchant_name'] =  $merchant->merchant_name;
         }
-        $temp['photo']       =   'https://fleetng.s3.ap-southeast-1.amazonaws.com/' . $user->photo;
+        $temp['photo']       =   Helper::imageUrl($user->getRawOriginal('photo'));
         $response['data'] = $temp;
       }
     } else {
@@ -711,7 +720,7 @@ class ApiController extends Controller
 
           Helper::deleteS3Image($user->photo); //delete old s3 image if exists 
         } else {
-          $profile_img = $user->photo;
+          $profile_img = $user->getRawOriginal('photo');
         }
 
         $last_name = $request->last_name;
@@ -798,7 +807,8 @@ class ApiController extends Controller
 
         $user_detail  = ApiModel::fetchSingleRecord('users', $where_data);
 
-        $code         = substr((mt_rand()), 0, 6);
+        $code = \Illuminate\Support\Str::random(64);
+        \Illuminate\Support\Facades\DB::table('password_resets')->updateOrInsert(['email'=>$user_detail->email],['token'=>hash('sha256',$code),'created_at'=>now()]);
         $forgot_data  = array('token' => $code);
         ApiModel::editRecord('users', $where_data, $forgot_data);
 

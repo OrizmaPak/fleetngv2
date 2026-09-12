@@ -144,7 +144,7 @@
           "serverSide": true,
           "bLengthChange":false,
           "ajax": {
-            "url":"{{ route('driver-trip-list-detail',Request::segment(3)) }}"
+            "url":"{{ route('driver-trip-list-detail',request()->route('id')) }}"
             
           },
           "columns":[

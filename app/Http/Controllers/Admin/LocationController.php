@@ -16,7 +16,7 @@ class LocationController extends Controller
   private $allowsuperadmin;
   public function __construct()
   {
-    $this->api_url = config('app.url') . 'api/';
+    $this->api_url = rtrim(config('app.url'), '/') . '/api/';
     $this->allowsuperadmin=config('custom.super_admin_permission');
   }
 
@@ -93,24 +93,15 @@ class LocationController extends Controller
   public function add_pickup_location(Request $request)
   {
     if ($request->isMethod('post')) {
-      //Formatted address
-      $formattedAddr = str_replace(' ', '+', $request->location);
-      //Send request and receive json data by address
-      $geocodeFromAddr = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . $formattedAddr . '&sensor=false&key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U');
-      $output = json_decode($geocodeFromAddr);
-
-      // if user selected location is not found!
-      if( empty( $output->results ) ){
-        return back()->with('fail','Something went wrong, please try again!');
-      }
+      $coordinates = $this->coordinates($request);
 
       $url = $this->api_url . "add-pickup-location"; 
 
       $params          = [
         'location' => $request->location,
         'location_name' => $request->location_name,
-        'latitude' => $output->results[0]->geometry->location->lat,
-        'longitude' => $output->results[0]->geometry->location->lng,
+        'latitude' => $coordinates['latitude'],
+        'longitude' => $coordinates['longitude'],
         'user_id' => Auth::id()
       ];
 
@@ -137,31 +128,7 @@ class LocationController extends Controller
   public function edit_pickup_location(Request $request, $id)
   {
     if ($request->isMethod('post')) {
-      $location =  explode(",", $request->input('loc'));
-      $pickup_location = PickupLocation::where('id', $id)->first();
-
-      if ($pickup_location->latitude !== $location[0]) {
-        $address = $request->input('location');
-        //Formatted address
-        $formattedAddr = str_replace(' ', '+', $address);
-        //Send request and receive json data by address
-        $geocodeFromAddr = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . $formattedAddr . '&sensor=false&key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U');
-        $output = json_decode($geocodeFromAddr);
-
-        // if user selected location is not found!
-        if( empty( $output->results ) ){
-          return back()->with('fail','Something went wrong, please try again!');
-        }
-        
-        //Get latitude and longitute from json data
-        $data['latitude']  = $output->results[0]->geometry->location->lat;
-        $data['longitude'] = $output->results[0]->geometry->location->lng;
-        $lat = $data['latitude'];
-        $lng = $data['longitude'];
-      } else {
-        $lat = $pickup_location->latitude;
-        $lng = $pickup_location->longitude;
-      }
+      $coordinates = $this->coordinates($request);
 
       $url = $this->api_url . "update-pickup-location-detail";
 
@@ -169,8 +136,8 @@ class LocationController extends Controller
         'location_id' => $id,
         'location' => $request->location,
         'location_name' => $request->location_name,
-        'latitude' => $lat,
-        'longitude' => $lng
+        'latitude' => $coordinates['latitude'],
+        'longitude' => $coordinates['longitude']
       ];
 
       $location_update = FrontModel::callPostCurl($url, $params);
@@ -231,5 +198,14 @@ class LocationController extends Controller
     $url = $this->api_url . "change-pickup-location-status";
     $params          = array('location_id' => $request->id, 'is_active' => $request->status);
     FrontModel::callPostCurl($url, $params);
+  }
+  private function coordinates(Request $request): array
+  {
+    return $request->validate([
+      'location' => 'required|string|max:500',
+      'location_name' => 'required|string|max:255',
+      'latitude' => 'required|numeric|between:-90,90',
+      'longitude' => 'required|numeric|between:-180,180',
+    ]);
   }
 }

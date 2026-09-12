@@ -12,7 +12,7 @@
 @section('page-style')
 {{-- Page Css files --}}
 <link rel="stylesheet" type="text/css" href="{{asset('css/base/plugins/forms/pickers/form-flat-pickr.css')}}">
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<link href="{{ asset('editor/css/summernote-bs4.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="{{asset('css/croppie.css')}}">
 @endsection
 
@@ -125,7 +125,7 @@
                       <label for="slider_image_head_two">Photo</label>
                     </div>
                     <div class="col-sm-9">
-                      <img src="@if(@getimagesize($driver_details['photo'])){{$driver_details['photo']}}@else {{asset('images/user_default.png')}} @endif" height="100"/>  <br><br>
+                      <img src="@if($driver_details['photo']){{$driver_details['photo']}}@else {{asset('images/user_default.png')}} @endif" height="100"/>  <br><br>
                       <input type="file" name="photo" id="profile_image" accept="image/*" class="form-control" onchange="preview_image(this)">
                     </div>
                   </div>
@@ -257,7 +257,7 @@
 <script src="{{URL::to('js/jquery.imgareaselect.js')}}"></script>
 <script src="{{URL::to('js/croppie.js')}}"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="{{ asset('editor/js/summernote-bs4.js') }}"></script>
 <script type="text/javascript">
     //  this function show selected sidebar active
     $('#admin_driver_list').addClass('active');

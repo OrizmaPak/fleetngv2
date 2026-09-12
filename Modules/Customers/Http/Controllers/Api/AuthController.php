@@ -13,6 +13,13 @@ use Modules\Customers\Entities\Customer;
 
 class AuthController extends Controller
 {
+    public function logout(Request $request)
+    {
+        $token = $request->user()->currentAccessToken();
+        if ($token && method_exists($token, 'delete')) $token->delete();
+        return response()->success('Signed out successfully.');
+    }
+
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -62,6 +69,7 @@ class AuthController extends Controller
             "country_code" => $request->country_code,
             "email" => $request->email
         ];
+        if (!DevelopmentOtpController::consumeProof($request)) return response()->badRequest('Verify your phone number before creating an account.');
         $customer = Customer::create($data);  // create customer data in database
         $customer->access_token = $customer->createToken("API_TOKEN")->plainTextToken; // generate access token
         return response()->success("Phone number verified successfully.", $customer);
@@ -130,6 +138,8 @@ class AuthController extends Controller
             return response()->badRequest("Data not found");
         }
 
+        if (!$customer->is_active) return response()->badRequest('This customer account is unavailable.');
+        if (!DevelopmentOtpController::consumeProof($request)) return response()->badRequest('Verify your phone number before signing in.');
         $customer->tokens()->delete(); //delete all old tokens fron database
         $customer->access_token = $customer->createToken("API_TOKEN")->plainTextToken; // generate access token
 

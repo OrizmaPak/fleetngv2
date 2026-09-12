@@ -18,7 +18,7 @@ class UserController extends Controller
   private $api_url;
   public function __construct()
   {
-    $this->api_url = config('app.url') . 'api/';
+    $this->api_url = rtrim(config('app.url'), '/') . '/api/';
   }
 
 
@@ -363,7 +363,9 @@ class UserController extends Controller
     $id = $request->id;
     if (!empty($id)) {
       $where = ['is_active' => 1, 'merchant_assigned' => $id, 'user_type' => 3];
-      $userData = User::where($where)->get();
+      $query = User::where($where);
+      if (!\App\Support\StaffAccess::global($request->user())) $query->whereKey($request->user()->id);
+      $userData = $query->get();
     } else {
       $userData = '';
     }

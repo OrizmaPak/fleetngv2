@@ -16,7 +16,9 @@ class SMSController extends Controller
 
     public function send_sms_payment_alert_to_client(Request $request)
     {
-        $trip = Trip::find($request->trip_id);
+        if (!config('integrations.sms_enabled') || !config('integrations.sms_key') || app()->environment(['local','testing'])) return redirect(route('trip-list'))->with('fail','SMS delivery is not connected. No message was sent.');
+        $request->validate(['trip_id'=>'required|integer','sms_text'=>'required|string|max:1000']);
+        $trip = \App\Support\StaffAccess::trips(Auth::user())->findOrFail($request->trip_id);
         $phone_number = "";
         if ($trip && $trip->client_id) {
             $client = Customer::find($trip->client_id);
@@ -49,10 +51,10 @@ class SMSController extends Controller
                 "channel" => "dnd", 
                 "type" => "plain", 
                 'sms' => $message, 
-                "api_key" => 'TLjfB1ZoqOahpt7kbZWUprumklt4s1DgZFAizpX2RrKGMJzY3W99h46xJPbDpt'
+                "api_key" => config('integrations.sms_key')
             ];
 
-            $response = Http::post('https://api.ng.termii.com/api/sms/send', $data)->json();
+            $response = Http::timeout(20)->withOptions(['connect_timeout'=>5])->post('https://api.ng.termii.com/api/sms/send', $data)->throw()->json();
             if ($response && isset($response['message_id']) && $response['message'] == "Successfully Sent") {
                 $log['sms_id'] = $response['message_id'];
                 $log['is_sent'] = 1;

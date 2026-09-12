@@ -274,9 +274,11 @@ class ApiModel extends Model
 
 	public static function getTripReport($truck_id, $daterange, $trip_type, $customer_phone = null, $payment_type = null)
 	{
+		$trip_type = $trip_type ?: 'all';
 		$customer_id = null;
 
 		if ($customer_phone) {
+			$customer_id = -1;
 			$customer = Customer::where('phone_number', $customer_phone)->first();
 			if ($customer) {
 				$customer_id = $customer->id;
@@ -299,26 +301,9 @@ class ApiModel extends Model
 				$to_date = Carbon::parse($date[1])->toDateTimeString();
 			}
 		}
-		if ($truck_id !== null) {
-			$driver = Driver::where('vehicle_id', $truck_id)->select('id', 'vehicle_id')->first();
-
-			if (session('user_role') == 1) {
-				$driver = Driver::where('vehicle_id', $truck_id)->select('id', 'vehicle_id')->first();
-			} else {
-				$driver = Driver::where(['vehicle_id' => $truck_id, 'user_id' => Auth::user()->id])->select('id', 'vehicle_id')->first();
-			}
-			if ($driver) {
-				$driver_id = [$driver->id];
-			} else {
-				$driver_id = [$truck_id];
-			}
-		} else {
-			if (session('user_role') == 1) {
-				$driver_id = Driver::pluck('id');
-			} else {
-				$driver_id = DB::table('drivers')->where('user_id', Auth::user()->id)->pluck('id');
-			}
-		}
+		$drivers = \App\Support\StaffAccess::drivers(Auth::user());
+		if ($truck_id !== null && $truck_id !== '') $drivers->where('vehicle_id', $truck_id);
+		$driver_id = $drivers->pluck('id');
 
 		$trips_detail = DB::table('trips')
 			->select('drivers.first_name', 'drivers.last_name', 'trips.driver_id', 'trips.client_id', 'trips.total_cost', 'trips.cost_of_sand', 'trips.road_money', 'trips.driver_commission', 'trips.client_name', 'trips.trip_generated_at', 'trips.created_at', 'pickup_locations.location as pickup_location', 'pickup_locations.location_name', 'drop_locations.location as drop_location', 'trip_payments.transaction_id', 'trip_payments.status as trip_payment_status', 'trips.status', 'trips.id', 'trips.payment_confirm_by_bank_transfer', 'trips.payment_confirmed_by_pos')
@@ -367,7 +352,7 @@ class ApiModel extends Model
 						$item->payment_status =  '--';
 					} else if ($item->status == 3 && !$item->transaction_id) {
 						$item->payment_status = 'Pending';
-					} else if ($item->transaction_id) {
+					} else if ($item->transaction_id && $item->trip_payment_status === 'successful') {
 						$item->payment_status = 'Paid';
 					} else if ($item->transaction_id && $item->trip_payment_status !== 'successful') {
 						$item->payment_status = 'Failed';

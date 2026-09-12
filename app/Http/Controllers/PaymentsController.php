@@ -15,13 +15,13 @@ class PaymentsController extends Controller
     {
         $user = Auth::user();
 
-        if ($user->user_type === 2) {
+        if (\App\Support\StaffAccess::global($user)) {
             $payments = TripPayment::get()->each(function ($item) {
                 $item->trip = $item->trip();
                 $item->trip = $item->trip();
             });
         } else {
-            $payments = TripPayment::whereIn('customer_id', $user->client_ids())->get()->each(function ($item) {
+            $payments = TripPayment::whereIn('trip_id', \App\Support\StaffAccess::trips($user)->select('id'))->get()->each(function ($item) {
                 $item->trip = $item->trip();
                 $item->trip = $item->trip();
             });
@@ -31,7 +31,7 @@ class PaymentsController extends Controller
     }
     public function trip_invoice_pdf_download($id)
     {
-        $trip = Trip::where('id', $id)->first();
+        $trip = \App\Support\StaffAccess::trips(Auth::user())->findOrFail($id);
         $trip->client = $trip->client_info();
         $trip->pickup_location_alias = $trip->pickup_location_alias();
         $trip->drop_location = $trip->drop_location();

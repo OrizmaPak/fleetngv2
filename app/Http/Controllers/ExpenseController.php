@@ -74,7 +74,7 @@ class ExpenseController extends Controller
 
         if ($expense) {
             $driver = Driver::find($expense->driver_id);
-            if ($driver && $driver->merchant_id === $userId) {
+            if ($driver && \App\Support\StaffAccess::drivers(Auth::user())->whereKey($driver->id)->exists()) {
                 Expense::where(['id' => $id])->delete();
                 return redirect()->back()->with('success', 'Expense deleted successfully.');
             }
@@ -84,13 +84,14 @@ class ExpenseController extends Controller
 
     public function edit_expense(Request $request)
     {
+        $request->validate(['item_name'=>'required|string|max:255','item_cost'=>'required|numeric|min:0','item_quantity'=>'required|integer|min:1']);
         $id = $request->expense_id;
         $expense = Expense::find($id);
         $user = Auth::user();
 
         if ($expense) {
             $driver = Driver::find($expense->driver_id);
-            if ($driver && $driver->user_id === $user->id) {
+            if ($driver && \App\Support\StaffAccess::drivers($user)->whereKey($driver->id)->exists()) {
                 $data = [
                     'item_name' => $request->item_name,
                     'item_cost' => $request->item_cost,

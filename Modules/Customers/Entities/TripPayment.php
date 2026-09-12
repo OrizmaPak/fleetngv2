@@ -23,7 +23,7 @@ class TripPayment extends Model
 
     public function trip()
     {
-        $trip = Trip::select('id', 'pickup_location_id', 'drop_location_id', 'created_at')->where(['id' => $this->trip_id])->first();
+        $trip = Trip::select('id', 'pickup_location_id', 'drop_location_id', 'created_at', 'total_cost', 'cost_of_sand', 'road_money')->where(['id' => $this->trip_id])->first();
         if ($trip) {
             $trip->pickup_location = $trip->pickup_location();
             $trip->pickup_location_alias = $trip->pickup_location_alias();

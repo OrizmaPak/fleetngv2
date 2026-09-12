@@ -92,7 +92,7 @@ class Trip extends Model
     public function send_trip_request_notification()
     {
         $driver = Driver::where(['id' => $this->driver_id])->whereNotNull('device_token')->select('device_token')->first();
-        if ($driver && $driver->device_token) {
+        if ($driver && $driver->device_token && !app()->environment(['local', 'testing'])) {
             $SERVER_API_KEY = config('app.fcm_server_key');
 
             $body = $this->client_name . " has requested a trip to " . $this->drop_location() . " for " . $this->total_cost . " NGN.";

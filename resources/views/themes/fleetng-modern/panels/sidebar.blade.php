@@ -2,6 +2,7 @@
     $role = (string) session('user_role');
     $currentUser = Auth::user();
     $dashboardUrl = $role === '1' ? route('super-dashboard-analytics') : route('dashboard-analytics');
+    if ($currentUser && $currentUser->is_payment_user) $dashboardUrl = route('trip-list');
 @endphp
 <aside class="main-menu menu-fixed menu-light" aria-label="Primary navigation">
     <div class="fleetng-sidebar-head">

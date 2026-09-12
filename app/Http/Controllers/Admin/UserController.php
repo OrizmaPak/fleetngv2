@@ -19,7 +19,7 @@ class UserController extends Controller
   private $api_url;
   public function __construct()
   {
-    $this->api_url = config('app.url') . 'api/';
+    $this->api_url = rtrim(config('app.url'), '/') . '/api/';
   }
 
   public function generatePassword()
@@ -346,23 +346,25 @@ class UserController extends Controller
   //function used to show driver all trip list
   public function user_trip_list($id)
   {
+    abort_unless(in_array((int) Auth::user()->user_type, [1, 2], true) || Auth::id() === (int) $id, 403);
     $breadcrumbs = [
       ['link' => "/analytics", 'name' => "Home"], ['link' => "/admin/driver-list", 'name' => "Driver Management"],  ['name' => "Driver Trip List"]
     ];
     return view('/admin/user-management/user-trip-list', [
-      'breadcrumbs' => $breadcrumbs
+      'breadcrumbs' => $breadcrumbs, 'userId' => (int) $id
     ]);
   }
 
   // this function is used for ajax call to show driver list detail
   public function user_trip_list_detail(Request $request, $id)
   {
+    abort_unless(in_array((int) Auth::user()->user_type, [1, 2], true) || Auth::id() === (int) $id, 403);
     if ($request->ajax()) {
-      $data = Trip::where('driver_id', $id)->orderBy('id', 'DESC')->get();
+      $data = Trip::with('driver')->whereIn('driver_id', Driver::where('user_id', $id)->select('id'))->orderBy('id', 'DESC')->get();
       return Datatables::of($data)
         ->addIndexColumn()
         ->addColumn('name', function ($data) {
-          return $data->driver->first_name . ' ' . !empty($data->driver->last_name) ? $data->driver->last_name : '';
+          return $data->driver ? trim($data->driver->first_name . ' ' . $data->driver->last_name) : 'Not assigned';
         })
         ->addColumn('trip_generated_at', function ($data) {
           return date("d-M-Y h:i A", strtotime($data->trip_generated_at));

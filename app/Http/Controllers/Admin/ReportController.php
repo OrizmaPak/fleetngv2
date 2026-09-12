@@ -12,6 +12,11 @@ use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 
 class ReportController extends Controller
 {
+  public function report_api(Request $request)
+  {
+    return response()->json(ApiModel::getTripReport($request->truck_id, $request->daterange, $request->trip_type, $request->customer, $request->payment_type));
+  }
+
   public function report_index(Request $request)
   {
     if ($request->ajax()) {

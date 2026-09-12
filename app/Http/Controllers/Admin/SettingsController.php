@@ -13,7 +13,7 @@ class SettingsController extends Controller
    private $api_url;
    public function __construct()
    {
-     $this->api_url = config('app.url').'api/';
+     $this->api_url = rtrim(config('app.url'), '/') . '/api/';
    }		
 
   // Account Settings
@@ -26,6 +26,7 @@ class SettingsController extends Controller
   //function used to change password
   public function change_password(Request $request)
   {
+    $request->validate(['old_password'=>'required|string','new_password'=>'required|string|min:8|max:128','confirm-new-password'=>'required|same:new_password']);
   	$url = $this->api_url . "change-password";
 
   	$params = [

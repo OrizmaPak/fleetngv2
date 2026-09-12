@@ -7,7 +7,7 @@
 @endphp
 <nav class="header-navbar navbar navbar-expand-lg align-items-center" aria-label="Utility navigation">
     <div class="navbar-container d-flex align-items-center content">
-        <button type="button" class="fleetng-icon-button menu-toggle d-xl-none" aria-label="Open navigation">
+        <button type="button" class="fleetng-icon-button fleetng-mobile-toggle d-xl-none" aria-label="Open navigation">
             <i data-feather="menu"></i>
         </button>
 

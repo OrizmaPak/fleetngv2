@@ -19,7 +19,7 @@
 
   function initialiseNavigation() {
     var collapse = document.querySelector('.fleetng-nav-collapse');
-    var mobileToggle = document.querySelector('.menu-toggle');
+    var mobileToggle = document.querySelector('.fleetng-mobile-toggle');
     var overlay = document.querySelector('.sidenav-overlay');
     var collapsed = storage.getItem('fleetng-nav-collapsed') === 'true';
     if (collapsed && window.innerWidth >= 1200) body.classList.add('fleetng-nav-collapsed');
@@ -61,7 +61,7 @@
   }
 
   function initialisePasswordToggles() {
-    document.querySelectorAll('.form-password-toggle').forEach(function (wrapper) {
+    document.querySelectorAll('.fleetng-password-toggle').forEach(function (wrapper) {
       var input = wrapper.querySelector('input');
       var button = wrapper.querySelector('button, .input-group-text');
       if (!input || !button) return;

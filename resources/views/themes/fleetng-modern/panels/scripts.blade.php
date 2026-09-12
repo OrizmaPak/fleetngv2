@@ -4,3 +4,4 @@
 <script src="{{ asset(mix('js/core/app.js')) }}"></script>
 @yield('page-script')
 <script src="{{ asset('themes/fleetng-modern/js/app.js') }}?v=1.0.0" defer></script>
+<script src="{{ asset('themes/fleetng-modern/js/operations.js') }}?v=20260910" defer></script>

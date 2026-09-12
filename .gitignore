@@ -17,6 +17,7 @@
 /storage/framework/sessions/*
 /storage/framework/views/*
 /storage/logs/*
+/storage/app/review/
 *.log
 *.sql
 *.zip

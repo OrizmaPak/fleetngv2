@@ -12,8 +12,7 @@
 @section('page-style')
 {{-- Page Css files --}}
 <link rel="stylesheet" type="text/css" href="{{asset('css/base/plugins/forms/pickers/form-flat-pickr.css')}}">
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
-{{-- <script src="https://maps.google.com/maps/api/js?sensor=false&&key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U"></script> --}}
+<link href="{{ asset('editor/css/summernote-bs4.css') }}" rel="stylesheet">
 @endsection
 <style type="text/css">
   #map {
@@ -71,14 +70,8 @@
                       <label for="slider_image_head_two"></label>
                     </div>
                     <div class="col-12">
-                      <input id='loc' type='hidden' value='' />
-                      <br>
-                      <div id="map"></div>
-                      <div id="infowindow-content">
-                        <img src="" width="16" height="16" id="place-icon">
-                        <span id="place-name" class="title"></span><br>
-                        <span id="place-address"></span>
-                      </div>
+                      @include('admin.location-management.coordinates')
+                    </div>
                     </div>
                   </div>
                 </div>
@@ -109,115 +102,5 @@
 @endsection
 
 @section('page-script')
-
-
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
-<script type="text/javascript">
-
-</script>
-{{-- Page js files --}}
-<script type="text/javascript">
-  //  this function show selected sidebar active
-  $('#admin_location_list').addClass('active');
-  var a = 6.4280556;
-  var b = 3.4219444;
-
-  function initMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
-      center: {lat: a, lng: b},
-      zoom: 17
-    });
-    
-    var input = document.getElementById('pac-input');//only required
-    
-    var autocomplete = new google.maps.places.Autocomplete(input);
-
-    // Bind the map's bounds (viewport) property to the autocomplete object,
-    // so that the autocomplete requests use the current map bounds for the
-    // bounds option in the request.
-    autocomplete.bindTo('bounds', map);
-
-    // Set the data fields to return when the user selects a place.
-    autocomplete.setFields(
-        ['address_components', 'geometry', 'icon', 'name']);
-
-    var infowindow = new google.maps.InfoWindow();
-    var infowindowContent = document.getElementById('infowindow-content');
-    infowindow.setContent(infowindowContent);
-    var marker = new google.maps.Marker({
-      map: map,
-      anchorPoint: new google.maps.Point(0, -29),
-      draggable: true //this makes it drag and drop
-    });
-
-    autocomplete.addListener('place_changed', function() {
-      infowindow.close();
-      marker.setVisible(true);
-      var place = autocomplete.getPlace();
-
-      if (!place.geometry) {
-        // User entered the name of a Place that was not suggested and
-        // pressed the Enter key, or the Place Details request failed.
-        window.alert("No details available for input: '" + place.name + "'");
-        return;
-      }
-
-      // If the place has a geometry, then present it on a map.
-      if (place.geometry.viewport) {
-        map.fitBounds(place.geometry.viewport);
-        map.setZoom(17); 
-      } else {
-        map.setCenter(place.geometry.location);
-        map.setZoom(17);  // Why 17? Because it looks good.
-      }
-      marker.setPosition(place.geometry.location);
-      marker.setVisible(true);
-
-      var address = '';
-      if (place.address_components) {
-        address = [
-          (place.address_components[0] && place.address_components[0].short_name || ''),
-          (place.address_components[1] && place.address_components[1].short_name || ''),
-          (place.address_components[2] && place.address_components[2].short_name || '')
-        ].join(' ');
-      }
-
-      infowindowContent.children['place-icon'].src = place.icon;
-      infowindowContent.children['place-name'].textContent = place.name;
-      infowindowContent.children['place-address'].textContent = address;
-      infowindow.open(map, marker);
-    });
-  
-    var latlng = new google.maps.LatLng(a,b); //Set the default location of map
-          var marker = new google.maps.Marker({
-          position: latlng,
-          map: map,
-          title: 'Place the marker for your location!', //The title on hover to display
-          draggable: true //this makes it drag and drop
-      });
-
-        google.maps.event.addListener(marker, 'dragend', function(a) {
-        console.log(a);
-
-        console.log($('#loc').val());
-        var lat_long = a.latLng.lat() + ', ' + a.latLng.lng();
-        
-            $.ajax({
-                type: 'post',
-                url:'https://maps.googleapis.com/maps/api/geocode/json?address='+lat_long+'&sensor=false&key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U',
-                success: function(response) {
-                  console.log(response.results[0]);
-                  $('#pac-input').val(response.results[0].formatted_address);
-                }
-            });
-        document.getElementById('loc').value = a.latLng.lat().toFixed(6) + ', ' + a.latLng.lng().toFixed(6); //Place the value in input box
-
-      
-
-    });
-
-
-  }
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U&libraries=places&callback=initMap&loading=async" async defer></script>
+<script>$('#admin_location_list').addClass('active');</script>
 @endsection

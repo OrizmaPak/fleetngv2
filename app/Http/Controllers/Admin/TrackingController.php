@@ -18,8 +18,8 @@ class TrackingController extends Controller
    {
     $live_tracking_url="https://app.zypsa.com/tracking_api.php";
     $live_tracking_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "track"        
     ];
     $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
@@ -29,7 +29,7 @@ class TrackingController extends Controller
      ];
      return view('/admin/tracking-management/tracking-list', [
        'breadcrumbs' => $breadcrumbs,
-       'tracking_details' => $live_tracking_data['data']['vehicles']
+       'tracking_details' => $this->scopedVehicles($live_tracking_data['data']['vehicles'])
      ]);
    }
 
@@ -46,28 +46,17 @@ class TrackingController extends Controller
     // this function is used for ajax call to show trip list detail
   public function tracking_list_detail(Request $request)
   {
-    $user_id = $request->u_ID; //Auth user id 
-    $user_Data= User::where('id',$user_id)->select('user_type')->first();
-
-    if($user_Data->user_type == 1){
-      $driversSerialNo= Driver::where('is_active',1)->pluck('device_serial_number')->all(); 
-    }else{
-      if($user_Data->user_type==2){
-        $driversSerialNo= Driver::where('is_active',1)->pluck('device_serial_number')->all(); //reteriving all the drivers
-      }else{
-        $driversSerialNo= Driver::where(['user_id'=>$user_id,'is_active'=>1])->pluck('device_serial_number')->all(); //reteriving all the drivers related to that user
-      }
-    }
+    $driversSerialNo = \App\Support\StaffAccess::drivers($request->user())->where('is_active',1)->pluck('device_serial_number')->all();
 
     $live_tracking_url="https://app.zypsa.com/tracking_api.php";
     $live_tracking_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "track"        
     ];   
     $live_tracking_distance_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "extra"        
     ];    
 
@@ -143,31 +132,20 @@ class TrackingController extends Controller
   // this function is used for ajax call to show trip list detail according to filter
   public function tracking_list_detail_filter(Request $request)
   {
-    $user_id = $request->u_ID; //Auth user id 
-    $user_Data= User::where('id',$user_id)->select('user_type')->first();
-
-    if($user_Data->user_type == 1){
-      $driversSerialNo= Driver::where('is_active',1)->pluck('device_serial_number')->all(); 
-    }else{
-      if($user_Data->user_type==2){
-        $driversSerialNo= Driver::where('is_active',1)->pluck('device_serial_number')->all(); //reteriving all the drivers
-      }else{
-        $driversSerialNo= Driver::where(['user_id'=>$user_id,'is_active'=>1])->pluck('device_serial_number')->all(); //reteriving all the drivers related to that user
-      }
-    }
+    $driversSerialNo = \App\Support\StaffAccess::drivers($request->user())->where('is_active',1)->pluck('device_serial_number')->all();
 
     $vehicle_status = $request->vehicle_status;
     $driver = trim($request->search_driver);
  
     $live_tracking_url="https://app.zypsa.com/tracking_api.php";
     $live_tracking_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "track"        
     ];   
     $live_tracking_distance_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "extra"        
     ];
     $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
@@ -265,13 +243,13 @@ class TrackingController extends Controller
    {
     $live_tracking_url="https://app.zypsa.com/tracking_api.php";
     $live_tracking_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "track"        
     ];   
     $live_tracking_distance_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "extra"        
     ];
     $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
@@ -279,18 +257,19 @@ class TrackingController extends Controller
     $live_tracking_details = $live_tracking_data['data']['vehicles'];
     $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'];
 
-    $data = array_replace_recursive($live_tracking_details, $live_tracking_distance_details);
+    $data = $this->scopedVehicles(array_replace_recursive($live_tracking_details, $live_tracking_distance_details));
 
     if(!empty($id)){
 
      $vehicle_key = array_search($id, array_column($data, 'device_id'));
+     abort_if($vehicle_key === false, 404);
     }
     $date_from=date("Y-m-d H:i:s", mktime(0,0,0));
     $date_to=date("Y-m-d H:i:s", mktime(23,59,59));
-    $search_vehicle_map_url="https://app.zypsa.com/report_map_history_result.php?&action=map_history_json&device_id=".$id."&date_from=".$date_from."&date_to=".$date_to."&user_name=bd@epixelsoftware.com&hash_key=DABHHJIFELMIWAVS";
+    $search_vehicle_map_url="https://app.zypsa.com/report_map_history_result.php?&action=map_history_json&device_id=".$id."&date_from=".$date_from."&date_to=".$date_to."&user_name=".rawurlencode(config('integrations.tracking_username'))."&hash_key=".rawurlencode(config('integrations.tracking_key'))."";
     $search_vehicle_map_params          = [       
-        'user_name'=> "bd@epixelsoftware.com",
-        'hash_key' => "DABHHJIFELMIWAVS"        
+        'user_name'=> config('integrations.tracking_username'),
+        'hash_key' => config('integrations.tracking_key')
       ];
     $search_vehicle_map_data = FrontModel::callPostCurl($search_vehicle_map_url, json_encode($search_vehicle_map_params));
     if(isset($search_vehicle_map_data['data']['trip_data']))
@@ -329,13 +308,13 @@ class TrackingController extends Controller
    {
     $live_tracking_url="https://app.zypsa.com/tracking_api.php";
     $live_tracking_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "track"        
     ];   
     $live_tracking_distance_params          = [       
-      'user_name'=> "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name'=> config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       "action" => "extra"        
     ];
     $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
@@ -345,6 +324,8 @@ class TrackingController extends Controller
 
     $filtered_data = array_replace_recursive($live_tracking_details, $live_tracking_distance_details);
 
+    $live_tracking_details = $this->scopedVehicles($live_tracking_details);
+    $filtered_data = $this->scopedVehicles($filtered_data);
     if($request->isMethod('post')){
 
       $search_text = $request->search;
@@ -368,11 +349,12 @@ class TrackingController extends Controller
       if(!empty($search_text)){
 
         $driver_key = array_search($search_text, array_column($live_tracking_details, 'registration_no'));
+        abort_if($driver_key === false, 404);
         $device_id=$live_tracking_details[$driver_key]['device_id'];
-        $search_vehicle_url="https://app.zypsa.com/report_vehicle_distance_result.php?&data_format=json&device_id=".$device_id."&date_from=".$date_from."&date_to=".$date_to."&time_picker_from=00:00:00&time_picker_to=23:59:59&user_name=bd@epixelsoftware.com&hash_key=DABHHJIFELMIWAVS&group_hour=24group_mode=1";
+        $search_vehicle_url="https://app.zypsa.com/report_vehicle_distance_result.php?&data_format=json&device_id=".$device_id."&date_from=".$date_from."&date_to=".$date_to."&time_picker_from=00:00:00&time_picker_to=23:59:59&user_name=".rawurlencode(config('integrations.tracking_username'))."&hash_key=".rawurlencode(config('integrations.tracking_key'))."&group_hour=24group_mode=1";
         $search_vehicle_params          = [       
-            'user_name'=> "bd@epixelsoftware.com",
-            'hash_key' => "DABHHJIFELMIWAVS"        
+            'user_name'=> config('integrations.tracking_username'),
+            'hash_key' => config('integrations.tracking_key')
           ];
         $search_vehicle_data = FrontModel::callPostCurl($search_vehicle_url, json_encode($search_vehicle_params));
 
@@ -402,7 +384,7 @@ class TrackingController extends Controller
 
         $responses = Http::pool(function ($pool) use ($dates, $device_id) {
             foreach ($dates as $date) {
-                $pool->post("https://app.zypsa.com/report_map_history_result.php?&action=map_history_json&device_id=" . $device_id . "&date_from=" . $date['from_date'] . "&date_to=" . $date['to_date'] . "&user_name=bd@epixelsoftware.com&hash_key=DABHHJIFELMIWAVS");
+                $pool->timeout(20)->withOptions(['connect_timeout'=>5])->post("https://app.zypsa.com/report_map_history_result.php?&action=map_history_json&device_id=" . $device_id . "&date_from=" . $date['from_date'] . "&date_to=" . $date['to_date'] . "&user_name=".rawurlencode(config('integrations.tracking_username'))."&hash_key=".rawurlencode(config('integrations.tracking_key'))."");
             }
         });
         
@@ -454,8 +436,16 @@ class TrackingController extends Controller
      ];
      return view('/admin/tracking-management/map-history', [
        'breadcrumbs' => $breadcrumbs,
-       'vehicle_details' => $live_tracking_data['data']['vehicles']
+       'vehicle_details' => $live_tracking_details
      ]);
+   }
+
+   private function scopedVehicles(array $vehicles): array
+   {
+      $serials = \App\Support\StaffAccess::drivers(auth()->user())->where('is_active',1)->pluck('device_serial_number')->all();
+      return array_values(array_filter($vehicles, function ($vehicle) use ($serials) {
+          return in_array($vehicle['serial'] ?? null, $serials);
+      }));
    }
 
    private function getISTDateInNigeriaTime($date) {

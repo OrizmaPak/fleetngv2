@@ -16,7 +16,7 @@ class TripController extends Controller
   private $api_url;
   public function __construct()
   {
-    $this->api_url = config('app.url') . 'api/';
+    $this->api_url = rtrim(config('app.url'), '/') . '/api/';
   }
 
   //function used to show trip list

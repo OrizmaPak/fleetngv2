@@ -12,7 +12,7 @@
 @section('page-style')
 {{-- Page Css files --}}
 <link rel="stylesheet" type="text/css" href="{{asset('css/base/plugins/forms/pickers/form-flat-pickr.css')}}">
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<link href="{{ asset('editor/css/summernote-bs4.css') }}" rel="stylesheet">
 {{-- <script src="https://maps.google.com/maps/api/js?sensor=false&&key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U"></script> --}}
 @endsection
 <style type="text/css">
@@ -109,7 +109,7 @@
 @section('page-script')
 
 
-<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src="{{ asset('editor/js/summernote-bs4.js') }}"></script>
 
 {{-- Page js files --}}
 

@@ -20,7 +20,7 @@ class DriverController extends Controller
   private $allowUserType;
   public function __construct()
   {
-    $this->api_url = config('app.url') . 'api/';
+    $this->api_url = rtrim(config('app.url'), '/') . '/api/';
     $this->allowUserType = config('custom.permission');
   }
 
@@ -146,6 +146,21 @@ class DriverController extends Controller
   }
 
   //function used to add driver details
+  public function driver_list_detail_filter(Request $request)
+  {
+    return $this->driver_list_detail($request);
+  }
+
+  public function vehicle_no(Request $request)
+  {
+    $query = Driver::query();
+    if (!in_array((int) Auth::user()->user_type, [1, 2], true)) {
+      $query->whereIn('id', Auth::user()->drivers_ids());
+    }
+    if ($request->filled('driver_id')) $query->where('id', (int) $request->input('driver_id'));
+    return response()->json(['data' => $query->get(['id', 'vehicle_id'])]);
+  }
+
   public function add_driver(Request $request)
   {
 
@@ -196,8 +211,8 @@ class DriverController extends Controller
         'sim_no' => $request->phone,
         'voice_no' => $request->voice_number,
         'billing_term' => $request->billing_term,
-        'user_name' => "bd@epixelsoftware.com",
-        'hash_key' => "DABHHJIFELMIWAVS"
+        'user_name' => config('integrations.tracking_username'),
+        'hash_key' => config('integrations.tracking_key')
       ];
       // Check driver already or not in database===============
       $driver_url = $this->api_url . "get-driver-detail";
@@ -222,11 +237,14 @@ class DriverController extends Controller
       }
       //===============================\\
 
+      if (!config('integrations.tracking_enabled')) {
+        return redirect(route('driver-list'))->with($add_driver_data['success'] ? 'success' : 'fail', $add_driver_data['message'] . ' Tracking sync is not connected.');
+      }
       //// Check driver already or not in zypsa.com===============
       $search_vehicle_url = "https://app.zypsa.com/vehicle_result.php?action=search_json&user_name=bd@epixelsoftware.com&hash_key=DABHHJIFELMIWAVS";
       $search_vehicle_params          = [
-        'user_name' => "bd@epixelsoftware.com",
-        'hash_key' => "DABHHJIFELMIWAVS"
+        'user_name' => config('integrations.tracking_username'),
+        'hash_key' => config('integrations.tracking_key')
       ];
       $search_vehicle_data = FrontModel::callPostCurl($search_vehicle_url, json_encode($search_vehicle_params));
       foreach ($search_vehicle_data['data']['return_json'] as $value) {
@@ -341,6 +359,10 @@ class DriverController extends Controller
       ];
 
       $params['user_id'] = $request->user_id; //if superadmin edit driver
+      if (!config('integrations.tracking_enabled')) {
+        $driver_update = FrontModel::callPostCurl($url, $params);
+        return redirect(route('driver-list'))->with($driver_update['success'] ? 'success' : 'fail', $driver_update['message'] . ' Tracking sync is not connected.');
+      }
 
       if ($params['user_id'] < 1) { // if user_id is small than 1 return error msg
         return back()->with('fail', 'Something went wrong!!');
@@ -351,8 +373,8 @@ class DriverController extends Controller
 
       $search_vehicle_url = "https://app.zypsa.com/vehicle_result.php?action=search_json&user_name=bd@epixelsoftware.com&hash_key=DABHHJIFELMIWAVS";
       $search_vehicle_params          = [
-        'user_name' => "bd@epixelsoftware.com",
-        'hash_key' => "DABHHJIFELMIWAVS"
+        'user_name' => config('integrations.tracking_username'),
+        'hash_key' => config('integrations.tracking_key')
       ];
       $search_vehicle_data = FrontModel::callPostCurl($search_vehicle_url, json_encode($search_vehicle_params));
 
@@ -371,8 +393,8 @@ class DriverController extends Controller
 
       $edit_vehicle_url = "https://app.zypsa.com/vehicle_result.php?action=vehicleedit&user_name=bd@epixelsoftware.com&hash_key=DABHHJIFELMIWAVS&data_format=JSON&device_id=" . $search_vehicle_data['data']['return_json'][$driver_key]['device_id'] . "&registration_no=" . $request->vehicle_id . "&device_serial=" . $request->device_serial_number . "&serial_no=" . $request->device_serial_number . "&voice_no=" . $request->voice_number . "&sim_no=" . $request->phone . "&billing_term=" . $request->billing_term;
       $edit_vehicle_params          = [
-        'user_name' => "bd@epixelsoftware.com",
-        'hash_key' => "DABHHJIFELMIWAVS",
+        'user_name' => config('integrations.tracking_username'),
+        'hash_key' => config('integrations.tracking_key'),
         'data_format' => "JSON",
         'device_id' => $search_vehicle_data['data']['return_json'][$driver_key]['device_id'],
         'registration_no' => $request->vehicle_id,
@@ -448,6 +470,7 @@ class DriverController extends Controller
     $url = $this->api_url . "change-driver-status";
     $params          = array('driver_id' => $request->id, 'is_active' => $request->status);
     FrontModel::callPostCurl($url, $params);
+    if (!config('integrations.tracking_enabled')) return response()->json(['success'=>true,'message'=>'Status updated. Tracking sync is not connected.']);
 
     $get_url = $this->api_url . "get-driver-detail";
     $get_params     = array('driver_id' => $request->id);
@@ -455,8 +478,8 @@ class DriverController extends Controller
 
     $search_vehicle_url = "https://app.zypsa.com/vehicle_result.php?action=search_json&user_name=bd@epixelsoftware.com&hash_key=DABHHJIFELMIWAVS";
     $search_vehicle_params          = [
-      'user_name' => "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS"
+      'user_name' => config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key')
     ];
     $search_vehicle_data = FrontModel::callPostCurl($search_vehicle_url, json_encode($search_vehicle_params));
 
@@ -465,8 +488,8 @@ class DriverController extends Controller
     $request_status = ($request->status == 0) ? 1 : 0;
     $change_vehicle_status_url = "https://app.zypsa.com/vehicle_result.php?action=vehicleedit&user_name=bd@epixelsoftware.com&hash_key=DABHHJIFELMIWAVS&data_format=JSON&device_id=" . $search_vehicle_data['data']['return_json'][$driver_key]['device_id'] . "&device_active=" . $request_status;
     $change_vehicle_status_params          = [
-      'user_name' => "bd@epixelsoftware.com",
-      'hash_key' => "DABHHJIFELMIWAVS",
+      'user_name' => config('integrations.tracking_username'),
+      'hash_key' => config('integrations.tracking_key'),
       'data_format' => "JSON",
       'device_id' => $search_vehicle_data['data']['return_json'][$driver_key]['device_id'],
       'device_active' => $request_status

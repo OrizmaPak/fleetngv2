@@ -16,7 +16,7 @@ class UserAuth
      */
     public function handle(Request $request, Closure $next)
     {
-        if(session('user_role') == 3){
+        if(!in_array((int) optional($request->user())->user_type, [1,2], true)){
             abort('404');
         }else{
             return $next($request);

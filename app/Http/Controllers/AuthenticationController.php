@@ -182,11 +182,14 @@ class AuthenticationController extends Controller
 
   public function logout(Request $request)
   {
+    $role = session('user_role');
     User::where('id', Auth::id())->update(['last_active' => Carbon::now()]);
     Auth::logout();
-    if (session('user_role') == 1) {
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    if ($role == 1) {
       return redirect('/superadmin');
-    } elseif (session('user_role') == 2) {
+    } elseif ($role == 2) {
       return redirect('/admin');
     } else {
       return redirect('/user');
@@ -218,51 +221,26 @@ class AuthenticationController extends Controller
 
   public function reset_password(Request $request, $title = null)
   {
-    $pageConfigs = ['blankPage' => true];
-
-    $password = $request->password;
-    $type = $request->type ?? '1';
-    $password_confirmation = $request->password_confirmation;
-
-    $where_data   = array('token' => $title);
-    $user         = ApiModel::fetchSingleRecord('users', $where_data);
-
-
-    if ($request->isMethod('post')) {
-      if (!empty($user)) {
-        $user_token = $user->token;
-        if ($password != $password_confirmation) {
-          return redirect(url('reset-password') . $title . '?signature=' . bcrypt($user->id))->with('error_message', 'Password and Confirm password should be same');
-        }
-        if ($user_token == $title) {
-
-          $reset_data  = array('password' => bcrypt($password), 'token' => "");
-          ApiModel::editRecord('users', $where_data, $reset_data);
-          //Send mail to registered user for email verification.                  
-          $name = $user->first_name;
-          $email = $user->email;
-          $today_date = date("M d,Y");
-          $data = array('user_name' => $name, 'email' => $email, 'today_date' => $today_date, 'subject' => "Password has been changed");
-
-          Mail::send('mails.thankyou-reset', $data, function ($message) use ($data) //Send Mail
-          {
-            $message->to($data['email'])->subject('Password changed successfully');
-          });
-
-          if ($request->type === '1') {
-            return redirect('/superadmin')->with('success_message', 'Password changed successfully.');
-          }
-
-          return redirect(url('user'))->with('success_message', 'Password changed successfully.');
-        } else {
-          return redirect(url('reset-password') . $title . '?signature=' . bcrypt($user->id))->with('erro_message', 'Token does not match. Please try again with new reset link');
-        }
-      } else {
-        return redirect('forgot-password')->with('error_message', 'Token does not match. Please try again with new reset link');
-      }
+    $user = is_string($title) && strlen($title) === 64 ? \App\Models\User::where('token', $title)->first() : null;
+    $reset = $user ? \Illuminate\Support\Facades\DB::table('password_resets')->where('email', $user->email)->first() : null;
+    if (!$user || !$reset || !hash_equals($reset->token, hash('sha256', $title)) || \Carbon\Carbon::parse($reset->created_at)->addHour()->isPast()) {
+      return redirect('forgot-password')->with('error_message', 'This reset link has expired or is invalid. Request another link.');
     }
-    $dbresponse['token'] = $title;
-
-    return view('/content/authentication/auth-reset-password', ['dbresponse' => $dbresponse, 'pageConfigs' => $pageConfigs, 'type' => $type]);
+    if (!$request->isMethod('post')) {
+      return view('content.authentication.auth-reset-password', ['dbresponse'=>['token'=>$title], 'pageConfigs'=>['blankPage'=>true], 'type'=>$user->user_type]);
+    }
+    $request->validate(['password'=>'required|string|min:8|max:128|confirmed']);
+    \Illuminate\Support\Facades\DB::transaction(function () use ($user, $title, $request) {
+      $locked = \App\Models\User::whereKey($user->id)->lockForUpdate()->firstOrFail();
+      abort_unless(hash_equals((string)$locked->token, $title), 422, 'This reset link has already been used.');
+      $locked->forceFill(['password'=>bcrypt($request->password), 'token'=>null, 'remember_token'=>\Illuminate\Support\Str::random(60)])->save();
+      \Illuminate\Support\Facades\DB::table('password_resets')->where('email',$user->email)->delete();
+    });
+    $data = ['user_name'=>$user->first_name,'email'=>$user->email,'today_date'=>now()->format('M d,Y'),'subject'=>'Password has been changed'];
+    try {
+      Mail::send('mails.thankyou-reset',$data,function ($message) use ($user) { $message->to($user->email)->subject('Password changed successfully'); });
+    } catch (\Throwable $error) { report($error); }
+    $destination = (int)$user->user_type === 1 ? '/superadmin' : ((int)$user->user_type === 2 ? '/admin' : '/user');
+    return redirect($destination)->with('success_message','Password changed successfully.');
   }
 }

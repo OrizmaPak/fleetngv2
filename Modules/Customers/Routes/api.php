@@ -21,6 +21,8 @@ use Modules\Customers\Http\Controllers\TripController;
 
 
 Route::group(['prefix' => 'customer'], function () {
+    Route::post('otp/request', [\Modules\Customers\Http\Controllers\Api\DevelopmentOtpController::class, 'requestCode'])->middleware('throttle:customer-otp-request');
+    Route::post('otp/verify', [\Modules\Customers\Http\Controllers\Api\DevelopmentOtpController::class, 'verifyCode'])->middleware('throttle:customer-otp-verify');
     // UnAuthorized routes
     Route::post('register', [AuthController::class, 'store']);
     Route::post('login', [AuthController::class, 'login']);
@@ -29,10 +31,12 @@ Route::group(['prefix' => 'customer'], function () {
     Route::get('pickup-locations', [TripController::class, 'pickupLocations']); // retunt all active pickup locations
 
     // Sanctum Auth API routes
-    Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::group(['middleware' => ['auth:sanctum', \Modules\Customers\Http\Middleware\CustomerAccess::class]], function () {
+        Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/stats', [CustomerController::class, 'stats']); // return customer profile data
         Route::get('/profile', [CustomerController::class, 'profile']); // return customer profile data
         Route::post('/profile', [CustomerController::class, 'profileUpdate']); // return customer profile data
+        Route::get('/profile-image', [CustomerController::class, 'profileImage']);
         Route::post('/save-device-token', [CustomerController::class, 'saveDeviceToken']); // return customer profile data
         Route::get('/merchants', [CustomerController::class, 'merchants']); // return merchants list with driver
 
@@ -43,6 +47,7 @@ Route::group(['prefix' => 'customer'], function () {
         Route::patch('trips/{id}/driver', [TripController::class, 'tripDriver']); // add driver for the trip
         Route::post('trips/payment-link', [PaymentController::class, 'tripPaymentLink']); // generate payment link
         Route::get('trip-payments', [PaymentController::class, 'tripPayments']); // get all payments of trips
+        Route::get('checkouts/{reference}', [PaymentController::class, 'checkoutStatus']);
 
         // Draft Trips routes
         Route::get('draft/trips', [DraftTripController::class, 'allTrips']); // get all draft trips data of customer
@@ -54,7 +59,8 @@ Route::group(['prefix' => 'customer'], function () {
     });
 });
 
-Route::post('trips/{id}/send-notification', [TripController::class, 'tripSendNotification']);
+Route::post('trips/{id}/send-notification', [TripController::class, 'tripSendNotification'])
+    ->middleware(['auth:sanctum', \Modules\Customers\Http\Middleware\CustomerAccess::class, 'throttle:6,1']);
 
 
 // When user typed URL is not matched with none of the above then bellow code will run

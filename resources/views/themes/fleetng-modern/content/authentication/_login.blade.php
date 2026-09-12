@@ -22,7 +22,7 @@
                             <label for="password">Password</label>
                             <a href="{{ route('auth-forgot-password') }}"><small>Forgot password?</small></a>
                         </div>
-                        <div class="input-group input-group-merge form-password-toggle">
+                        <div class="input-group input-group-merge fleetng-password-toggle">
                             <input class="form-control" id="password" type="password" name="password" autocomplete="current-password" placeholder="Enter your password" required>
                             <div class="input-group-append"><button class="input-group-text cursor-pointer" type="button" aria-label="Show password"><i data-feather="eye"></i></button></div>
                         </div>

@@ -19,7 +19,7 @@ class MerchantController extends Controller
   private $api_url;
   public function __construct()
   {
-    $this->api_url = config('app.url') . 'api/';
+    $this->api_url = rtrim(config('app.url'), '/') . '/api/';
   }
 
   public function generatePassword () 
@@ -309,6 +309,23 @@ class MerchantController extends Controller
   }
 
   //function used to change driver status
+  public function merchant_status(Request $request)
+  {
+    abort_unless((int) $request->user()->user_type === 1, 403);
+    $data = $request->validate(['id' => 'required|integer', 'status' => 'required|in:0,1']);
+    $merchant = User::where('user_type', 4)->findOrFail($data['id']);
+    $merchant->update(['is_active' => $data['status']]);
+    return response()->json(['success' => true, 'message' => 'Merchant status updated successfully.']);
+  }
+
+  public function merchant_delete(Request $request)
+  {
+    abort_unless((int) $request->user()->user_type === 1, 403);
+    $data = $request->validate(['user_id' => 'required|integer']);
+    User::where('user_type', 4)->findOrFail($data['user_id'])->delete();
+    return redirect()->route('merchant-list')->with('success', 'Merchant deleted successfully.');
+  }
+
   public function user_status(Request $request)
   {
     $url = $this->api_url . "change-merchant-status";
@@ -374,12 +391,15 @@ class MerchantController extends Controller
 
   public function merchant_list_data(Request $request){
     $id=$request->id;
+    if (!\App\Support\StaffAccess::global($request->user())) abort_unless((int)$id === (int)$request->user()->merchant_assigned,403);
     $data = User::where('user_type', 4)->where('id',$id)->first();
     return $data;
   }
 
   public function merchant_data(Request $request){
-    $data = User::where('user_type', 4)->where('is_active',1)->get();
+    $query = User::where('user_type', 4)->where('is_active',1);
+    if (!\App\Support\StaffAccess::global($request->user())) $query->whereKey($request->user()->merchant_assigned ?: -1);
+    $data = $query->get();
     return $data;
   }
 

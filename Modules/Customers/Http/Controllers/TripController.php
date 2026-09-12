@@ -122,14 +122,20 @@ class TripController extends Controller
             return response()->badRequest($validator->errors()->first(), $validator->errors());
         }
 
-        $trip = Trip::where('id', $id)->first();  // get trip data from database
+        $trip = Trip::where('client_id', $request->user()->id)->find($id);
 
         if (!$trip) {
             return response()->badRequest("Trip not found.");
         }
 
-        $trip->driver_id = $request->driver;
-        $trip->save();  // save driver id in trips table
+        $trip = \Illuminate\Support\Facades\DB::transaction(function () use ($request, $id) {
+            $trip = Trip::where('client_id', $request->user()->id)->lockForUpdate()->findOrFail($id);
+            abort_unless((int) $trip->status === 1, 422, 'Only new trips can change driver.');
+            abort_unless(\App\Models\Driver::where('id', $request->driver)->where('is_active', 1)->exists(), 422, 'The selected driver is unavailable.');
+            $trip->driver_id = $request->driver;
+            $trip->save();
+            return $trip;
+        });
         return response()->success("Driver added to your Trip.", $trip);
     }
 

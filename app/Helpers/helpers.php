@@ -166,7 +166,18 @@ class Helper
 
     public static function addS3Image($filename, $data)
     {
-        Storage::disk('s3')->put($filename, $data);
+        $image = @getimagesizefromstring($data);
+        if (!$image || !in_array($image['mime'], ['image/png','image/jpeg','image/webp'], true) || strlen($data) > 2097152) {
+            throw \Illuminate\Validation\ValidationException::withMessages(['photo'=>'Choose a valid JPEG, PNG or WebP image up to 2 MB.']);
+        }
+        if (!Storage::disk(config('integrations.image_disk'))->put($filename, $data)) throw new \RuntimeException('Image storage is unavailable.');
+    }
+
+    public static function imageUrl($path)
+    {
+        if (!$path) return null;
+        if (filter_var($path, FILTER_VALIDATE_URL)) return $path;
+        return config('integrations.image_disk') === 'local' ? url('staff-image') . '?path=' . rawurlencode($path) : Storage::disk(config('integrations.image_disk'))->url($path);
     }
 
 
@@ -175,8 +186,8 @@ class Helper
         if (empty($filename))
             return false;
 
-        if (Storage::disk('s3')->exists($filename)) {
-            Storage::disk('s3')->delete($filename);
+        if (Storage::disk(config('integrations.image_disk'))->exists($filename)) {
+            Storage::disk(config('integrations.image_disk'))->delete($filename);
         }
     }
 

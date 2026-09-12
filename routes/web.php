@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\MiscellaneousController;
 use App\Http\Controllers\AuthenticationController;
+use App\Http\Controllers\SessionLoginController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\TripController;
@@ -24,6 +25,9 @@ use App\Http\Controllers\Superadmin\MerchantController as SuperAdminMerchantCont
 use App\Http\Controllers\Superadmin\PaymentUserController;
 use App\Http\Controllers\Superadmin\SettingsController as SuperAdminSettingsController;
 
+require __DIR__ . '/customer-portal.php';
+Route::get('staff-image', [\App\Http\Controllers\StaffImageController::class, 'show'])->middleware('auth');
+
 
 /* Admin panel pages routes starts here */
 
@@ -35,17 +39,17 @@ Route::get('terms-conditions', [FrontController::class, 'terms_conditions']);
 Route::get('contact-us', [FrontController::class, 'contact_us']);
 Route::post('submit-contact-us', [FrontController::class, 'submit_contact_request'])->name('submit-contact-us');
 
-Route::match(['get', 'post'], 'login', [AuthenticationController::class, 'admin_login'])->name('auth-login');
-Route::match(['get', 'post'], '/admin', [AuthenticationController::class, 'admin_login'])->name('auth-admin-login');
-Route::match(['get', 'post'], '/user', [AuthenticationController::class, 'user_login'])->name('auth-user-login');
+Route::match(['get', 'post'], 'login', [SessionLoginController::class, 'admin'])->name('auth-login');
+Route::match(['get', 'post'], '/admin', [SessionLoginController::class, 'admin'])->name('auth-admin-login');
+Route::match(['get', 'post'], '/user', [SessionLoginController::class, 'user'])->name('auth-user-login');
 // Route::match(['get', 'post'], '/user-login', [AuthenticationController::class, 'payment_user_login'])->name('auth-user-login');
 Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
 Route::match(['get', 'post'], 'forgot-password', [AuthenticationController::class, 'forgot_password'])->name('auth-forgot-password');
 Route::match(['get', 'post'], 'reset-password/{token}', [AuthenticationController::class, 'reset_password'])->name('auth-reset-password');
-Route::get('reports-api', [ReportController::class, 'report_api']);
+Route::get('reports-api', [ReportController::class, 'report_api'])->middleware('auth');
 Route::get('ui/search', UiSearchController::class)->middleware('auth')->name('ui-search');
 
-Route::group(['namespace' => 'Admin', 'middleware' => 'auth'], function () {
+Route::group(['namespace' => 'Admin', 'middleware' => ['auth', \App\Http\Middleware\StaffRouteAccess::class]], function () {
 
   Route::get('analytics', [DashboardController::class, 'dashboardAnalytics'])->name('dashboard-analytics');
 
@@ -95,7 +99,7 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth'], function () {
   Route::get('client-list', [ClientController::class, 'client_list'])->name('client-list');
   Route::get('client-list-detail', [ClientController::class, 'client_list_detail'])->name('client-list-detail');
   Route::match(['get', 'post'], 'client-edit/{id}', [ClientController::class, 'client_edit'])->name('client-edit');
-  Route::get('client-status-change/{id}', [ClientController::class, 'client_status_change'])->name('client-status-change');
+  Route::match(['get','post'], 'client-status-change/{id}', [ClientController::class, 'client_status_change'])->name('client-status-change');
   Route::post('client/delete', [ClientController::class, 'client_delete'])->name('client-delete');
   /* Route Client Management End */
 
@@ -148,17 +152,17 @@ Route::group(['namespace' => 'Admin', 'middleware' => 'auth'], function () {
   Route::post('change-password', [SettingsController::class, 'change_password']);
 });
 // Download trip invoice 
-Route::get('trip/{id}/invoice/pdf-download', [PaymentsController::class, 'trip_invoice_pdf_download'])->name('report_invoice_pdf_download'); // Trip invoice
+Route::get('trip/{id}/invoice/pdf-download', [PaymentsController::class, 'trip_invoice_pdf_download'])->middleware(['auth', \App\Http\Middleware\StaffRouteAccess::class])->name('report_invoice_pdf_download'); // Trip invoice
 
 // GET Vehicle number
 Route::match(['get', 'post'], '/Vehicle/no', [DriverController::class, 'vehicle_no'])->name('vehicle-no')->middleware('auth');
 
 /* Super Admin panel pages routes starts here */
 
-Route::match(['get', 'post'], '/superadmin', [AuthenticationController::class, 'superadmin_login'])->name('auth-superadmin-login');
+Route::match(['get', 'post'], '/superadmin', [SessionLoginController::class, 'superadmin'])->name('auth-superadmin-login');
 
 // SuperAdmin Routes
-Route::group(['prefix' => 'superadmin', 'namespace' => 'Superadmin', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'superadmin', 'namespace' => 'Superadmin', 'middleware' => ['auth', \App\Http\Middleware\StaffRouteAccess::class]], function () {
 
   Route::get('analytics', [SuperAdminDashboardController::class, 'dashboardAnalytics'])->name('super-dashboard-analytics');
   Route::match(['get', 'post'], 'pages/refund-policy', [PolicyPageController::class, 'refund_policy']);

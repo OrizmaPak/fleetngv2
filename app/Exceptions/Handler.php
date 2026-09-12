@@ -25,6 +25,11 @@ class Handler extends ExceptionHandler
     protected $dontFlash = [
         'password',
         'password_confirmation',
+        'old_password',
+        'new_password',
+        'confirm-new-password',
+        'code',
+        'verification_token',
     ];
 
     /**
@@ -35,7 +40,7 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            if (isset($_SERVER['SERVER_NAME']) && $_SERVER['SERVER_NAME'] != 'localhost') {
+            if (app()->environment('production')) {
                 Integration::captureUnhandledException($e);
             }
         });

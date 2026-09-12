@@ -15,7 +15,7 @@
     {{-- <link rel="stylesheet" type="text/css" href="{{asset(mix('css/base/plugins/forms/form-quill-editor.css'))}}"> --}}
     <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-flat-pickr.css')) }}">
     <link rel="stylesheet" href="{{ asset(mix('css/base/plugins/forms/pickers/form-pickadate.css')) }}">
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+    <link href="{{ asset('editor/css/summernote-bs4.css') }}" rel="stylesheet">
 
 @endsection
 
@@ -110,11 +110,10 @@
 @endsection
 
 @section('page-script')
-    <script src="{{ asset(mix('js/scripts/pages/page-blog-edit.js')) }}"></script>
     <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script>
     <script src="{{ asset(mix('js/scripts/forms/form-validation.js')) }}"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+    <script src="{{ asset('editor/js/summernote-bs4.js') }}"></script>
     <script>
         $(document).ready(() => {
             $('#summernote').summernote({

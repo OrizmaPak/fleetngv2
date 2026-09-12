@@ -4,7 +4,7 @@
 
 @php $configData = Helper::applClasses(); @endphp
 <!DOCTYPE html>
-<html lang="{{ session('locale', $configData['defaultLanguage']) }}" data-textdirection="{{ env('MIX_CONTENT_DIRECTION') === 'rtl' ? 'rtl' : 'ltr' }}" data-fleetng-theme="light">
+<html lang="{{ session('locale', $configData['defaultLanguage']) }}" data-textdirection="{{ env('MIX_CONTENT_DIRECTION') === 'rtl' ? 'rtl' : 'ltr' }}" data-fleetng-theme="dark">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,7 +14,7 @@
     <script>
         (function () {
             var saved = localStorage.getItem('fleetng-colour-theme');
-            var preferred = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            var preferred = 'dark';
             document.documentElement.setAttribute('data-fleetng-theme', saved || preferred);
         }());
     </script>

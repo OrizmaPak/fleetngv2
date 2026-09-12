@@ -53,7 +53,7 @@
                       <label for="slider_image_head_two">Photo*</label>
                     </div>
                     <div class="col-sm-9">
-                      <img src="@if(@getimagesize($driver_details['photo'])){{$driver_details['photo']}}@else {{asset('images/user_default.png')}} @endif" height="100"/> 
+                      <img src="@if($driver_details['photo']){{$driver_details['photo']}}@else {{asset('images/user_default.png')}} @endif" height="100"/>
                     </div>
                   </div>
                 </div>
