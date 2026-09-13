@@ -1,9 +1,12 @@
 (function () {
   'use strict';
   var signedIn = false;
+  function apiBaseUrl() {
+    return (window.CustomerPortalConfig && window.CustomerPortalConfig.apiBaseUrl) || '/customer-portal/api';
+  }
   async function request(method, path, data) {
     var multipart = data instanceof FormData;
-    var response = await fetch('/customer-portal/api' + path, {
+    var response = await fetch(apiBaseUrl() + path, {
       method: method, credentials: 'same-origin',
       headers: Object.assign({ 'Accept':'application/json', 'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').content },multipart ? {} : {'Content-Type':'application/json'}),
       body: method === 'GET' ? undefined : multipart ? data : JSON.stringify(data || {})
@@ -29,7 +32,7 @@
   }
   window.CustomerPreview = {
     mode:'local', request:request,
-    avatar:function (profile) { return profile.profile_image ? (String(profile.profile_image).startsWith('https://') ? profile.profile_image : '/customer-portal/api/profile-image?v=' + encodeURIComponent(profile.updated_at || '')) : ''; },
+    avatar:function (profile) { return profile.profile_image ? (String(profile.profile_image).startsWith('https://') ? profile.profile_image : apiBaseUrl() + '/profile-image?v=' + encodeURIComponent(profile.updated_at || '')) : ''; },
     ready:request('GET','/profile').catch(function () { signedIn = false; }),
     isSignedIn:function () { return signedIn; },
     total:function (t) { return Number(t.total_cost || 0) + Number(t.cost_of_sand || 0) + Number(t.road_money || 0); },

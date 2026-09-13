@@ -92,7 +92,7 @@
                                             </a>
                                         </li>
                                         <li class="dropdown">
-                                            <a href="{{ config('app.front_url') }}" class="" style="color: red">
+                                            <a href="{{ url('customer-portal') }}" class="" style="color: red">
                                                 Customer Login
                                             </a>
                                         </li>
@@ -122,7 +122,7 @@
                                                 </a>
                                             </li>
                                             <li class="dropdown">
-                                                <a href="{{ config('app.front_url') }}" class="scroll" style="color: red">
+                                                <a href="{{ url('customer-portal') }}" class="scroll" style="color: red">
                                                     Customer Login
                                                 </a>
                                             </li>
@@ -376,7 +376,7 @@
 
             <div class="row">
                 <div class="col-md-12">
-                    <a href="{{ config('app.front_url') }}" class="btn btn-big btn-yellow btn-centered">
+                    <a href="{{ url('customer-portal') }}" class="btn btn-big btn-yellow btn-centered">
                             <span>
                                 View Logistics & Haulage Details
                             </span>
@@ -692,7 +692,7 @@
                             We are hiring logistics and haulage drivers. Join our team and help deliver goods to businesses and projects across Nigeria!
                         </p>
 
-                        <a href="{{ config('app.front_url') }}" class="btn btn-medium btn-yellow">
+                        <a href="{{ url('customer-portal') }}" class="btn btn-medium btn-yellow">
                             <span>Apply Now</span>
                         </a>
                     </div><!-- .promo-box end -->
@@ -769,7 +769,7 @@
                             </p>                              
                         </div><!-- .text end -->
 
-                        <a href="{{ config('app.front_url') }}" class="btn btn-big">
+                        <a href="{{ url('customer-portal') }}" class="btn btn-big">
                             <span>Request Bulk Delivery</span>
                         </a>
                     </div><!-- .call-to-action end -->
@@ -870,13 +870,13 @@
                                     </p>
                                 </div>
 
-                                <a href="{{ config('app.front_url') }}">
+                                <a href="{{ url('customer-portal') }}">
                                     <h4>
                                         Bulk Goods Transport
                                     </h4>
                                 </a>
 
-                                <a href="{{ config('app.front_url') }}" class="read-more">
+                                <a href="{{ url('customer-portal') }}" class="read-more">
                                         <span>
                                             Learn more
                                             <i class="fa fa-chevron-right"></i>
@@ -899,13 +899,13 @@
                                     </p>
                                 </div>
 
-                                <a href="{{ config('app.front_url') }}">
+                                <a href="{{ url('customer-portal') }}">
                                     <h4>
                                         Wholesale & Retail Delivery
                                     </h4>
                                 </a>
 
-                                <a href="{{ config('app.front_url') }}" class="read-more">
+                                <a href="{{ url('customer-portal') }}" class="read-more">
                                         <span>
                                             Learn more
                                             <i class="fa fa-chevron-right"></i>
@@ -995,7 +995,7 @@
                         FleetNG  serves over 150 locations, delivering goods to businesses and project sites across Nigeria and beyond.
                     </p>
 
-                    <a href="{{ config('app.front_url') }}" class="read-more">
+                    <a href="{{ url('customer-portal') }}" class="read-more">
                             <span>
                                 View all locations
                                 <i class="fa fa-chevron-right"></i>

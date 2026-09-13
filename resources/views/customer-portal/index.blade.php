@@ -8,6 +8,13 @@
     <title>Customer Portal | FleetNG</title>
     <link rel="icon" href="{{ asset('images/logo/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('customer-preview/styles.css') }}">
+    <script>
+        window.CustomerPortalConfig = {
+            logoUrl: @json(asset('images/logo/fleetng-logo.svg')),
+            apiBaseUrl: @json(url('customer-portal/api')),
+            titleSuffix: 'FleetNG'
+        };
+    </script>
     <script defer src="{{ asset('vendors/js/feather-icons/feather-icons.min.js') }}"></script>
     <script defer src="{{ asset('customer-preview/live-data.js') }}"></script>
     <script defer src="{{ asset('customer-preview/app.js') }}"></script>

@@ -22,7 +22,7 @@
                 <div class="left-div"> <a href="{{url('/')}}"><img src="{{ asset('front/images/logo/fleetng-logo.svg') }}" alt="Logo" width="60" class="img-fluid"></a></div>
                 <div class="nav-btns">
                     <a href="{{url('user')}}" class="nav-btn btn me-2">User Login</a>
-                    <a href="{{ config('app.front_url') }}" class="nav-btn btn customer">Customer Login</a>
+                    <a href="{{ url('customer-portal') }}" class="nav-btn btn customer">Customer Login</a>
                 </div>
             </div>
         </div>

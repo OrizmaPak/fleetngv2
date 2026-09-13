@@ -25,12 +25,14 @@
   function row(label, value, raw = false) { return '<div class="detail-row"><span>' + e(label) + '</span><strong>' + (raw ? value : e(value || 'Not assigned')) + '</strong></div>'; }
   function empty(title, description, action = '') { return '<div class="empty">' + icon('inbox') + '<h3>' + e(title) + '</h3><p>' + e(description) + '</p>' + action + '</div>'; }
   function field(label, name, type = 'text', value = '', extra = '', span = false) { return '<div class="field' + (span ? ' span-2' : '') + '"><label for="' + name + '">' + label + '</label><input id="' + name + '" name="' + name + '" type="' + type + '" value="' + e(value) + '" ' + extra + '></div>'; }
-  function brand() { return '<a class="brand" href="#/overview"><img src="../images/logo/fleetng-logo.svg" alt="FleetNG logo"><span>FLEETNG</span></a>'; }
+  function portalConfig() { return window.CustomerPortalConfig || {}; }
+  function logoUrl() { return portalConfig().logoUrl || '../images/logo/fleetng-logo.svg'; }
+  function brand() { return '<a class="brand" href="#/overview"><img src="' + e(logoUrl()) + '" alt="FleetNG logo"><span>FLEETNG</span></a>'; }
   function shell(title, content) {
     const nav = [['overview','Overview','grid'],['trips','My trips','truck'],['drafts','Draft bookings','file-text'],['payments','Payments','credit-card'],['profile','My account','user']];
     const active = route.startsWith('trip/') ? 'trips' : route.startsWith('draft/') ? 'drafts' : route;
     root.innerHTML = '<button class="overlay" data-action="close-nav" aria-label="Close navigation"></button><aside class="sidebar">' + brand() + '<p class="sidebar-caption">Customer workspace</p><nav aria-label="Main navigation">' + nav.map(([url,label,i]) => '<a class="nav-link ' + (url === active ? 'active' : '') + '" ' + (url === active ? 'aria-current="page"' : '') + ' href="#/' + url + '">' + icon(i) + e(label) + (url === 'drafts' && drafts.length ? '<span class="nav-count">' + drafts.length + '</span>' : '') + '</a>').join('') + '</nav><div class="sidebar-foot"><div class="muted">FleetNG customer portal</div><button class="text-button" data-action="reset">' + icon('rotate-ccw') + 'Reset sample data</button><button class="text-button" data-action="logout">' + icon('log-out') + 'Sign out</button></div></aside><div class="workspace"><header class="topbar"><div class="breadcrumb"><button class="icon-button mobile-toggle" data-action="nav" aria-label="Open navigation" aria-expanded="false">' + icon('menu') + '</button><span class="root-label">Customer portal</span>' + icon('chevron-right') + '<span>' + e(title) + '</span></div><div class="topbar-right"><span class="demo-tag">' + icon('flask-conical').replace('flask-conical','box') + 'Demo / sample data</span><a class="identity" href="#/profile"><span class="avatar">' + e(initials(profile)) + '</span><div><strong>' + e(profile.first_name + ' ' + profile.last_name) + '</strong><small>Customer account</small></div></a></div></header><main id="main" tabindex="-1">' + content + '</main></div>';
-    root.querySelector('.breadcrumb').insertAdjacentHTML('afterbegin','<a class="mobile-brand" href="#/overview" aria-label="FleetNG overview"><img src="../images/logo/fleetng-logo.svg" alt="FleetNG"></a>');
+    root.querySelector('.breadcrumb').insertAdjacentHTML('afterbegin','<a class="mobile-brand" href="#/overview" aria-label="FleetNG overview"><img src="' + e(logoUrl()) + '" alt="FleetNG"></a>');
     if (local) {
       root.querySelector('[data-action="reset"]').remove();
       root.querySelector('.topbar .demo-tag').textContent = 'Local database / development OTP';
@@ -229,7 +231,7 @@
     try {
       [profile,trips,drafts,payments,locations,merchants] = await Promise.all(['/profile','/trips','/draft/trips','/trip-payments','/pickup-locations','/merchants'].map(p => request('GET',p)));
       if (version !== renderId) return;
-      document.title = 'Customer Portal | FleetNG ' + (local ? 'Local' : 'Preview');
+      document.title = 'Customer Portal | ' + (portalConfig().titleSuffix || 'FleetNG');
       if (route === 'overview') overview();
       else if (route.startsWith('payment-return')) {
         const params = new URLSearchParams(route.split('?')[1] || '');
