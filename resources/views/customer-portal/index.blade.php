@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#050b18">
-    <title>Customer Portal | FleetNG Local</title>
+    <title>Customer Portal | FleetNG</title>
     <link rel="icon" href="{{ asset('images/logo/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('customer-preview/styles.css') }}">
     <script defer src="{{ asset('vendors/js/feather-icons/feather-icons.min.js') }}"></script>

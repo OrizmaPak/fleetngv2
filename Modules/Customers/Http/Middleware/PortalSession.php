@@ -11,7 +11,6 @@ class PortalSession
 {
     public function handle(Request $request, Closure $next)
     {
-        abort_unless(app()->environment(['local', 'testing']), 404);
         $customer = Customer::find($request->session()->get('customer_portal_id'));
         $request->setUserResolver(function () use ($customer) { return $customer; });
         $response = $next($request);
