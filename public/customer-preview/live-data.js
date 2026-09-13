@@ -14,7 +14,11 @@
     var csrf = response.headers.get('X-CSRF-TOKEN');
     if (csrf) document.querySelector('meta[name="csrf-token"]').content = csrf;
     var payload;
-    try { payload = await response.json(); } catch (_) { throw new Error('The server returned an unreadable response. Try again.'); }
+    try {
+      payload = await response.json();
+    } catch (_) {
+      throw new Error(response.status === 503 ? 'Customer verification is not enabled on this server.' : 'The server returned an unreadable response. Try again.');
+    }
     if (!response.ok || payload.status === false) {
       if (response.status === 401) signedIn = false;
       var error = new Error(response.status === 419 ? 'Your session expired. Reload and sign in again.' : payload.message || payload.error || 'The request could not be completed.');

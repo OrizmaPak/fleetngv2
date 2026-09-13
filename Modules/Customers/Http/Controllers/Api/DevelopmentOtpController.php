@@ -9,9 +9,18 @@ use Illuminate\Support\Str;
 
 class DevelopmentOtpController extends Controller
 {
+    private static function testOtpEnabled(Request $request): bool
+    {
+        if (app()->environment(['local', 'testing']) && in_array($request->ip(), ['127.0.0.1', '::1'], true)) {
+            return true;
+        }
+
+        return filter_var(env('CUSTOMER_PORTAL_TEST_OTP', false), FILTER_VALIDATE_BOOLEAN);
+    }
+
     private function developmentOnly(Request $request)
     {
-        abort_unless(app()->environment(['local', 'testing']) && in_array($request->ip(), ['127.0.0.1', '::1'], true), 503, 'Customer verification is not configured for this environment.');
+        abort_unless(self::testOtpEnabled($request), 503, 'Customer verification is not configured for this environment.');
     }
 
     public function requestCode(Request $request)
@@ -43,7 +52,7 @@ class DevelopmentOtpController extends Controller
 
     public static function consumeProof(Request $request)
     {
-        if (!app()->environment(['local', 'testing']) || !in_array($request->ip(), ['127.0.0.1', '::1'], true)) return false;
+        if (!self::testOtpEnabled($request)) return false;
         $proof = $request->input('verification_token');
         if (!is_string($proof) || strlen($proof) !== 64) return false;
         $phone = Cache::pull('customer-verified:' . hash('sha256', $proof));

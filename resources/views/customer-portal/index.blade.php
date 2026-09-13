@@ -12,7 +12,8 @@
         window.CustomerPortalConfig = {
             logoUrl: @json(asset('images/logo/fleetng-logo.svg')),
             apiBaseUrl: @json(url('customer-portal/api')),
-            titleSuffix: 'FleetNG'
+            titleSuffix: 'FleetNG',
+            testOtpEnabled: @json(filter_var(env('CUSTOMER_PORTAL_TEST_OTP', false), FILTER_VALIDATE_BOOLEAN) || app()->environment(['local', 'testing']))
         };
     </script>
     <script defer src="{{ asset('vendors/js/feather-icons/feather-icons.min.js') }}"></script>

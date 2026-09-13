@@ -26,6 +26,9 @@
   function empty(title, description, action = '') { return '<div class="empty">' + icon('inbox') + '<h3>' + e(title) + '</h3><p>' + e(description) + '</p>' + action + '</div>'; }
   function field(label, name, type = 'text', value = '', extra = '', span = false) { return '<div class="field' + (span ? ' span-2' : '') + '"><label for="' + name + '">' + label + '</label><input id="' + name + '" name="' + name + '" type="' + type + '" value="' + e(value) + '" ' + extra + '></div>'; }
   function portalConfig() { return window.CustomerPortalConfig || {}; }
+  function testOtpEnabled() { return !!portalConfig().testOtpEnabled; }
+  function verificationLabel() { return testOtpEnabled() ? 'Testing verification / OTP 123456' : 'Phone verification'; }
+  function verificationNote() { return testOtpEnabled() ? 'Testing verification: use OTP 123456. No SMS is sent.' : 'Phone verification is required before customer access.'; }
   function logoUrl() { return portalConfig().logoUrl || '../images/logo/fleetng-logo.svg'; }
   function brand() { return '<a class="brand" href="#/overview"><img src="' + e(logoUrl()) + '" alt="FleetNG logo"><span>FLEETNG</span></a>'; }
   function shell(title, content) {
@@ -159,13 +162,13 @@
     const existing = loginMode === 'existing';
     root.innerHTML = '<div class="login-shell">' + brand() + '<main id="main" class="login-center"><span class="demo-tag">Demo / sample data</span><span class="eyebrow">Customer portal</span><h1>' + (existing ? 'Welcome to FleetNG' : 'Create a demo account') + '</h1><p>Your next delivery starts here.</p><div class="tabs" role="tablist" aria-label="Account type"><button class="tab" role="tab" data-login="existing" aria-selected="' + existing + '">Existing customer</button><button class="tab" role="tab" data-login="new" aria-selected="' + !existing + '">New customer</button></div><form id="login-form"><div class="form-error" role="alert"></div>' + (existing ? field('Phone number','phone_number','tel',profile ? profile.phone_number : '8000000000','required pattern="[0-9]{9,13}"') : field('First name','first_name','text','','required') + field('Last name','last_name') + field('Email address','email','email','','required') + field('Country code','country_code','text','+234','required pattern="\\+[0-9]{1,4}"') + field('Phone number','phone_number','tel','','required pattern="[0-9]{9,13}"')) + '<button class="button" type="submit">' + (existing ? 'Open demo account' : 'Create demo account') + icon('arrow-right') + '</button></form><p class="review-note">Sample account access only. No OTP is sent.</p><button class="text-button" data-action="reset">' + icon('rotate-ccw') + 'Restore sample account</button></main></div>';
     if (local) {
-      root.querySelector('.demo-tag').textContent = 'Local database / development OTP';
+      root.querySelector('.demo-tag').textContent = verificationLabel();
       root.querySelector('[data-action="reset"]').remove();
       root.querySelector('#login-form button[type="submit"]').textContent = 'Continue';
       if (!existing) root.querySelector('h1').textContent = 'Create your account';
       if (existing && !profile) root.querySelector('[name="phone_number"]').value = '';
     }
-    root.querySelector('.review-note').textContent = 'Development verification: use OTP 123456. No SMS is sent.';
+    root.querySelector('.review-note').textContent = verificationNote();
     if (previous && previous.mode === loginMode) {
       root.querySelectorAll('#login-form input').forEach(input => {
         if (Object.prototype.hasOwnProperty.call(previous.data,input.name)) input.value = previous.data[input.name];
@@ -176,7 +179,7 @@
   function otpPage() {
     const form = document.getElementById('login-form');
     form.id = 'otp-form';
-    form.innerHTML = '<div class="form-error" role="alert"></div><p>Verify ' + e(pendingLogin.data.phone_number) + '</p>' + field('Verification code','code','text','','required pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code" aria-describedby="otp-hint"') + '<p id="otp-hint" class="review-note">Development OTP: <strong>123456</strong>. No SMS was sent. Code expires in 5 minutes.</p><div class="button-row"><button class="button secondary" type="button" data-action="otp-restart">Change details</button><button class="button" type="submit">Verify and continue</button></div>';
+    form.innerHTML = '<div class="form-error" role="alert"></div><p>Verify ' + e(pendingLogin.data.phone_number) + '</p>' + field('Verification code','code','text','','required pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code" aria-describedby="otp-hint"') + '<p id="otp-hint" class="review-note">' + (testOtpEnabled() ? 'Testing OTP: <strong>123456</strong>. No SMS was sent.' : 'Enter the verification code sent to this phone number.') + ' Code expires in 5 minutes.</p><div class="button-row"><button class="button secondary" type="button" data-action="otp-restart">Change details</button><button class="button" type="submit">Verify and continue</button></div>';
     form.querySelector('[name="code"]').focus();
     root.querySelector('.login-center > .review-note').hidden = true;
     form.insertAdjacentHTML('beforeend','<button class="text-button" type="button" data-action="otp-resend">Request another code</button>');
@@ -279,7 +282,7 @@
           pendingLogin.challenge = challenge.challenge_id;
           document.querySelector('#otp-form .form-error').textContent = '';
           document.querySelector('#otp-form [name="code"]').value = '';
-          toast('New development code ready: 123456. No SMS was sent.');
+          toast(testOtpEnabled() ? 'New testing code ready: 123456. No SMS was sent.' : 'A new verification code has been requested.');
         } catch (error) { toast(error.message); }
         finally { target.disabled = false; }
         break;
