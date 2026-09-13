@@ -46,7 +46,8 @@
       "id": "merchant_payment_list",
       "payment_user": false,
       "role": [
-        "2"
+        "2",
+        "1"
       ]
     },
     {
@@ -80,7 +81,8 @@
       "payment_user": false,
       "role": [
         "2",
-        "3"
+        "3",
+        "1"
       ]
     },
     {
@@ -93,7 +95,8 @@
       "role": [
         "2",
         "3",
-        "5"
+        "5",
+        "1"
       ]
     },
     {
@@ -105,7 +108,8 @@
       "payment_user": false,
       "role": [
         "2",
-        "3"
+        "3",
+        "1"
       ]
     },
     {
@@ -117,7 +121,8 @@
       "payment_user": false,
       "role": [
         "2",
-        "3"
+        "3",
+        "1"
       ]
     },
     {
@@ -129,7 +134,8 @@
       "payment_user": false,
       "role": [
         "2",
-        "3"
+        "3",
+        "1"
       ]
     },
     {
