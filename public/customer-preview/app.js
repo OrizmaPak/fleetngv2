@@ -38,7 +38,7 @@
     root.querySelector('.breadcrumb').insertAdjacentHTML('afterbegin','<a class="mobile-brand" href="#/overview" aria-label="FleetNG overview"><img src="' + e(logoUrl()) + '" alt="FleetNG"></a>');
     if (local) {
       root.querySelector('[data-action="reset"]').remove();
-      root.querySelector('.topbar .demo-tag').textContent = 'Local database / development OTP';
+      root.querySelector('.topbar .demo-tag').textContent = verificationLabel();
       const accountTag = root.querySelector('.profile-aside .demo-tag');
       if (accountTag) accountTag.textContent = 'Customer account';
       const confirm = root.querySelector('[name="intent"][value="confirm"]');
