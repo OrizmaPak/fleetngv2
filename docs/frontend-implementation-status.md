@@ -9,6 +9,8 @@ Updated: 2026-09-12. This is local implementation and verification evidence, not
 - Offline customer preview: http://127.0.0.1:8022/customer-preview/
 - Backend-connected customer portal: http://127.0.0.1:8022/customer-portal
 
+The review homepage uses the recovered public homepage template from `resources/views/front/index.blade.php`, matching the separate legacy homepage served on port 8095. The modern theme does not override `/`; it only supplies the staff/customer operational surfaces.
+
 The review server uses an isolated SQLite database at `storage/app/review/review.sqlite`, a separate session cookie and local/test provider configuration. It does not mutate the original recovered database.
 
 ## Review identities
@@ -35,8 +37,9 @@ The OTP hint is intentionally visible in local/testing because no original OTP p
 | --- | --- |
 | Review environment | `scripts/start-review.ps1` and `php artisan fleetng:prepare-review` build an isolated review database with synthetic users, customers, drivers, trips, policies, expenses and manifests |
 | Route/view audit | 224 registered routes, 107 audited views and zero missing controller handlers |
+| Public homepage | `/` renders the recovered MasterSlider homepage with `User Login` and `Customer Login`, not the modern placeholder homepage |
 | Staff theme | Modern staff shell renders the inspected operational staff pages while preserving legacy URLs, forms and route names |
-| Staff access | Superadmin, admin, company user and payment user login paths are covered with role-specific browser checks and direct authorization tests |
+| Staff access | The public staff entry is one User Login at `/user`; superadmin, admin, company user and payment user are detected after sign-in and routed by role. Legacy role-specific login URLs remain as compatibility aliases, not separate public products |
 | Customer preview | Offline customer preview covers overview, trips, drafts, booking, assignment, payment states, profile, login/logout/reset, filtering, paging and responsive states without business writes |
 | Customer portal | Backend-connected customer session flow uses local mock OTP, separate customer session identity, CSRF refresh after session rotation and no browser bearer-token storage |
 | Customer ownership | Customer reads and mutations are scoped by active customer identity for trips, drafts, driver assignment, payment IDs and profile image access |
@@ -53,7 +56,7 @@ The OTP hint is intentionally visible in local/testing because no original OTP p
 
 | Check | Result |
 | --- | --- |
-| PHPUnit feature suite | 36 tests, 411 assertions passed |
+| PHPUnit feature suite | 37 tests, 435 assertions passed; focused frontend migration subset: 7 tests, 271 assertions |
 | Interface audit | 224 routes, 107 views, zero missing controller handlers |
 | View compilation | `php artisan view:cache` passed |
 | Offline customer browser suite | Passed desktop, mobile, assets, search/filter/paging, demo payments, drafts, save/edit/confirm, driver assignment, reload, profile, login/logout/reset and empty states |
@@ -100,11 +103,11 @@ C:\Users\Oreva\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\nod
 
 Final checkpoint:
 
-- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\finalization-20260912-20260912-201805\source.zip`
-- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\finalization-20260912-20260912-201805\database.sqlite`
-- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\finalization-20260912-20260912-201805\review.sqlite`
-- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\finalization-20260912-20260912-201805\environment.private`
-- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\finalization-20260912-20260912-201805\checkpoint-manifest.json`
+- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\login-unification-20260913-final\source.zip`
+- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\login-unification-20260913-final\database.sqlite`
+- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\login-unification-20260913-final\review.sqlite`
+- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\login-unification-20260913-final\environment.private`
+- `C:\Users\Oreva\Desktop\oreva\MIRA\FLEETNG V2\backups\login-unification-20260913-final\checkpoint-manifest.json`
 
 The source archive excludes `.git`, `vendor`, `node_modules`, `.env`, live SQLite files and generated storage/cache/log directories. The local and review SQLite backups passed `PRAGMA integrity_check`; selected checkpoint files were extracted into the checkpoint's `restore-check` directory as a sanity check.
 

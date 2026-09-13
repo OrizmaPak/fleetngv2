@@ -182,18 +182,11 @@ class AuthenticationController extends Controller
 
   public function logout(Request $request)
   {
-    $role = session('user_role');
     User::where('id', Auth::id())->update(['last_active' => Carbon::now()]);
     Auth::logout();
     $request->session()->invalidate();
     $request->session()->regenerateToken();
-    if ($role == 1) {
-      return redirect('/superadmin');
-    } elseif ($role == 2) {
-      return redirect('/admin');
-    } else {
-      return redirect('/user');
-    }
+    return redirect('/user');
   }
 
   // Forgot Password v2
@@ -240,7 +233,6 @@ class AuthenticationController extends Controller
     try {
       Mail::send('mails.thankyou-reset',$data,function ($message) use ($user) { $message->to($user->email)->subject('Password changed successfully'); });
     } catch (\Throwable $error) { report($error); }
-    $destination = (int)$user->user_type === 1 ? '/superadmin' : ((int)$user->user_type === 2 ? '/admin' : '/user');
-    return redirect($destination)->with('success_message','Password changed successfully.');
+    return redirect('/user')->with('success_message','Password changed successfully.');
   }
 }

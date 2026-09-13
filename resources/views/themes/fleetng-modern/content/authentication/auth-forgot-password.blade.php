@@ -14,7 +14,7 @@
             <div class="form-group"><label for="forgot-password-email">Email address</label><input class="form-control" id="forgot-password-email" type="email" name="email" autocomplete="email" placeholder="name@company.com" value="{{ old('email') }}" required autofocus></div>
             <button type="submit" class="btn btn-primary btn-block">Send reset link</button>
         </form>
-        <p class="text-center mt-2"><a href="{{ route('auth-admin-login') }}"><i data-feather="chevron-left"></i> Back to login</a></p>
+        <p class="text-center mt-2"><a href="{{ route('auth-user-login') }}"><i data-feather="chevron-left"></i> Back to login</a></p>
     </div></div>
 </div></div>
 @endsection

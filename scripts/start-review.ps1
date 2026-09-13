@@ -17,6 +17,7 @@ $env:CUSTOMER_PAYMENTS_ENABLED = 'false'
 $env:TRACKING_ENABLED = 'false'
 $env:CUSTOMER_PROFILE_DISK = 'local'
 $env:STAFF_IMAGE_DISK = 'local'
+$env:CUSTOMER_PORTAL_FRONTEND_URL = "http://127.0.0.1:$Port/customer-portal"
 $env:SESSION_COOKIE = "fleetng_review_$Port"
 $arguments = @('-d', "extension_dir=`"$extensions`"", '-d','extension=openssl','-d','extension=pdo_sqlite','-d','extension=sqlite3','-d','extension=mbstring','-d','extension=fileinfo','-S',"127.0.0.1:$Port",'-t','public','server.php')
 $process = Start-Process -FilePath $php -ArgumentList $arguments -WorkingDirectory $root -WindowStyle Hidden -PassThru -RedirectStandardOutput (Join-Path $root "storage\logs\review-$Port.log") -RedirectStandardError (Join-Path $root "storage\logs\review-$Port-error.log")

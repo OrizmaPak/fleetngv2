@@ -30,6 +30,8 @@ class FrontendMigrationTest extends TestCase
     public function test_staff_login_uses_role_and_active_status_without_remote_http()
     {
         $user = $this->account(3);
+        $admin = $this->account(2);
+        $superadmin = $this->account(1);
         $this->post('/admin', ['email' => $user->email, 'password' => 'local-test-password'])->assertSessionHas('error_message');
         $this->assertGuest();
         $this->post('/user', ['email' => $user->email, 'password' => 'local-test-password', 'remember_me' => 'remember'])->assertRedirect('/analytics')->assertCookieExpired('user_cookies');
@@ -38,6 +40,12 @@ class FrontendMigrationTest extends TestCase
         $this->get('/logout')->assertRedirect('/user');
         $this->assertGuest();
         $this->assertNull(session('user_role'));
+        $this->post('/user', ['email' => $admin->email, 'password' => 'local-test-password'])->assertRedirect('/analytics');
+        $this->assertAuthenticatedAs($admin);
+        $this->get('/logout')->assertRedirect('/user');
+        $this->post('/user', ['email' => $superadmin->email, 'password' => 'local-test-password'])->assertRedirect('/superadmin/analytics');
+        $this->assertAuthenticatedAs($superadmin);
+        $this->get('/logout')->assertRedirect('/user');
         $inactive = $this->account(3, 0);
         $this->post('/user', ['email' => $inactive->email, 'password' => 'local-test-password'])->assertSessionHas('error_message');
         $this->assertGuest();
@@ -73,6 +81,27 @@ class FrontendMigrationTest extends TestCase
     {
         app('view')->getFinder()->prependLocation(resource_path('views/themes/fleetng-modern'));
         view()->share('uiTheme', 'fleetng-modern');
-        $this->get('/user')->assertOk()->assertSee('fleetng-password-toggle')->assertSee('operations.css')->assertSee('data-fleetng-theme="dark"', false);
+        $this->get('/user')
+            ->assertOk()
+            ->assertSee('User Login')
+            ->assertSee('fleetng-password-toggle')
+            ->assertSee('operations.css')
+            ->assertSee('data-fleetng-theme="dark"', false)
+            ->assertDontSee('Company user')
+            ->assertDontSee('Super Admin')
+            ->assertDontSee('>Admin</a>', false);
+    }
+
+    public function test_modern_theme_uses_recovered_public_homepage()
+    {
+        app('view')->getFinder()->prependLocation(resource_path('views/themes/fleetng-modern'));
+        view()->share('uiTheme', 'fleetng-modern');
+        $this->get('/')
+            ->assertOk()
+            ->assertSee('masterslider')
+            ->assertSee('User Login')
+            ->assertSee('Customer Login')
+            ->assertDontSee('Open operations portal')
+            ->assertDontSee('public-hero');
     }
 }

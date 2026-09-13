@@ -84,7 +84,7 @@ class StaffSubmissionTest extends TestCase
         $user->forceFill(['token'=>$token])->save();
         DB::table('password_resets')->insert(['email'=>$user->email,'token'=>hash('sha256',$token),'created_at'=>now()]);
         $this->postJson('/reset-password/'.$token,['password'=>'NewPassword123!','password_confirmation'=>'wrong'])->assertStatus(422);
-        $this->post('/reset-password/'.$token,['password'=>'NewPassword123!','password_confirmation'=>'NewPassword123!'])->assertRedirect('/admin');
+        $this->post('/reset-password/'.$token,['password'=>'NewPassword123!','password_confirmation'=>'NewPassword123!'])->assertRedirect('/user');
         $this->assertTrue(Hash::check('NewPassword123!',$user->fresh()->password));
         $this->post('/reset-password/'.$token,['password'=>'Another123!','password_confirmation'=>'Another123!'])->assertRedirect('forgot-password');
         $user->forceFill(['token'=>$token])->save();

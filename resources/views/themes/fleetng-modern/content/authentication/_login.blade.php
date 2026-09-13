@@ -37,9 +37,8 @@
                 </form>
 
                 <div class="fleetng-portal-links" aria-label="Other sign-in options">
-                    @if(!request()->is('admin') && !request()->is('login'))<a href="{{ route('auth-admin-login') }}">Admin</a>@endif
-                    @if(!request()->is('user'))<a href="{{ route('auth-user-login') }}">Company user</a>@endif
-                    @if(!request()->is('superadmin'))<a href="{{ route('auth-superadmin-login') }}">Super Admin</a>@endif
+                    <a href="{{ url('/') }}">Back to homepage</a>
+                    <a href="{{ url('customer-portal') }}">Customer portal</a>
                 </div>
                 <p class="fleetng-auth-security"><i data-feather="shield"></i> Protected FleetNG access</p>
             </div>
