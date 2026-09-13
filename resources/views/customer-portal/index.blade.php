@@ -16,8 +16,8 @@
         };
     </script>
     <script defer src="{{ asset('vendors/js/feather-icons/feather-icons.min.js') }}"></script>
-    <script defer src="{{ asset('customer-preview/live-data.js') }}"></script>
-    <script defer src="{{ asset('customer-preview/app.js') }}"></script>
+    <script defer src="{{ asset('customer-preview/live-data.js') }}?v=f901c90"></script>
+    <script defer src="{{ asset('customer-preview/app.js') }}?v=f901c90"></script>
 </head>
 <body>
     <a class="skip" href="#main">Skip to content</a>
