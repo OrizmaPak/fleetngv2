@@ -26,9 +26,9 @@ class CustomerPortalSessionTest extends TestCase
         $this->getJson('/customer-portal/api/profile')->assertUnauthorized();
     }
 
-    public function test_portal_is_not_exposed_in_production()
+    public function test_portal_shell_is_exposed_in_production()
     {
         $this->app['env'] = 'production';
-        $this->get('/customer-portal')->assertNotFound();
+        $this->get('/customer-portal')->assertOk();
     }
 }

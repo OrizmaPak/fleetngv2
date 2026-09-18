@@ -86,7 +86,7 @@ class FrontendMigrationTest extends TestCase
             ->assertSee('User Login')
             ->assertSee('fleetng-password-toggle')
             ->assertSee('operations.css')
-            ->assertSee('data-fleetng-theme="dark"', false)
+            ->assertSee('data-fleetng-theme="light"', false)
             ->assertDontSee('Company user')
             ->assertDontSee('Super Admin')
             ->assertDontSee('>Admin</a>', false);

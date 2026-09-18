@@ -30,6 +30,8 @@
   function verificationLabel() { return testOtpEnabled() ? 'Testing verification / OTP 123456' : 'Phone verification'; }
   function verificationNote() { return testOtpEnabled() ? 'Testing verification: use OTP 123456. No SMS is sent.' : 'Phone verification is required before customer access.'; }
   function logoUrl() { return portalConfig().logoUrl || '../images/logo/fleetng-logo.svg'; }
+  function loginImageUrl() { return portalConfig().loginImageUrl || '../front/images/hero-img.png'; }
+  function homeUrl() { return portalConfig().homeUrl || '../'; }
   function brand() { return '<a class="brand" href="#/overview"><img src="' + e(logoUrl()) + '" alt="FleetNG logo"><span>FLEETNG</span></a>'; }
   function shell(title, content) {
     const nav = [['overview','Overview','grid'],['trips','My trips','truck'],['drafts','Draft bookings','file-text'],['payments','Payments','credit-card'],['profile','My account','user']];
@@ -160,11 +162,10 @@
     const previous = pendingLogin;
     pendingLogin = null;
     const existing = loginMode === 'existing';
-    root.innerHTML = '<div class="login-shell">' + brand() + '<main id="main" class="login-center"><span class="demo-tag">Demo / sample data</span><span class="eyebrow">Customer portal</span><h1>' + (existing ? 'Welcome to FleetNG' : 'Create a demo account') + '</h1><p>Your next delivery starts here.</p><div class="tabs" role="tablist" aria-label="Account type"><button class="tab" role="tab" data-login="existing" aria-selected="' + existing + '">Existing customer</button><button class="tab" role="tab" data-login="new" aria-selected="' + !existing + '">New customer</button></div><form id="login-form"><div class="form-error" role="alert"></div>' + (existing ? field('Phone number','phone_number','tel',profile ? profile.phone_number : '8000000000','required pattern="[0-9]{9,13}"') : field('First name','first_name','text','','required') + field('Last name','last_name') + field('Email address','email','email','','required') + field('Country code','country_code','text','+234','required pattern="\\+[0-9]{1,4}"') + field('Phone number','phone_number','tel','','required pattern="[0-9]{9,13}"')) + '<button class="button" type="submit">' + (existing ? 'Open demo account' : 'Create demo account') + icon('arrow-right') + '</button></form><p class="review-note">Sample account access only. No OTP is sent.</p><button class="text-button" data-action="reset">' + icon('rotate-ccw') + 'Restore sample account</button></main></div>';
+    root.innerHTML = '<div class="login-shell"><section class="login-visual" aria-label="FleetNG logistics"><img class="login-photo" src="' + e(loginImageUrl()) + '" alt="Fleet vehicles ready for delivery"><div class="login-visual-content">' + brand() + '<div class="login-visual-message"><span class="login-visual-kicker">LOGISTICS, MADE CLEAR</span><h2>Your freight.<br>Your visibility.</h2><p>Book deliveries and keep every journey in view, from pickup to arrival.</p></div><div class="login-visual-foot"><span>FleetNG customer portal</span><span>Built for the journey ahead</span></div></div></section><section class="login-panel"><div class="login-panel-top"><span class="login-panel-mark">CUSTOMER PORTAL <span aria-hidden="true">/</span> ACCOUNT ACCESS</span><a class="login-home" href="' + e(homeUrl()) + '">' + icon('arrow-up-right') + ' Back to website</a></div><main id="main" class="login-center"><div class="login-form-head"><span class="eyebrow">Customer portal</span><h1>' + (existing ? 'Welcome to FleetNG' : 'Create a demo account') + '</h1><p>' + (existing ? 'Access your bookings, payments, and deliveries in one place.' : 'Start booking and tracking deliveries with FleetNG.') + '</p></div><div class="tabs" role="tablist" aria-label="Account type"><button class="tab" role="tab" data-login="existing" aria-selected="' + existing + '">Existing customer</button><button class="tab" role="tab" data-login="new" aria-selected="' + !existing + '">New customer</button></div><form id="login-form"><div class="form-error" role="alert"></div>' + (existing ? field('Phone number','phone_number','tel',profile ? profile.phone_number : '8000000000','required pattern="[0-9]{9,13}" autocomplete="tel-national" inputmode="tel" placeholder="Enter your phone number"') : field('First name','first_name','text','','required autocomplete="given-name"') + field('Last name','last_name','text','','autocomplete="family-name"') + field('Email address','email','email','','required autocomplete="email"') + field('Country code','country_code','text','+234','required pattern="\\+[0-9]{1,4}"') + field('Phone number','phone_number','tel','','required pattern="[0-9]{9,13}" autocomplete="tel-national"')) + '<button class="button" type="submit"><span>' + (existing ? 'Open demo account' : 'Create demo account') + '</span>' + icon('arrow-right') + '</button></form><p class="review-note">Sample account access only. No OTP is sent.</p><button class="text-button" data-action="reset">' + icon('rotate-ccw') + 'Restore sample account</button></main><div class="login-panel-foot"><span>FLEETNG</span><span>Move with confidence.</span></div></section></div>';
     if (local) {
-      root.querySelector('.demo-tag').textContent = verificationLabel();
       root.querySelector('[data-action="reset"]').remove();
-      root.querySelector('#login-form button[type="submit"]').textContent = 'Continue';
+      root.querySelector('#login-form button[type="submit"] span').textContent = 'Continue';
       if (!existing) root.querySelector('h1').textContent = 'Create your account';
       if (existing && !profile) root.querySelector('[name="phone_number"]').value = '';
     }
@@ -179,10 +180,13 @@
   function otpPage() {
     const form = document.getElementById('login-form');
     form.id = 'otp-form';
-    form.innerHTML = '<div class="form-error" role="alert"></div><p>Verify ' + e(pendingLogin.data.phone_number) + '</p>' + field('Verification code','code','text','','required pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code" aria-describedby="otp-hint"') + '<p id="otp-hint" class="review-note">' + (testOtpEnabled() ? 'Testing OTP: <strong>123456</strong>. No SMS was sent.' : 'Enter the verification code sent to this phone number.') + ' Code expires in 5 minutes.</p><div class="button-row"><button class="button secondary" type="button" data-action="otp-restart">Change details</button><button class="button" type="submit">Verify and continue</button></div>';
+    root.querySelector('.login-form-head .eyebrow').textContent = 'One more step';
+    root.querySelector('.login-form-head h1').textContent = 'Verify your number';
+    root.querySelector('.login-form-head p').textContent = 'Enter the code for ' + pendingLogin.data.phone_number + ' to continue.';
+    root.querySelector('.login-center .tabs').hidden = true;
+    form.innerHTML = '<div class="form-error" role="alert"></div>' + field('Verification code','code','text','','required pattern="[0-9]{6}" maxlength="6" inputmode="numeric" autocomplete="one-time-code" aria-describedby="otp-hint" placeholder="6-digit code"') + '<p id="otp-hint" class="review-note">' + (testOtpEnabled() ? 'Testing OTP: <strong>123456</strong>. No SMS was sent.' : 'Enter the verification code sent to this phone number.') + ' Code expires in 5 minutes.</p><button class="button" type="submit"><span>Verify and continue</span>' + icon('arrow-right') + '</button><div class="otp-actions"><button class="text-button" type="button" data-action="otp-restart">Change details</button><button class="text-button" type="button" data-action="otp-resend">Request another code</button></div>';
     form.querySelector('[name="code"]').focus();
     root.querySelector('.login-center > .review-note').hidden = true;
-    form.insertAdjacentHTML('beforeend','<button class="text-button" type="button" data-action="otp-resend">Request another code</button>');
   }
   function openDialog(title, body, actions = '') {
     dialog.innerHTML = '<div class="dialog-head"><h2 id="dialog-title">' + e(title) + '</h2><button class="icon-button" data-close aria-label="Close dialog">' + icon('x') + '</button></div><div class="dialog-body">' + body + '</div>' + (actions ? '<div class="dialog-actions">' + actions + '</div>' : '');
@@ -335,7 +339,7 @@
       pendingLogin = {data, mode:loginMode, challenge:challenge.challenge_id};
       otpPage();
     });
-    if (form.id === 'otp-form') await perform(form, async () => {
+    else if (form.id === 'otp-form') await perform(form, async () => {
       const verified = await request('POST','/otp/verify',{challenge_id:pendingLogin.challenge,code:data.code});
       try {
         profile = await request('POST',pendingLogin.mode === 'existing' ? '/login' : '/register',{...pendingLogin.data,verification_token:verified.verification_token});
