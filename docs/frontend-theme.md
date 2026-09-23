@@ -30,4 +30,4 @@ Rollback is the same process with `UI_THEME=legacy`. The theme switch changes vi
 
 Modern Blade overrides live in `resources/views/themes/fleetng-modern`. Modern browser assets live in `public/themes/fleetng-modern`. Do not place modern files over the legacy view or asset trees.
 
-Before production deployment, back up the FLEETNG V2 application directory and its dedicated database. Upload only files belonging to FLEETNG V2 and run cache commands from that application's root directory.
+Before production deployment, back up the `FLEETNGV2` application directory and its dedicated database. Upload only files belonging to `FLEETNGV2` and run cache commands from that application's root directory.

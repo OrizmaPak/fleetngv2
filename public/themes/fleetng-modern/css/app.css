@@ -910,11 +910,366 @@ body.fleetng-nav-collapsed .navigation-main > li > a { justify-content: center; 
 .fleetng-modern-auth {
   min-height: 100vh;
   overflow-x: hidden;
-  background: #050b18 !important;
+  background: #f7f9fc !important;
 }
 
 .fleetng-auth-canvas {
   min-height: 100vh;
+}
+
+.fleetng-modern .pace,
+.fleetng-modern .pace .pace-progress,
+.fleetng-modern .pace .pace-activity {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.fleetng-login-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 53%) minmax(420px, 47%);
+  background: #f7f9fc;
+  color: #142237;
+}
+
+.fleetng-login-visual {
+  position: relative;
+  min-height: 100vh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #122235;
+  color: #fff;
+}
+
+.fleetng-login-photo {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 48% center;
+  filter: saturate(.86) contrast(1.08);
+}
+
+.fleetng-login-visual::after {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(5, 16, 30, .67) 0%, rgba(5, 16, 30, .10) 34%, rgba(5, 16, 30, .86) 100%);
+  content: "";
+}
+
+.fleetng-login-visual-content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(24px, 3.5vw, 52px);
+}
+
+.fleetng-login-brand {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 13px;
+  color: #fff !important;
+  font-size: 21px;
+  font-weight: 750;
+  letter-spacing: 0;
+}
+
+.fleetng-login-brand img {
+  width: 43px;
+  height: 43px;
+  object-fit: contain;
+}
+
+.fleetng-login-visual-message {
+  max-width: 600px;
+  margin-top: auto;
+  padding-bottom: clamp(35px, 7vh, 92px);
+}
+
+.fleetng-login-visual-message > span {
+  display: block;
+  margin-bottom: 20px;
+  color: #f3ca80;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.fleetng-login-visual-message h2 {
+  margin: 0;
+  color: #fff;
+  font-size: clamp(44px, 4.3vw, 72px);
+  line-height: 1.05;
+  font-weight: 730;
+  letter-spacing: 0;
+}
+
+.fleetng-login-visual-message p {
+  max-width: 430px;
+  margin: 24px 0 0;
+  color: #e3eaf2;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.fleetng-login-visual-foot,
+.fleetng-login-panel-foot {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  font-size: 11px;
+  letter-spacing: .03em;
+}
+
+.fleetng-login-visual-foot {
+  padding-top: 21px;
+  border-top: 1px solid rgba(255, 255, 255, .28);
+  color: #d5deea;
+}
+
+.fleetng-login-panel {
+  display: flex;
+  min-width: 0;
+  min-height: 100vh;
+  flex-direction: column;
+  padding: clamp(24px, 3.5vw, 52px);
+  background: #f7f9fc;
+}
+
+.fleetng-login-panel-top,
+.fleetng-login-panel-foot,
+.fleetng-login-label-row,
+.fleetng-login-options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.fleetng-login-mark {
+  color: #54708e;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .12em;
+  white-space: nowrap;
+}
+
+.fleetng-login-mark span {
+  padding: 0 5px;
+  color: #b0bdcb;
+}
+
+.fleetng-login-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #365675 !important;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.fleetng-login-home:hover {
+  color: #1264c7 !important;
+}
+
+.fleetng-login-home svg {
+  width: 14px;
+  height: 14px;
+}
+
+.fleetng-login-center {
+  width: min(100%, 432px);
+  margin: auto;
+  padding: 55px 0;
+}
+
+.fleetng-login-eyebrow {
+  margin: 0 0 15px;
+  color: #1264c7;
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.fleetng-login-center h1 {
+  margin: 0;
+  color: #102136;
+  font-size: clamp(30px, 2.8vw, 42px);
+  font-weight: 730;
+  line-height: 1.13;
+}
+
+.fleetng-login-form-head > p:last-child {
+  max-width: 360px;
+  margin: 16px 0 31px;
+  color: #65778c;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.fleetng-login-center .form-group {
+  margin-bottom: 19px;
+}
+
+.fleetng-login-center label {
+  color: #273e55;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.fleetng-login-label-row {
+  margin-bottom: .2857rem;
+}
+
+.fleetng-login-label-row label {
+  margin-bottom: 0;
+}
+
+.fleetng-login-label-row a {
+  color: #1769d2 !important;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fleetng-login-center .form-control,
+.fleetng-login-center .input-group-text {
+  min-height: 50px;
+  border-color: #ccd8e5 !important;
+  border-radius: 5px;
+  background: #fff !important;
+  color: #172b42 !important;
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(14, 40, 64, .03) !important;
+}
+
+.fleetng-login-center .form-control::placeholder {
+  color: #9aaabc;
+}
+
+.fleetng-login-center .form-control:hover {
+  border-color: #a8bdcf !important;
+}
+
+.fleetng-login-center .form-control:focus {
+  border-color: #2179d6 !important;
+  box-shadow: 0 0 0 3px rgba(139, 200, 237, .45) !important;
+}
+
+.fleetng-login-center .input-group .form-control:not(:last-child) {
+  border-radius: 5px 0 0 5px;
+}
+
+.fleetng-login-center .input-group-append .input-group-text {
+  min-width: 50px;
+  justify-content: center;
+  border-left: 0 !important;
+  border-radius: 0 5px 5px 0;
+  color: #60748a !important;
+}
+
+.fleetng-login-options {
+  margin: 1px 0 22px;
+  color: #65778c;
+  font-size: 12px;
+}
+
+.fleetng-login-options > span {
+  color: #486786;
+  white-space: nowrap;
+}
+
+.fleetng-login-center .custom-control-label {
+  color: #486786;
+  font-size: 12px;
+}
+
+.fleetng-login-center .custom-control-label::before,
+.fleetng-login-center .custom-control-label::after {
+  top: .08rem;
+}
+
+.fleetng-login-center .btn[type="submit"] {
+  display: flex;
+  width: 100%;
+  min-height: 51px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 11px;
+  padding: 12px 17px;
+  border: 1px solid #1769d2;
+  border-radius: 5px;
+  background: #1769d2 !important;
+  color: #fff !important;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 8px 20px rgba(23, 105, 210, .16) !important;
+}
+
+.fleetng-login-center .btn[type="submit"]:hover {
+  border-color: #115bbd;
+  background: #115bbd !important;
+}
+
+.fleetng-login-center .btn[type="submit"] svg {
+  width: 17px;
+  height: 17px;
+}
+
+.fleetng-login-center .alert {
+  margin-bottom: 19px;
+}
+
+.fleetng-login-panel .fleetng-portal-links {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 24px;
+  color: #486786;
+  font-size: 12px;
+}
+
+.fleetng-login-panel .fleetng-portal-links a {
+  color: #486786 !important;
+  font-weight: 600;
+}
+
+.fleetng-login-panel .fleetng-portal-links a:hover {
+  color: #1769d2 !important;
+}
+
+.fleetng-login-panel .fleetng-auth-security {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  margin: 24px 0 0;
+  color: #8b9caf;
+  font-size: 11px;
+}
+
+.fleetng-login-panel .fleetng-auth-security svg {
+  width: 14px;
+  height: 14px;
+}
+
+.fleetng-login-panel-foot {
+  padding-top: 20px;
+  border-top: 1px solid #dce4ed;
+  color: #8b9caf;
+}
+
+.fleetng-login-panel-foot span:first-child {
+  color: #264b73;
+  font-weight: 800;
+  letter-spacing: .08em;
 }
 
 .fleetng-modern-auth .app-content,
@@ -975,6 +1330,140 @@ body.fleetng-nav-collapsed .navigation-main > li > a { justify-content: center; 
 .fleetng-state-logo { position:absolute; top:26px; left:28px; width:92px; height:42px; object-fit:contain; }
 .fleetng-state-icon { display:grid; width:58px; height:58px; margin-bottom:20px; place-items:center; border:1px solid rgba(88,162,255,.28); border-radius:8px; background:rgba(55,125,246,.12); color:#89c1ff; }
 .fleetng-state-icon svg { width:26px; height:26px; }
+
+.fleetng-modern-auth .fleetng-login-center h1 {
+  color: #102136;
+}
+
+.fleetng-modern-auth .fleetng-login-form-head > p:last-child,
+.fleetng-modern-auth .fleetng-login-center label {
+  color: #65778c;
+}
+
+.fleetng-modern-auth .fleetng-login-center .form-control,
+.fleetng-modern-auth .fleetng-login-center .input-group-text {
+  border-color: #ccd8e5 !important;
+  background: #fff !important;
+  color: #172b42 !important;
+}
+
+.fleetng-modern-auth .fleetng-login-center .form-control:focus {
+  border-color: #2179d6 !important;
+  box-shadow: 0 0 0 3px rgba(139, 200, 237, .45) !important;
+}
+
+@media (max-width: 980px) {
+  .fleetng-login-shell {
+    grid-template-columns: minmax(0, 45%) minmax(0, 55%);
+  }
+
+  .fleetng-login-visual-message h2 {
+    font-size: clamp(38px, 4.3vw, 54px);
+  }
+
+  .fleetng-login-visual-foot span:last-child {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .fleetng-login-shell {
+    display: block;
+  }
+
+  .fleetng-login-visual,
+  .fleetng-login-visual-content {
+    min-height: 230px;
+  }
+
+  .fleetng-login-visual-content {
+    padding: 24px;
+  }
+
+  .fleetng-login-brand {
+    font-size: 18px;
+  }
+
+  .fleetng-login-brand img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .fleetng-login-visual-message {
+    margin-top: auto;
+    padding-bottom: 0;
+  }
+
+  .fleetng-login-visual-message h2 {
+    font-size: 32px;
+  }
+
+  .fleetng-login-visual-message > span,
+  .fleetng-login-visual-message p,
+  .fleetng-login-visual-foot {
+    display: none;
+  }
+
+  .fleetng-login-panel {
+    min-height: calc(100vh - 230px);
+    padding: 23px 24px 25px;
+  }
+
+  .fleetng-login-center {
+    padding: 40px 0 55px;
+  }
+
+  .fleetng-login-panel-foot {
+    margin-top: auto;
+  }
+}
+
+@media (max-width: 420px) {
+  .fleetng-login-visual,
+  .fleetng-login-visual-content {
+    min-height: 190px;
+  }
+
+  .fleetng-login-visual-message h2 {
+    font-size: 28px;
+  }
+
+  .fleetng-login-panel {
+    min-height: calc(100vh - 190px);
+    padding: 21px 20px 24px;
+  }
+
+  .fleetng-login-mark {
+    font-size: 9px;
+  }
+
+  .fleetng-login-mark,
+  .fleetng-login-mark span {
+    white-space: normal;
+  }
+
+  .fleetng-login-home {
+    font-size: 11px;
+  }
+
+  .fleetng-login-home svg {
+    display: none;
+  }
+
+  .fleetng-login-center {
+    padding: 36px 0 48px;
+  }
+
+  .fleetng-login-center h1 {
+    font-size: 30px;
+  }
+
+  .fleetng-login-options {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+}
 
 /* Maps, charts and utility states */
 .fleetng-modern .apexcharts-canvas text,
