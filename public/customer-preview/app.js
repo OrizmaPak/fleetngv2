@@ -33,6 +33,23 @@
   function loginImageUrl() { return portalConfig().loginImageUrl || '../front/images/hero-img.png'; }
   function homeUrl() { return portalConfig().homeUrl || '../'; }
   function brand() { return '<a class="brand" href="#/overview"><img src="' + e(logoUrl()) + '" alt="FleetNG logo"><span>FLEETNG</span></a>'; }
+  function setLoading(button, label = 'Loading...') {
+    if (!button || button.dataset.loadingText) return;
+    button.dataset.loadingText = button.innerHTML;
+    button.innerHTML = '<span class="customer-loading-spinner" aria-hidden="true"></span><span>' + e(label) + '</span>';
+    button.classList.add('is-loading');
+    button.setAttribute('aria-busy','true');
+    button.disabled = true;
+  }
+  function clearLoading(button) {
+    if (!button || !button.dataset.loadingText) return;
+    button.innerHTML = button.dataset.loadingText;
+    delete button.dataset.loadingText;
+    button.classList.remove('is-loading');
+    button.removeAttribute('aria-busy');
+    button.disabled = false;
+    icons();
+  }
   function shell(title, content) {
     const nav = [['overview','Overview','grid'],['trips','My trips','truck'],['drafts','Draft bookings','file-text'],['payments','Payments','credit-card'],['profile','My account','user']];
     const active = route.startsWith('trip/') ? 'trips' : route.startsWith('draft/') ? 'drafts' : route;
@@ -198,13 +215,14 @@
       if (!items.length) return;
       openDialog('Review payment',items.map(t => row('Trip #' + t.id,money(api.total(t)))).join('') + '<div class="form-error" role="alert"></div>','<button class="button secondary" data-close>Cancel</button><button class="button" id="open-checkout">Continue to checkout</button>');
       document.getElementById('open-checkout').onclick = async event => {
-        const button = event.currentTarget; button.disabled = true;
+        const button = event.currentTarget;
         try {
+          setLoading(button);
           const checkout = await request('POST','/trips/payment-link',{trip_ids:items.map(t => t.id)});
           const url = new URL(checkout.link);
           if (url.protocol !== 'https:' || !(url.hostname === 'flutterwave.com' || url.hostname.endsWith('.flutterwave.com'))) throw new Error('The payment provider returned an invalid link.');
           location.assign(url.href);
-        } catch (error) { dialog.querySelector('.form-error').textContent = error.message; button.disabled = false; }
+        } catch (error) { dialog.querySelector('.form-error').textContent = error.message; clearLoading(button); }
       };
       return;
     }
@@ -212,9 +230,9 @@
     if (!items.length) return;
     openDialog('Review demo payment','<span class="demo-tag">No real payment</span><p class="review-note">This records a sample payment in this browser only.</p>' + items.map(t => row('Trip #' + t.id,money(api.total(t)))).join('') + '<div class="detail-row total"><span>Total</span><strong>' + money(items.reduce((s,t) => s+api.total(t),0)) + '</strong></div><div class="form-error" role="alert"></div>','<button class="button secondary" data-close>Cancel</button><button class="button" id="confirm-payment">Simulate successful payment</button>');
     document.getElementById('confirm-payment').onclick = async event => {
-      event.currentTarget.disabled = true;
+      setLoading(event.currentTarget);
       try { api.simulatePayment(items.map(t => t.id)); selected.clear(); dialog.close(); await render(); toast('Sample payment recorded. No money was charged.'); }
-      catch (error) { dialog.querySelector('.form-error').textContent = error.message; event.currentTarget.disabled = false; }
+      catch (error) { dialog.querySelector('.form-error').textContent = error.message; clearLoading(event.currentTarget); }
     };
   }
   function assignmentDialog(id) {
@@ -223,9 +241,9 @@
   }
   async function perform(form, action) {
     const errorNode = form.querySelector('.form-error'); errorNode.textContent = '';
-    const buttons = [...form.querySelectorAll('button[type="submit"]')]; buttons.forEach(b => b.disabled = true);
+    const buttons = [...form.querySelectorAll('button[type="submit"]')]; buttons.forEach(b => setLoading(b));
     try { await action(); } catch (error) { errorNode.textContent = error.message; }
-    finally { buttons.forEach(b => b.disabled = false); }
+    finally { buttons.forEach(b => clearLoading(b)); }
   }
   async function render() {
     const version = ++renderId, next = location.hash.replace(/^#\/?/,'') || 'overview';
@@ -280,7 +298,7 @@
       case 'logout': try { await api.logout(); profile = null; booking = null; selected.clear(); go('login'); } catch (error) { toast(error.message); } break;
       case 'otp-restart': loginPage(); break;
       case 'otp-resend':
-        target.disabled = true;
+        setLoading(target);
         try {
           const challenge = await request('POST','/otp/request',{phone_number:pendingLogin.data.phone_number});
           pendingLogin.challenge = challenge.challenge_id;
@@ -288,7 +306,7 @@
           document.querySelector('#otp-form [name="code"]').value = '';
           toast(testOtpEnabled() ? 'New testing code ready: 123456. No SMS was sent.' : 'A new verification code has been requested.');
         } catch (error) { toast(error.message); }
-        finally { target.disabled = false; }
+        finally { clearLoading(target); }
         break;
       case 'reset': openDialog('Reset sample data?','<p class="muted">Your demo bookings and profile changes will be replaced with the original sample account.</p>','<button class="button secondary" data-close>Keep changes</button><button class="button" id="confirm-reset">Reset demo</button>'); document.getElementById('confirm-reset').onclick = async () => { api.reset(); booking = null; selected.clear(); profile = null; dialog.close(); if (route === 'overview') await render(); else go('overview'); toast('Sample account restored.'); }; break;
       case 'density': tableState.compact = !tableState.compact; renderTable(); break;
