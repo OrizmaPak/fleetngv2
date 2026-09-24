@@ -105,6 +105,8 @@ $user_type=Session::get('user_role');
                 <th>User Name</th>
                 <th>Phone</th>
                 <th>Trips</th>
+                <th>Savings Balance</th>
+                <th>Weekly Savings Limit</th>
                 <th width="150">Login Pins</th>
                 <th>Vehicle ID</th>
                 <th>Last Active</th>
@@ -296,6 +298,14 @@ $user_type=Session::get('user_role');
           "orderable": false
         },
         {
+          "data": "savings_balance",
+          "orderable": false
+        },
+        {
+          "data": "weekly_savings_limit",
+          "orderable": false
+        },
+        {
           "data": "auth_pin",
           "orderable": false
         },
@@ -371,6 +381,14 @@ $user_type=Session::get('user_role');
         },
         {
           "data": "total_trips",
+          "orderable": false
+        },
+        {
+          "data": "savings_balance",
+          "orderable": false
+        },
+        {
+          "data": "weekly_savings_limit",
           "orderable": false
         },
         {

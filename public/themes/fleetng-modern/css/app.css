@@ -868,6 +868,12 @@ body.fleetng-nav-collapsed .navigation-main > li > a { justify-content: center; 
 .fleetng-kpi strong { margin-top: 7px; color: var(--fleet-text); font-size: 22px; line-height: 1.2; }
 .fleetng-kpi em { margin-top: 6px; overflow: hidden; color: var(--fleet-text-muted); font-size: 11px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
 .fleetng-chart-wrap { position: relative; min-height: 330px; }
+.fleetng-section-title {
+  margin: 0 0 12px;
+  color: var(--fleet-text);
+  font-size: 18px;
+  line-height: 1.35;
+}
 
 .fleetng-finance-grid,
 .fleetng-status-summary {
@@ -881,6 +887,7 @@ body.fleetng-nav-collapsed .navigation-main > li > a { justify-content: center; 
 }
 
 .fleetng-finance-grid > div,
+.fleetng-finance-grid > a,
 .fleetng-status-summary > div {
   display: flex;
   min-height: 98px;
@@ -893,6 +900,10 @@ body.fleetng-nav-collapsed .navigation-main > li > a { justify-content: center; 
 }
 
 .fleetng-finance-grid strong { color: var(--fleet-text); font-size: 18px; }
+.fleetng-finance-grid > a { color: inherit; transition: border-color .18s ease, transform .18s ease; }
+.fleetng-finance-grid > a:hover { border-color: var(--fleet-border-strong); transform: translateY(-1px); }
+.fleetng-finance-grid em { display: block; margin-top: 6px; color: var(--fleet-text-muted); font-size: 11px; font-style: normal; }
+.fleetng-savings-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .fleetng-status-summary { grid-template-columns: repeat(4, minmax(0, 1fr)); box-shadow: none; }
 .fleetng-status-summary > div { min-height: 108px; align-items: flex-start; }
 .fleetng-status-summary strong { color: var(--fleet-text); font-size: 24px; }

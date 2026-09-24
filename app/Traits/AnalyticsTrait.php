@@ -8,6 +8,8 @@ use App\Models\Trip;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 trait AnalyticsTrait
 {
     public function getUsersCount()
@@ -181,5 +183,71 @@ trait AnalyticsTrait
         }
         
         return $data;
+    }
+
+    public function getSavingsAnalytics()
+    {
+        $user = Auth::user();
+        $data = [
+            'overall_savings' => 0,
+            'overall_savings_withdrawals' => 0,
+            'total_driver_savings' => 0,
+            'total_motorboy_savings' => 0,
+            'total_driver_withdrawals' => 0,
+            'total_motorboy_withdrawals' => 0,
+            'previous_week_overall_savings' => 0,
+            'previous_week_overall_savings_withdrawals' => 0,
+            'previous_week_driver_savings' => 0,
+            'previous_week_motorboy_savings' => 0,
+            'previous_week_driver_withdrawals' => 0,
+            'previous_week_motorboy_withdrawals' => 0,
+        ];
+
+        $driverIds = null;
+        if ($user->user_type === 3) {
+            $driverIds = $user->drivers_ids()->toArray();
+        }
+
+        $driverSavings = $this->sumExistingColumns('drivers', ['savings_balance', 'saving_balance', 'savings', 'wallet_balance'], 'id', $driverIds);
+        $driverWithdrawals = $this->sumExistingColumns('drivers', ['savings_withdrawals', 'saving_withdrawals', 'withdrawals', 'withdrawal_balance'], 'id', $driverIds);
+        $motorboySavings = $this->sumExistingColumns('motorboys', ['savings_balance', 'saving_balance', 'savings', 'wallet_balance']);
+        $motorboyWithdrawals = $this->sumExistingColumns('motorboys', ['savings_withdrawals', 'saving_withdrawals', 'withdrawals', 'withdrawal_balance']);
+
+        $data['total_driver_savings'] = $driverSavings;
+        $data['total_driver_withdrawals'] = $driverWithdrawals;
+        $data['total_motorboy_savings'] = $motorboySavings;
+        $data['total_motorboy_withdrawals'] = $motorboyWithdrawals;
+        $data['overall_savings'] = $driverSavings + $motorboySavings;
+        $data['overall_savings_withdrawals'] = $driverWithdrawals + $motorboyWithdrawals;
+
+        return $data;
+    }
+
+    private function sumExistingColumns(string $table, array $columns, ?string $scopeColumn = null, ?array $scopeIds = null): float
+    {
+        if (!Schema::hasTable($table)) {
+            return 0;
+        }
+
+        foreach ($columns as $column) {
+            if (!Schema::hasColumn($table, $column)) {
+                continue;
+            }
+
+            $query = DB::table($table);
+            if (Schema::hasColumn($table, 'deleted_at')) {
+                $query->whereNull('deleted_at');
+            }
+            if ($scopeColumn && is_array($scopeIds)) {
+                if (count($scopeIds) === 0) {
+                    return 0;
+                }
+                $query->whereIn($scopeColumn, $scopeIds);
+            }
+
+            return (float) $query->sum($column);
+        }
+
+        return 0;
     }
 }

@@ -19,6 +19,7 @@ class DashboardController extends Controller
     $revenue = $this->getRevenue();
     $commissions = $this->getCommissions();
     $expenses = $this->getExpenses();
+    $savings = $this->getSavingsAnalytics();
 
     $data = [
       'total_users' => $users['total_users'],
@@ -39,7 +40,19 @@ class DashboardController extends Controller
       'total_commission' => $commissions['total_commission'],
       'today_expenses' => $expenses['today_expenses'],
       'total_expenses' => $expenses['total_expenses'],
-      'merchant' => 0,
+      'overall_savings' => $savings['overall_savings'],
+      'overall_savings_withdrawals' => $savings['overall_savings_withdrawals'],
+      'total_driver_savings' => $savings['total_driver_savings'],
+      'total_motorboy_savings' => $savings['total_motorboy_savings'],
+      'total_driver_withdrawals' => $savings['total_driver_withdrawals'],
+      'total_motorboy_withdrawals' => $savings['total_motorboy_withdrawals'],
+      'previous_week_overall_savings' => $savings['previous_week_overall_savings'],
+      'previous_week_overall_savings_withdrawals' => $savings['previous_week_overall_savings_withdrawals'],
+      'previous_week_driver_savings' => $savings['previous_week_driver_savings'],
+      'previous_week_motorboy_savings' => $savings['previous_week_motorboy_savings'],
+      'previous_week_driver_withdrawals' => $savings['previous_week_driver_withdrawals'],
+      'previous_week_motorboy_withdrawals' => $savings['previous_week_motorboy_withdrawals'],
+      'merchant' => [],
     ];
 
     $data['net_revenue'] = $data['total_revenue'] - $data['total_commission'];

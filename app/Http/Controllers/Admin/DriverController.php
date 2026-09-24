@@ -118,6 +118,12 @@ class DriverController extends Controller
             return 'No Trip';
           }
         })
+        ->addColumn('savings_balance', function ($data) {
+          return number_format((float) ($data->savings_balance ?? $data->saving_balance ?? 0), 2);
+        })
+        ->addColumn('weekly_savings_limit', function ($data) {
+          return number_format((float) ($data->weekly_savings_limit ?? $data->saving_weekly_limit ?? 0), 2);
+        })
         ->addColumn('auth_pin', function ($data) {
           $login = '<input type="password" maxlength="4" onkeypress="return onlyNumberKey(event)"  class="form-control" id="login_pin_input' . $data->id . '" value="' . $data->auth_pin . '" style="width: 40%;" autocomplete="off" onblur="save_pin(' . $data->id . ',' . $data->auth_pin . ')" />';
           return $login;
