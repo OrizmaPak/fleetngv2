@@ -1,5 +1,5 @@
 RewriteEngine On
-RewriteRule ^$ "https://nglohitech.com.ng/FLEETNG V2/public/" [R=302,L]
+RewriteRule ^$ "https://nglohitech.com.ng/fleetngv2/public/" [R=302,L]
 
 # Use the host's installed PHP 8.2 runtime only for this application tree.
 <IfModule mime_module>
