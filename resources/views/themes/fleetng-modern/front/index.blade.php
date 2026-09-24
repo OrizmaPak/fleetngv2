@@ -43,6 +43,26 @@
             padding-top: 20px;
             padding-bottom: 20px;
         }
+        .fleetng-home-loading {
+            display: inline-flex !important;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+        .fleetng-home-loading-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: fleetng-home-loading-spin .7s linear infinite;
+        }
+        @keyframes fleetng-home-loading-spin {
+            to { transform: rotate(360deg); }
+        }
     </style>
     <!-- styleswitcher -->
 </head>
@@ -1291,9 +1311,62 @@
     <script>
         /* <![CDATA[ */
         (function ($) {
+            function setHomeLoading(control, label) {
+                if (!control || control.dataset.loadingText) return;
+                var loadingLabel = label || 'Loading...';
+
+                if (control.tagName === 'INPUT') {
+                    control.dataset.loadingText = control.value;
+                    control.value = loadingLabel;
+                } else {
+                    control.dataset.loadingText = control.innerHTML;
+                    control.innerHTML = '<span class="fleetng-home-loading-spinner" aria-hidden="true"></span><span>' + loadingLabel + '</span>';
+                }
+
+                control.classList.add('fleetng-home-loading');
+                control.setAttribute('aria-busy', 'true');
+
+                if (control.tagName === 'BUTTON' || control.tagName === 'INPUT') {
+                    control.disabled = true;
+                }
+            }
+
+            function clearHomeLoading(control) {
+                if (!control || !control.dataset.loadingText) return;
+                control.classList.remove('fleetng-home-loading');
+                control.removeAttribute('aria-busy');
+
+                if (control.tagName === 'INPUT') {
+                    control.value = control.dataset.loadingText;
+                } else {
+                    control.innerHTML = control.dataset.loadingText;
+                }
+
+                delete control.dataset.loadingText;
+                if (control.tagName === 'BUTTON' || control.tagName === 'INPUT') {
+                    control.disabled = false;
+                }
+            }
+
+            $(document).on('click', 'a[href]', function () {
+                var href = this.getAttribute('href') || '';
+                if ($(this).hasClass('scroll') || href.charAt(0) === '#' || href.indexOf('javascript:') === 0 || this.target === '_blank') {
+                    return;
+                }
+
+                setHomeLoading(this, 'Loading...');
+            });
+
+            $(document).on('submit', 'form', function () {
+                if (this.id === 'fleetng-home-contact') return;
+                var submitter = this.querySelector('[type="submit"]');
+                setHomeLoading(submitter, 'Loading...');
+            });
+
             $('#fleetng-home-contact').on('submit', function (event) {
                 event.preventDefault();
                 var $form = $(this);
+                var submit = $form.find('[type="submit"]').get(0);
                 var $success = $('#fleetng-home-contact-success').hide();
                 var $error = $('#fleetng-home-contact-error').hide();
                 var firstName = $.trim($('#contact-name').val());
@@ -1303,6 +1376,7 @@
                 });
 
                 payload.push({ name: 'name', value: $.trim(firstName + ' ' + lastName) });
+                setHomeLoading(submit, 'Loading...');
 
                 $.ajax({
                     url: $form.attr('action'),
@@ -1316,6 +1390,9 @@
                     error: function (xhr) {
                         var response = xhr.responseJSON || {};
                         $error.text(response.message || 'Something went wrong. Please check the form and try again.').show();
+                    },
+                    complete: function () {
+                        clearHomeLoading(submit);
                     }
                 });
             });
