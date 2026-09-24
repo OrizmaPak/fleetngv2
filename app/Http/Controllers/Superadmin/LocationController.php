@@ -107,7 +107,7 @@ class LocationController extends Controller
       //Formatted address
       $formattedAddr = str_replace(' ', '+', $request->location);
       //Send request and receive json data by address
-      $geocodeFromAddr = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . $formattedAddr . '&sensor=false&key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U');
+      $geocodeFromAddr = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . $formattedAddr . '&sensor=false&key=' . config('integrations.google_maps_key'));
       $output = json_decode($geocodeFromAddr);
 
 
@@ -155,7 +155,7 @@ class LocationController extends Controller
         //Formatted address
         $formattedAddr = str_replace(' ', '+', $address);
         //Send request and receive json data by address
-        $geocodeFromAddr = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . $formattedAddr . '&sensor=false&key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U');
+        $geocodeFromAddr = file_get_contents('https://maps.googleapis.com/maps/api/geocode/json?address=' . $formattedAddr . '&sensor=false&key=' . config('integrations.google_maps_key'));
         $output = json_decode($geocodeFromAddr);
         //Get latitude and longitute from json data
         $data['latitude']  = $output->results[0]->geometry->location->lat;

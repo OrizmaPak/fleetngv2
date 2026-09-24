@@ -13,7 +13,7 @@
     {{-- Page Css files --}}
     <link rel="stylesheet" type="text/css" href="{{ asset('css/base/plugins/forms/pickers/form-flat-pickr.css') }}">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <script src="https://maps.google.com/maps/api/js?key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U&loading=async" async defer></script>
+    <script src="https://maps.google.com/maps/api/js?key={{ config('integrations.google_maps_key') }}&loading=async" async defer></script>
 @endsection
 
 

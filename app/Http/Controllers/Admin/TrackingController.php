@@ -9,6 +9,7 @@ use App\Models\FrontModel;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
+use Throwable;
 
 class TrackingController extends Controller
 {
@@ -61,11 +62,16 @@ class TrackingController extends Controller
     ];    
 
     if ($request->ajax()) {
-      $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
-      $live_tracking_distance_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_distance_params));
-      $live_tracking_details = $live_tracking_data['data']['vehicles'];
-      $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'];
-      $api_data = $live_tracking_data['data']['vehicles'];
+      try {
+        $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
+        $live_tracking_distance_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_distance_params));
+      } catch (Throwable $exception) {
+        report($exception);
+        return $this->emptyTrackingTable($request, 'Tracking provider is not connected.');
+      }
+      $live_tracking_details = $live_tracking_data['data']['vehicles'] ?? [];
+      $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'] ?? [];
+      $api_data = $live_tracking_details;
       $api_data = array_replace_recursive($live_tracking_details, $live_tracking_distance_details);
       $data=[];
       
@@ -148,10 +154,15 @@ class TrackingController extends Controller
       'hash_key' => config('integrations.tracking_key'),
       "action" => "extra"        
     ];
-    $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
-    $live_tracking_distance_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_distance_params));
-    $live_tracking_details = $live_tracking_data['data']['vehicles'];
-    $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'];
+    try {
+      $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
+      $live_tracking_distance_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_distance_params));
+    } catch (Throwable $exception) {
+      report($exception);
+      return $this->emptyTrackingTable($request, 'Tracking provider is not connected.');
+    }
+    $live_tracking_details = $live_tracking_data['data']['vehicles'] ?? [];
+    $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'] ?? [];
 
     $filtered_data = array_replace_recursive($live_tracking_details, $live_tracking_distance_details);
     $search_text = $driver;
@@ -252,10 +263,18 @@ class TrackingController extends Controller
       'hash_key' => config('integrations.tracking_key'),
       "action" => "extra"        
     ];
-    $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
-    $live_tracking_distance_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_distance_params));
-    $live_tracking_details = $live_tracking_data['data']['vehicles'];
-    $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'];
+    try {
+      $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
+      $live_tracking_distance_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_distance_params));
+    } catch (Throwable $exception) {
+      report($exception);
+      if ($request->isMethod('post') || $request->ajax()) {
+        return response()->json(['message' => 'Tracking provider is not connected.'], 503);
+      }
+      return response()->view('admin.provider-unavailable', [], 503);
+    }
+    $live_tracking_details = $live_tracking_data['data']['vehicles'] ?? [];
+    $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'] ?? [];
 
     $data = $this->scopedVehicles(array_replace_recursive($live_tracking_details, $live_tracking_distance_details));
 
@@ -266,12 +285,22 @@ class TrackingController extends Controller
     }
     $date_from=date("Y-m-d H:i:s", mktime(0,0,0));
     $date_to=date("Y-m-d H:i:s", mktime(23,59,59));
-    $search_vehicle_map_url="https://app.zypsa.com/report_map_history_result.php?&action=map_history_json&device_id=".$id."&date_from=".$date_from."&date_to=".$date_to."&user_name=".rawurlencode(config('integrations.tracking_username'))."&hash_key=".rawurlencode(config('integrations.tracking_key'))."";
+    $search_vehicle_map_url = $this->zypsaUrl('report_map_history_result.php', [
+      'action' => 'map_history_json',
+      'device_id' => $id,
+      'date_from' => $date_from,
+      'date_to' => $date_to,
+    ]);
     $search_vehicle_map_params          = [       
         'user_name'=> config('integrations.tracking_username'),
         'hash_key' => config('integrations.tracking_key')
       ];
-    $search_vehicle_map_data = FrontModel::callPostCurl($search_vehicle_map_url, json_encode($search_vehicle_map_params));
+    try {
+      $search_vehicle_map_data = FrontModel::callPostCurl($search_vehicle_map_url, json_encode($search_vehicle_map_params));
+    } catch (Throwable $exception) {
+      report($exception);
+      $search_vehicle_map_data = [];
+    }
     if(isset($search_vehicle_map_data['data']['trip_data']))
     {
       foreach($search_vehicle_map_data['data']['trip_data'] as $trip_value)
@@ -317,10 +346,18 @@ class TrackingController extends Controller
       'hash_key' => config('integrations.tracking_key'),
       "action" => "extra"        
     ];
-    $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
-    $live_tracking_distance_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_distance_params));
-    $live_tracking_details = $live_tracking_data['data']['vehicles'];
-    $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'];
+    try {
+      $live_tracking_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_params));
+      $live_tracking_distance_data = FrontModel::callPostCurl($live_tracking_url, json_encode($live_tracking_distance_params));
+    } catch (Throwable $exception) {
+      report($exception);
+      if ($request->ajax() || $request->isMethod('post')) {
+        return response()->json(['message' => 'Tracking provider is not connected.'], 503);
+      }
+      return response()->view('admin.provider-unavailable', [], 503);
+    }
+    $live_tracking_details = $live_tracking_data['data']['vehicles'] ?? [];
+    $live_tracking_distance_details=$live_tracking_distance_data['data']['vehicle_data'] ?? [];
 
     $filtered_data = array_replace_recursive($live_tracking_details, $live_tracking_distance_details);
 
@@ -351,12 +388,26 @@ class TrackingController extends Controller
         $driver_key = array_search($search_text, array_column($live_tracking_details, 'registration_no'));
         abort_if($driver_key === false, 404);
         $device_id=$live_tracking_details[$driver_key]['device_id'];
-        $search_vehicle_url="https://app.zypsa.com/report_vehicle_distance_result.php?&data_format=json&device_id=".$device_id."&date_from=".$date_from."&date_to=".$date_to."&time_picker_from=00:00:00&time_picker_to=23:59:59&user_name=".rawurlencode(config('integrations.tracking_username'))."&hash_key=".rawurlencode(config('integrations.tracking_key'))."&group_hour=24group_mode=1";
+        $search_vehicle_url = $this->zypsaUrl('report_vehicle_distance_result.php', [
+          'data_format' => 'json',
+          'device_id' => $device_id,
+          'date_from' => $date_from,
+          'date_to' => $date_to,
+          'time_picker_from' => '00:00:00',
+          'time_picker_to' => '23:59:59',
+          'group_hour' => 24,
+          'group_mode' => 1,
+        ]);
         $search_vehicle_params          = [       
             'user_name'=> config('integrations.tracking_username'),
             'hash_key' => config('integrations.tracking_key')
           ];
-        $search_vehicle_data = FrontModel::callPostCurl($search_vehicle_url, json_encode($search_vehicle_params));
+        try {
+          $search_vehicle_data = FrontModel::callPostCurl($search_vehicle_url, json_encode($search_vehicle_params));
+        } catch (Throwable $exception) {
+          report($exception);
+          return response()->json(['message' => 'Tracking provider is not connected.'], 503);
+        }
 
         // ---------------------------------------
         // Fetch map history start
@@ -384,14 +435,22 @@ class TrackingController extends Controller
 
         $responses = Http::pool(function ($pool) use ($dates, $device_id) {
             foreach ($dates as $date) {
-                $pool->timeout(20)->withOptions(['connect_timeout'=>5])->post("https://app.zypsa.com/report_map_history_result.php?&action=map_history_json&device_id=" . $device_id . "&date_from=" . $date['from_date'] . "&date_to=" . $date['to_date'] . "&user_name=".rawurlencode(config('integrations.tracking_username'))."&hash_key=".rawurlencode(config('integrations.tracking_key'))."");
+                $pool->timeout(20)->withOptions(['connect_timeout'=>5])->post($this->zypsaUrl('report_map_history_result.php', [
+                  'action' => 'map_history_json',
+                  'device_id' => $device_id,
+                  'date_from' => $date['from_date'],
+                  'date_to' => $date['to_date'],
+                ]));
             }
         });
         
         $api_response = array_reduce($responses, function($initial, $response)  {
-          $response = $response->json();
-          if (isset($response['data']['trip_data'])) {
-            return array_merge($initial, $response['data']['trip_data']);
+          if (!$response->successful()) {
+            return $initial;
+          }
+          $payload = $response->json();
+          if (isset($payload['data']['trip_data']) && is_array($payload['data']['trip_data'])) {
+            return array_merge($initial, $payload['data']['trip_data']);
           }
           return $initial;
         }, []);
@@ -452,5 +511,24 @@ class TrackingController extends Controller
       $convertedDate = new \DateTime($date, new \DateTimeZone('Asia/kolkata') );
       $convertedDate->setTimeZone(new \DateTimeZone('Africa/Algiers'));
       return $convertedDate->format('d/m/Y H:i:s');
+   }
+
+   private function zypsaUrl(string $path, array $query): string
+   {
+      $query['user_name'] = config('integrations.tracking_username');
+      $query['hash_key'] = config('integrations.tracking_key');
+
+      return 'https://app.zypsa.com/' . ltrim($path, '/') . '?' . http_build_query($query);
+   }
+
+   private function emptyTrackingTable(Request $request, string $message)
+   {
+      return response()->json([
+        'draw' => (int) $request->input('draw'),
+        'recordsTotal' => 0,
+        'recordsFiltered' => 0,
+        'data' => [],
+        'error' => $message,
+      ]);
    }
 }

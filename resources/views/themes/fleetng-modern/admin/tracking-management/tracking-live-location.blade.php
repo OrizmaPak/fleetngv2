@@ -92,6 +92,6 @@
 
 
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U&libraries=places&callback=initMap&loading=async" async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ config('integrations.google_maps_key') }}&libraries=places&callback=initMap&loading=async" async defer></script>
 
 @endsection

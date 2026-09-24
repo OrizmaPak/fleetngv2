@@ -34,7 +34,7 @@ ul.typeahead.dropdown-menu{
   z-index:999;
 }
 </style>
-<script src="https://maps.google.com/maps/api/js?key=AIzaSyDU6bmt7uOJ1WPpcveuiTjdOdf04w1zi_U&loading=async"></script>
+<script src="https://maps.google.com/maps/api/js?key={{ config('integrations.google_maps_key') }}&loading=async"></script>
 
 <!-- Ajax Sourced Server-side -->
 <section id="ajax-datatable">
