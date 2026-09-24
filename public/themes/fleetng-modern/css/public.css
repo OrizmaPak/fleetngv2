@@ -22,6 +22,9 @@ body.fleetng-public { margin:0; color:var(--slate); background:#fff; font:15px/1
 .public-button-primary { background:var(--blue); color:#fff !important; }
 .public-button-primary:hover { background:var(--blue-strong); }
 .public-button-secondary { border-color:rgba(255,255,255,.38); background:rgba(7,20,43,.35); color:#fff !important; }
+.public-button.is-loading,.fleetng-public .is-loading { display:inline-flex !important; align-items:center; justify-content:center; gap:8px; pointer-events:none; white-space:nowrap; }
+.public-loading-spinner { display:inline-block; width:14px; height:14px; flex:0 0 14px; border:2px solid currentColor; border-right-color:transparent; border-radius:50%; animation:public-loading-spin .7s linear infinite; }
+@keyframes public-loading-spin { to { transform:rotate(360deg); } }
 .public-band { padding:84px max(24px,calc((100vw - 1240px)/2)); }
 .public-section-heading { max-width:650px; margin-bottom:36px; }
 .public-band h2,.public-page-head h1,.public-cta h2 { margin:0; color:var(--ink); font-size:34px; line-height:1.2; }

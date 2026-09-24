@@ -1485,6 +1485,28 @@ body.fleetng-nav-collapsed .navigation-main > li > a { justify-content: center; 
 .fleetng-modern .nav-tabs .nav-link { border-radius: 7px 7px 0 0; color: var(--fleet-text-muted); }
 .fleetng-modern .nav-tabs .nav-link.active { border-color: var(--fleet-border) var(--fleet-border) var(--fleet-card); background: var(--fleet-card); color: var(--fleet-blue); }
 .fleetng-modern .toast { border: 1px solid var(--fleet-border); border-radius: 8px; background: var(--fleet-elevated); color: var(--fleet-text); box-shadow: var(--fleet-shadow); }
+.fleetng-modern .is-loading,
+.fleetng-modern-auth .is-loading {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.fleetng-loading-spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: fleetng-loading-spin .7s linear infinite;
+}
+@keyframes fleetng-loading-spin {
+  to { transform: rotate(360deg); }
+}
 
 @media (max-width: 1199.98px) {
   .fleetng-modern .main-menu {

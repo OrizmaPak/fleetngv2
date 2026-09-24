@@ -7,7 +7,7 @@
     <meta name="theme-color" content="#07142b">
     <title>@yield('title') - FleetNG</title>
     <link rel="icon" href="{{ asset('front/images/favicon.png') }}" type="image/png">
-    <link rel="stylesheet" href="{{ asset('themes/fleetng-modern/css/public.css') }}?v=1.0.0">
+    <link rel="stylesheet" href="{{ asset('themes/fleetng-modern/css/public.css') }}?v=20260924-loading">
 </head>
 <body class="fleetng-public">
     <header class="public-header">
@@ -31,6 +31,6 @@
         </nav>
         <p>&copy; {{ date('Y') }} FleetNG. All rights reserved.</p>
     </footer>
-    <script src="{{ asset('themes/fleetng-modern/js/public.js') }}?v=1.0.0" defer></script>
+    <script src="{{ asset('themes/fleetng-modern/js/public.js') }}?v=20260924-loading" defer></script>
 </body>
 </html>
