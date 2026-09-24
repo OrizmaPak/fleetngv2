@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\RateLimiter;
 class SessionLoginController extends Controller
 {
     public function admin(Request $request) { return $this->login($request, [2], 'auth-admin-login', '/analytics'); }
-    public function user(Request $request) { return $this->login($request, [1, 2, 3, 5], 'auth-user-login', null); }
+    public function user(Request $request) { return $this->login($request, [1, 2, 3, 5], 'auth-user-login', '/analytics'); }
     public function superadmin(Request $request) { return $this->login($request, [1], 'auth-superadmin-login', '/superadmin/analytics'); }
 
     private function login(Request $request, array $roles, string $view, ?string $destination)
@@ -37,6 +37,6 @@ class SessionLoginController extends Controller
 
     private function destinationFor(User $user): string
     {
-        return (int) $user->user_type === 1 ? '/superadmin/analytics' : '/analytics';
+        return '/analytics';
     }
 }

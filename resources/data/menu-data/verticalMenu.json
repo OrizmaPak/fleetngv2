@@ -5,48 +5,10 @@
       "badgeClass": "badge badge-light-warning badge-pill ml-auto mr-1",
       "icon": "home",
       "slug": "analytics",
-      "url": "superadmin/analytics",
-      "id": "admin_analytics",
-      "payment_user": false,
-      "role": [
-        "1"
-      ]
-    },
-    {
-      "name": "Dashboards",
-      "badgeClass": "badge badge-light-warning badge-pill ml-auto mr-1",
-      "icon": "home",
-      "slug": "analytics",
       "url": "/analytics",
       "id": "admin_analytics",
-      "payment_user": true,
-      "role": [
-        "2",
-        "3",
-        "5"
-      ]
-    },
-    {
-      "url": "superadmin/user-list",
-      "name": "User Management",
-      "icon": "user",
-      "slug": "superadmin/user-list",
-      "id": "admin_user_list",
       "payment_user": false,
-      "role": [
-        "1"
-      ]
-    },
-    {
-      "url": "/user-list",
-      "name": "User Management",
-      "icon": "user",
-      "slug": "/user-list",
-      "id": "admin_user_list",
-      "payment_user": false,
-      "role": [
-        "2"
-      ]
+      "role": ["1", "2", "3"]
     },
     {
       "url": "/client-list",
@@ -55,85 +17,34 @@
       "slug": "/client-list",
       "id": "merchant_client_list",
       "payment_user": false,
-      "role": [
-        "1",
-        "2",
-        "3"
-      ]
-    },
-    {
-      "url": "superadmin/merchant-list",
-      "name": "Merchant Management",
-      "icon": "user",
-      "slug": "superadmin/merchant-list",
-      "id": "admin_merchant_list",
-      "payment_user": false,
-      "role": [
-        "1"
-      ]
-    },
-    {
-      "url": "/payment-list",
-      "name": "Payments",
-      "icon": "dollar-sign",
-      "badge": "New",
-      "slug": "/payment-list",
-      "id": "merchant_payment_list",
-      "payment_user": false,
-      "role": [
-        "1",
-        "2"
-      ]
+      "role": ["1", "2", "3"]
     },
     {
       "url": "/driver-list",
       "name": "Drivers",
       "icon": "user",
-      "slug": "admin/driver-list",
+      "slug": "/driver-list",
       "id": "admin_driver_list",
       "payment_user": false,
-      "role": [
-        "3"
-      ]
-    },
-    {
-      "url": "/driver-list",
-      "name": "Driver Management",
-      "icon": "user",
-      "slug": "admin/driver-list",
-      "id": "admin_driver_list",
-      "payment_user": false,
-      "role": [
-        "1",
-        "2"
-      ]
+      "role": ["1", "2", "3"]
     },
     {
       "url": "/location-list",
       "name": "Geofencing",
       "icon": "map-pin",
-      "slug": "admin/location-list",
+      "slug": "/location-list",
       "id": "admin_location_list",
       "payment_user": false,
-      "role": [
-        "1",
-        "2",
-        "3"
-      ]
+      "role": ["1", "2", "3"]
     },
     {
       "url": "/trip-list",
       "name": "Trip Management",
       "icon": "truck",
-      "slug": "admin/trip-list",
+      "slug": "/trip-list",
       "id": "admin_trip_list",
       "payment_user": true,
-      "role": [
-        "1",
-        "2",
-        "3",
-        "5"
-      ]
+      "role": ["1", "2", "3", "5"]
     },
     {
       "url": "/live-tracking",
@@ -142,11 +53,7 @@
       "slug": "/live-tracking",
       "id": "admin_live_tracking",
       "payment_user": false,
-      "role": [
-        "1",
-        "2",
-        "3"
-      ]
+      "role": ["1", "2", "3"]
     },
     {
       "url": "/map-history",
@@ -155,11 +62,7 @@
       "slug": "/map-history",
       "id": "admin_map_history",
       "payment_user": false,
-      "role": [
-        "1",
-        "2",
-        "3"
-      ]
+      "role": ["1", "2", "3"]
     },
     {
       "url": "/reports",
@@ -168,80 +71,22 @@
       "slug": "/reports",
       "id": "admin_reports",
       "payment_user": false,
-      "role": [
-        "1",
-        "2",
-        "3"
-      ]
+      "role": ["1", "2", "3"]
     },
     {
       "url": "/expenses",
       "name": "Expenses",
       "icon": "trending-down",
-      "slug": "/reports",
+      "slug": "/expenses",
       "id": "merchant_expenses",
       "payment_user": false,
-      "role": [
-        "3"
-      ]
-    },
-    {
-      "name": "Pages",
-      "icon": "file-text",
-      "dropdown": "1",
-      "slug": "",
-      "url": "",
-      "submenu": [
-        {
-          "url": "superadmin/pages/refund-policy",
-          "name": "Refund Policy",
-          "icon": "file",
-          "slug": "superadmin/pages/refund-policy"
-        },
-        {
-          "url": "superadmin/pages/privacy-policy",
-          "name": "Privacy Policy",
-          "icon": "file",
-          "slug": "superadmin/pages/privacy-policy"
-        },
-        {
-          "url": "superadmin/pages/terms-conditions",
-          "name": "Terms & Condittions",
-          "icon": "file",
-          "slug": "superadmin/pages/terms-conditions"
-        }
-      ],
-      "role": [
-        "1"
-      ]
-    },
-    {
-      "navheader": "Account Settings",
-      "slug": "",
-      "payment_user": false,
-      "role": [
-        "1"
-      ]
+      "role": ["1", "2", "3"]
     },
     {
       "navheader": "Account Settings",
       "slug": "",
       "payment_user": true,
-      "role": [
-        "2",
-        "3",
-        "5"
-      ]
-    },
-    {
-      "url": "superadmin/account-settings",
-      "name": "Change Password",
-      "icon": "settings",
-      "slug": "superadmin/account-settings",
-      "payment_user": false,
-      "role": [
-        "1"
-      ]
+      "role": ["1", "2", "3", "5"]
     },
     {
       "url": "/account-settings",
@@ -249,11 +94,7 @@
       "icon": "settings",
       "slug": "/account-settings",
       "payment_user": true,
-      "role": [
-        "2",
-        "3",
-        "5"
-      ]
+      "role": ["1", "2", "3", "5"]
     },
     {
       "url": "logout",
@@ -261,12 +102,7 @@
       "icon": "power",
       "slug": "logout",
       "payment_user": true,
-      "role": [
-        "1",
-        "2",
-        "3",
-        "5"
-      ]
+      "role": ["1", "2", "3", "5"]
     }
   ]
 }
