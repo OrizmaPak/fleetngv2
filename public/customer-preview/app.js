@@ -30,7 +30,7 @@
   function verificationLabel() { return testOtpEnabled() ? 'Testing verification / OTP 123456' : 'Phone verification'; }
   function verificationNote() { return testOtpEnabled() ? 'Testing verification: use OTP 123456. No SMS is sent.' : 'Phone verification is required before customer access.'; }
   function logoUrl() { return portalConfig().logoUrl || '../images/logo/fleetng-logo.svg'; }
-  function loginImageUrl() { return portalConfig().loginImageUrl || '../themes/fleetng-modern/images/login/customer-delivery.png'; }
+  function loginImageUrl() { return portalConfig().loginImageUrl || '../front/images/hero-img.png'; }
   function homeUrl() { return portalConfig().homeUrl || '../'; }
   function brand() { return '<a class="brand" href="#/overview"><img src="' + e(logoUrl()) + '" alt="FleetNG logo"><span>FLEETNG</span></a>'; }
   function setLoading(button, label = 'Loading...') {
