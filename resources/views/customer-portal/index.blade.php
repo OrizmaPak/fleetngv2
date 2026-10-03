@@ -7,6 +7,8 @@
     <meta name="theme-color" content="#050b18">
     <title>Customer Portal | FleetNG</title>
     <link rel="icon" href="{{ asset('images/logo/favicon.png') }}">
+    <link rel="preload" as="image" href="{{ asset('front/images/hero-img.png') }}" fetchpriority="high">
+    <link rel="preload" as="image" href="{{ asset('images/logo/fleetng-logo.svg') }}">
     <link rel="stylesheet" href="{{ asset('customer-preview/styles.css') }}">
     <link rel="stylesheet" href="{{ asset('customer-preview/login.css') }}?v=20260924-customer-loading">
     @php

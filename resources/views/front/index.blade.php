@@ -9,6 +9,15 @@
     <meta name="keywords" content="logistics, trucking, haulage, transportation, FleetNG, wholesale delivery, construction delivery, bulk goods, supply chain, Nigeria">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preload" as="image" href="img/logo.png">
+    <link rel="preload" as="image" href="img/slider/slide04.jpg" fetchpriority="high">
+    <link rel="preload" as="image" href="img/slider/slider-line.jpg">
+    <link rel="preload" as="image" href="img/slider/banner-5.png">
+    <link rel="preload" as="image" href="img/slider/banner-11.png">
+    <link rel="preload" as="image" href="img/slider/slide05.jpg">
+    <link rel="preload" as="image" href="img/slider/banner-4.png">
+    <link rel="preload" as="image" href="img/slider/banner-6.png">
+    <link rel="preload" as="image" href="img/slider/slider06.png">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="css/bootstrap.css" />
@@ -83,7 +92,7 @@
                                 <div class="navbar-header">
                                     <div class="logo">
                                         <a href="{{ url('/') }}">
-                                            <img src="img/logo.png" alt="FleetNG - Logistics & Haulage"/>
+                                            <img src="img/logo.png" alt="FleetNG - Logistics & Haulage" loading="eager" fetchpriority="high" decoding="async"/>
                                         </a>
                                     </div>
                                     <!-- .logo end -->
@@ -177,9 +186,9 @@
         <!-- first slide -->
         <div class="ms-slide">
             <!-- slide background -->
-            <img src="masterslider/blank.gif" data-src="img/slider/slide04.jpg" alt="Logistics Experts" />
+            <img src="masterslider/blank.gif" data-src="img/slider/slide04.jpg" alt="Logistics Experts" loading="eager" fetchpriority="high" decoding="async" />
 
-            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 310px; transform: translateX(-50%);" data-type="image" data-effect="left(short)" data-duration="300" data-hide-effect="fade" data-delay="0" />
+            <img class="ms-layer" src="masterslider/blank.gif" data-src="img/slider/slider-line.jpg" alt="" style="left: 50%; top: 310px; transform: translateX(-50%);" data-type="image" data-effect="left(short)" data-duration="300" data-hide-effect="fade" data-delay="0" loading="eager" decoding="async" />
 
             <h2 class="ms-layer pi-caption01" style="left: 50%; top: 340px; transform: translateX(-50%);" data-type="text" data-effect="left(short)" data-duration="300" data-hide-effect="fade" data-delay="300">
                 Logistics & Haulage
@@ -198,7 +207,7 @@
         <!-- slide 02 start -->
         <div class="ms-slide">
             <!-- slide background -->
-            <img src="masterslider/blank.gif" data-src="img/slider/banner-5.png" alt="Start Your Delivery" />
+            <img src="masterslider/blank.gif" data-src="img/slider/banner-5.png" alt="Start Your Delivery" loading="eager" decoding="async" />
 
             <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
                 Start Your Haulage
@@ -215,7 +224,7 @@
         <!-- slide 03 start -->
         <div class="ms-slide">
             <!-- slide background -->
-            <img src="masterslider/blank.gif" data-src="img/slider/banner-11.png" alt="Easy Logistics Steps" />
+            <img src="masterslider/blank.gif" data-src="img/slider/banner-11.png" alt="Easy Logistics Steps" loading="eager" decoding="async" />
 
             <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
                 Simple Steps
@@ -232,7 +241,7 @@
         <!-- slide 04 start -->
         <div class="ms-slide">
             <!-- slide background -->
-            <img src="masterslider/blank.gif" data-src="img/slider/slide05.jpg" alt="Choose Your Driver" />
+            <img src="masterslider/blank.gif" data-src="img/slider/slide05.jpg" alt="Choose Your Driver" loading="eager" decoding="async" />
 
             <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="00">
                 Choose Your Driver
@@ -249,7 +258,7 @@
         <!-- slide 05 start -->
         <div class="ms-slide">
             <!-- slide background -->
-            <img src="masterslider/blank.gif" data-src="img/slider/banner-4.png" alt="Efficient Delivery" />
+            <img src="masterslider/blank.gif" data-src="img/slider/banner-4.png" alt="Efficient Delivery" loading="eager" decoding="async" />
 
             <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
                 Reliable &
@@ -266,7 +275,7 @@
         <!-- slide 06 start -->
         <div class="ms-slide">
             <!-- slide background -->
-            <img src="masterslider/blank.gif" data-src="img/slider/banner-6.png" alt="Innovative Logistics Solutions" />
+            <img src="masterslider/blank.gif" data-src="img/slider/banner-6.png" alt="Innovative Logistics Solutions" loading="eager" decoding="async" />
 
             <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
                 Innovative
@@ -283,7 +292,7 @@
         <!-- slide 07 start -->
         <div class="ms-slide">
             <!-- slide background -->
-            <img src="masterslider/blank.gif" data-src="img/slider/slider06.png" alt="Client Satisfaction" />
+            <img src="masterslider/blank.gif" data-src="img/slider/slider06.png" alt="Client Satisfaction" loading="eager" decoding="async" />
 
             <h2 class="ms-layer pi-caption01" style="left: 50%; top: 390px; transform: translateX(-50%);" data-type="text" data-effect="top(short)" data-duration="300" data-hide-effect="fade" data-delay="0">
                 Client Satisfaction
@@ -305,7 +314,7 @@
                 <div class="col-md-4 col-sm-4">
                     <div class="service-feature-box">
                         <div class="service-media">
-                            <img src="img/slider/banner-3.png" alt="">
+                            <img src="img/slider/banner-3.png" alt="" loading="lazy" decoding="async">
 
                             <!-- <a href="{{ config('app.front_url') }}" class="read-more02">
                                     <span>
@@ -335,7 +344,7 @@
                 <div class="col-md-4 col-sm-4">
                     <div class="service-feature-box">
                         <div class="service-media">
-                            <img src="img/slider/truck.png" alt="Logistics Trucking" />
+                            <img src="img/slider/truck.png" alt="Logistics Trucking" loading="lazy" decoding="async" />
 
                             <!-- <a href="{{ url('/') }}#services" class="read-more02">
                                     <span>
@@ -365,7 +374,7 @@
                 <div class="col-md-4 col-sm-4">
                     <div class="service-feature-box">
                         <div class="service-media">
-                            <img src="img/slider/namer.png" alt="Logistics Solutions" />
+                            <img src="img/slider/namer.png" alt="Logistics Solutions" loading="lazy" decoding="async" />
 
                             <!-- <a href="{{ url('/') }}#services" class="read-more02">
                                     <span>  
@@ -534,7 +543,7 @@
                 </div><!-- .col-md-6 end -->
 
                 <div class="col-md-6 animated triggerAnimation" data-animate="zoomIn">
-                    <img src="img/slider/trucker.png" alt="FleetNG "/>
+                    <img src="img/slider/trucker.png" alt="FleetNG " loading="lazy" decoding="async"/>
                 </div><!-- .col-md-6 end -->
             </div><!-- .row end -->
         </div><!-- .container end -->
@@ -771,7 +780,7 @@
                 </div><!-- .col-md-8 end -->
 
                 <div class="col-md-4">
-                    <img src="img/pics/img32.jpg" alt="Logistics Truck">
+                    <img src="img/pics/img32.jpg" alt="Logistics Truck" loading="lazy" decoding="async">
                 </div><!-- .col-md-4 end -->
             </div><!-- .row end -->
         </div><!-- .container end -->
@@ -1007,7 +1016,7 @@
                     </div>
                     <!-- .custom-heading end -->
 
-                    <img src="img/pics/locations.jpg" alt="locations illustration" />
+                    <img src="img/pics/locations.jpg" alt="locations illustration" loading="lazy" decoding="async" />
 
                     <br />
 

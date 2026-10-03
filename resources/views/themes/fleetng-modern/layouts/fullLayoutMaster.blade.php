@@ -20,6 +20,22 @@
     </script>
     <title>@yield('title') - FleetNG</title>
     <link rel="icon" href="{{ asset('front/images/favicon.png') }}" type="image/png">
+    @php
+        $routeName = optional(request()->route())->getName();
+        $loginPreloadImage = null;
+
+        if ($routeName === 'auth-superadmin-login') {
+            $loginPreloadImage = 'themes/fleetng-modern/images/login/platform-control.png';
+        } elseif ($routeName === 'auth-payment-user-login') {
+            $loginPreloadImage = 'themes/fleetng-modern/images/login/payment-operations.png';
+        } elseif (in_array($routeName, ['auth-login', 'auth-admin-login', 'auth-user-login'], true)) {
+            $loginPreloadImage = 'themes/fleetng-modern/images/login/operations-command.png';
+        }
+    @endphp
+    @if($loginPreloadImage)
+        <link rel="preload" as="image" href="{{ asset($loginPreloadImage) }}" fetchpriority="high">
+        <link rel="preload" as="image" href="{{ asset('images/logo/fleetng-logo.svg') }}">
+    @endif
     @include('panels.styles')
 </head>
 <body class="fleetng-modern fleetng-modern-auth {{ $configData['bodyClass'] }}" data-framework="laravel" data-asset-path="{{ asset('/') }}">

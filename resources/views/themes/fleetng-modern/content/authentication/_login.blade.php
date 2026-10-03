@@ -10,10 +10,10 @@
 
 <div class="fleetng-login-shell">
     <section class="fleetng-login-visual" aria-label="{{ $loginImageAlt }}">
-        <img class="fleetng-login-photo" src="{{ asset($loginImage) }}" alt="{{ $loginImageAlt }}">
+        <img class="fleetng-login-photo" src="{{ asset($loginImage) }}" alt="{{ $loginImageAlt }}" loading="eager" fetchpriority="high" decoding="async">
         <div class="fleetng-login-visual-content">
             <a class="fleetng-login-brand" href="{{ url('/') }}" aria-label="FleetNG homepage">
-                <img src="{{ asset('images/logo/fleetng-logo.svg') }}" alt="">
+                <img src="{{ asset('images/logo/fleetng-logo.svg') }}" alt="" loading="eager" decoding="async">
                 <span>FleetNG</span>
             </a>
             <div class="fleetng-login-visual-message">
