@@ -15,7 +15,7 @@
     <script>
         window.CustomerPortalConfig = {
             logoUrl: @json(asset('images/logo/fleetng-logo.svg')),
-            loginImageUrl: @json(asset('front/images/hero-img.png')),
+            loginImageUrl: @json(asset('themes/fleetng-modern/images/login/customer-delivery.png')),
             homeUrl: @json(url('/')),
             apiBaseUrl: @json(url('customer-portal/api')),
             titleSuffix: 'FleetNG',

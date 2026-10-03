@@ -1,19 +1,29 @@
+@php
+    $loginImage = $loginImage ?? 'themes/fleetng-modern/images/login/operations-command.png';
+    $loginImageAlt = $loginImageAlt ?? 'FleetNG operations workspace';
+    $visualKicker = $visualKicker ?? 'Operations command';
+    $visualTitle = $visualTitle ?? 'Run fleet work from one controlled workspace.';
+    $visualDescription = $visualDescription ?? 'Sign in to manage trips, vehicles, customers, payments, tracking, reports, and day-to-day fleet operations.';
+    $visualFootPrimary = $visualFootPrimary ?? 'FleetNG V2';
+    $visualFootSecondary = $visualFootSecondary ?? 'Secure role-based access';
+@endphp
+
 <div class="fleetng-login-shell">
-    <section class="fleetng-login-visual" aria-label="Fleet operations">
-        <img class="fleetng-login-photo" src="{{ asset('front/images/hero-img.png') }}" alt="">
+    <section class="fleetng-login-visual" aria-label="{{ $loginImageAlt }}">
+        <img class="fleetng-login-photo" src="{{ asset($loginImage) }}" alt="{{ $loginImageAlt }}">
         <div class="fleetng-login-visual-content">
             <a class="fleetng-login-brand" href="{{ url('/') }}" aria-label="FleetNG homepage">
                 <img src="{{ asset('images/logo/fleetng-logo.svg') }}" alt="">
                 <span>FleetNG</span>
             </a>
             <div class="fleetng-login-visual-message">
-                <span>Operations command</span>
-                <h2>Run fleet work from one controlled workspace.</h2>
-                <p>Sign in to manage trips, vehicles, customers, payments, tracking, reports, and day-to-day fleet operations.</p>
+                <span>{{ $visualKicker }}</span>
+                <h2>{{ $visualTitle }}</h2>
+                <p>{{ $visualDescription }}</p>
             </div>
             <div class="fleetng-login-visual-foot">
-                <span>FleetNG V2</span>
-                <span>Secure role-based access</span>
+                <span>{{ $visualFootPrimary }}</span>
+                <span>{{ $visualFootSecondary }}</span>
             </div>
         </div>
     </section>
