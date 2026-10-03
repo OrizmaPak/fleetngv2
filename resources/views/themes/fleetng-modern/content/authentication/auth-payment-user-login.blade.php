@@ -4,7 +4,7 @@
     @include('themes.fleetng-modern.content.authentication._login', [
         'portalTitle' => 'Payment User Login',
         'portalDescription' => 'Access trip and payment operations.',
-        'action' => route('auth-user-login'),
+        'action' => route('auth-payment-user-login'),
         'loginImage' => 'themes/fleetng-modern/images/login/payment-operations.png',
         'loginImageAlt' => 'FleetNG payment operations desk',
         'visualKicker' => 'Payment operations',

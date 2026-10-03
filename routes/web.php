@@ -42,7 +42,7 @@ Route::post('submit-contact-us', [FrontController::class, 'submit_contact_reques
 Route::match(['get', 'post'], 'login', [SessionLoginController::class, 'admin'])->name('auth-login');
 Route::match(['get', 'post'], '/admin', [SessionLoginController::class, 'admin'])->name('auth-admin-login');
 Route::match(['get', 'post'], '/user', [SessionLoginController::class, 'user'])->name('auth-user-login');
-// Route::match(['get', 'post'], '/user-login', [AuthenticationController::class, 'payment_user_login'])->name('auth-user-login');
+Route::match(['get', 'post'], '/user-login', [SessionLoginController::class, 'paymentUser'])->name('auth-payment-user-login');
 Route::get('logout', [AuthenticationController::class, 'logout'])->name('logout');
 Route::match(['get', 'post'], 'forgot-password', [AuthenticationController::class, 'forgot_password'])->name('auth-forgot-password');
 Route::match(['get', 'post'], 'reset-password/{token}', [AuthenticationController::class, 'reset_password'])->name('auth-reset-password');
