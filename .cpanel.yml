@@ -2,12 +2,24 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/nglohitech/public_html/fleetngv2
-    - /bin/mkdir -p "$DEPLOYPATH"
-    - /bin/cp -R app bootstrap config database docs Modules public resources routes scripts tests vendor artisan composer.json composer.lock package.json package-lock.json "$DEPLOYPATH"/
-    - /bin/cp -R .env.example "$DEPLOYPATH"/
-    - cd "$DEPLOYPATH" && php artisan migrate --force
-    - cd "$DEPLOYPATH" && php artisan optimize:clear
-    - cd "$DEPLOYPATH" && php artisan config:clear
-    - cd "$DEPLOYPATH" && php artisan route:clear
-    - cd "$DEPLOYPATH" && php artisan view:clear
-    - cd "$DEPLOYPATH" && php artisan cache:clear
+    - /bin/mkdir -p $DEPLOYPATH
+    - /bin/cp -R app $DEPLOYPATH
+    - /bin/cp -R bootstrap $DEPLOYPATH
+    - /bin/cp -R config $DEPLOYPATH
+    - /bin/cp -R database $DEPLOYPATH
+    - /bin/cp -R docs $DEPLOYPATH
+    - /bin/cp -R Modules $DEPLOYPATH
+    - /bin/cp -R public $DEPLOYPATH
+    - /bin/cp -R resources $DEPLOYPATH
+    - /bin/cp -R routes $DEPLOYPATH
+    - /bin/cp -R scripts $DEPLOYPATH
+    - /bin/cp -R tests $DEPLOYPATH
+    - /bin/cp -R vendor $DEPLOYPATH
+    - /bin/cp artisan $DEPLOYPATH
+    - /bin/cp composer.json $DEPLOYPATH
+    - /bin/cp composer.lock $DEPLOYPATH
+    - /bin/cp package.json $DEPLOYPATH
+    - /bin/cp package-lock.json $DEPLOYPATH
+    - /bin/cp .env.example $DEPLOYPATH
+    - cd $DEPLOYPATH && php artisan migrate --force
+    - cd $DEPLOYPATH && php artisan optimize:clear
